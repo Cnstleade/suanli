@@ -40,7 +40,7 @@
             </div>
         </div>
         <transition name="fade">
-            <ul v-if="show" class="submenu w-200 text-center">
+            <ul v-if="show" class="submenu w-200 text-center d-lg-none">
               <li><a href="#">首页</a></li>
               <li><a href="#">算力租赁</a></li>
               <li><a href="#">矿机租赁</a></li>
@@ -181,28 +181,30 @@ li {
     background: #fff none repeat scroll 0 0;
     box-shadow: 0 0 7px 0.5px rgba(0, 0, 0, 0.15);
     display: block;
+    top: 65px;
     right: 10px;
     padding: 10px 0px 14px;
     position: absolute;
     width: 80px;
     z-index: 999;
   }
-/*   .fade-move {
+  /*   .fade-move {
     transition: transform 1s;
   } */
   .fade-enter-active,
   .fade-leave-active {
-    transition: all 0.7s ease 0s;
+    transition: all 0.5s ease 0s;
   }
 
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
-    height: 0px;
-    width: 0px;
+    transform: scale(0, 0);
+    transform-origin: right top;
     visibility: hidden;
   }
   .fade-enter-to, .fade-leave /* .fade-leave-active below version 2.1.8 */ {
     opacity: 1;
+    transform: scale(1, 1);
     visibility: visible;
   }
 }
