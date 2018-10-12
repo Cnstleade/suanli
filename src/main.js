@@ -11,8 +11,10 @@ import store from './store/index.js';
 import App from './App'
 import router from './router'
 import FastClick from 'fastclick'
+import echarts from 'echarts'
 import {messages} from './config/language'
 
+Vue.prototype.$echarts = echarts
 Vue.use(VueI18n);
 Vue.use(ElementUI, {
   locale,

@@ -180,19 +180,25 @@ li {
   .menu {
     background: #1a1c1f;
     a {
-      font-size: 16px;
-      line-height: 26px;
-      color: #fff;
+      display: inline-block;
+      font-size: 14px;
+      line-height: 36px;
+      height: 36px;
+      min-width: 100%;
+      text-align: center;
       text-decoration: none;
+      font-size: 14px;
+      color: #d2d6dc;
+      border-bottom: 2px solid red;
     }
   }
   .submenu {
     // background: #fff none repeat scroll 0 0;
     box-shadow: 0 0 7px 0.5px rgba(0, 0, 0, 0.15);
     display: block;
-    top: 65px;
-    right: 10px;
-    padding: 10px 0px 14px;
+    top: 70px;
+    right: 2px;
+    padding: 10px 30px 14px;
     position: absolute;
     width: 168px;
     z-index: 999;
@@ -217,5 +223,6 @@ li {
     visibility: visible;
   }
 }
+
 </style>
 
