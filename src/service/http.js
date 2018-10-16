@@ -3,14 +3,14 @@ import Vue from 'vue';
 var qs = require('qs');
 //axios 配置
 axios.defaults.timeout = 6000000;
-axios.defaults.baseURL = 'http://101.132.171.38:8088'; //本地服务器
+
 
 //   /*得到代办人/
 // export function httpFindAllSignature() {
 //     return axios({
 //       url: "/apmsg/findAllSignature",
 //       method: "get",
-  
+
 //     })
 //   }
 
@@ -29,3 +29,11 @@ axios.defaults.baseURL = 'http://101.132.171.38:8088'; //本地服务器
 //       data: qs.stringify(data)
 //     })
 //   }
+
+//后台管理模块 / admin 贷后管理 逾期列表展示 下拉点击查看详细信息
+export function httpGetPrice() {
+  return axios({
+    url: "http://www.rhy.com/index/getPrice",
+    method: "get",
+  })
+}

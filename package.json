@@ -17,6 +17,7 @@
     "echarts": "^4.2.0-rc.1",
     "element-ui": "^2.4.8",
     "fastclick": "^1.0.6",
+    "jsonp": "^0.2.1",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "vue": "^2.5.2",

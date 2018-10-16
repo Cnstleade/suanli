@@ -5,45 +5,45 @@
             <div class="img  d-img-md">
                 <transition name="fade">
                     <template v-if="active==0">
-                        <img class="img-fluid " src="../../../static/1537252103689.jpg" alt="">
+                        <img class="img-fluid " src="../../../static/banner1.jpg" alt="">
                     </template>
                 </transition>
                 <transition name="fade">
                     <template v-if="active==1">
-                      <img class="img-fluid " src="../../../static/1537498184151.jpg" alt="">
+                      <img class="img-fluid " src="../../../static/banner2.jpg" alt="">
                     </template>
                 </transition> 
                 <transition name="fade">
                     <template v-if="active==2"> 
-                      <img class="img-fluid " src="../../../static/1537252103689.jpg" alt="">
+                      <img class="img-fluid " src="../../../static/banner3.jpg" alt="">
                     </template>
                 </transition>      
             </div>
             <div class="img d-img-xs ">
                 <transition name="fade">
                     <template v-if="active==0">
-                        <img class="img-fluid " src="../../../static/ss1.jpg" alt="">
+                        <img class="img-fluid " src="../../../static/minbanner1.jpg" alt="">
                     </template>
                 </transition>
                 <transition name="fade">
                     <template v-if="active==1">
-                      <img class="img-fluid " src="../../../static/ss2.jpg" alt="">
+                      <img class="img-fluid " src="../../../static/minbanner2.jpg" alt="">
                     </template>
                 </transition> 
                 <transition name="fade">
                     <template v-if="active==2">
-                      <img class="img-fluid " src="../../../static/ss1.jpg" alt="">
+                      <img class="img-fluid " src="../../../static/minbanner3.jpg" alt="">
                     </template>
                 </transition>      
             </div>            
 
             <button type="button" class="el-carousel__arrow el-carousel__arrow--left" @click="goto(-1,true)"><i class="el-icon-arrow-left"></i></button>            
             <button type="button" class="el-carousel__arrow el-carousel__arrow--right" @click="goto(1,true)"><i class="el-icon-arrow-right"></i></button>
-            <ul class="el-carousel__indicators">
+            <!-- <ul class="el-carousel__indicators">
                 <li class="el-carousel__indicator" @click="goto(0,false)"><button :class="{ isClick: active==0 }" class="el-carousel__button" ></button></li>
                 <li class="el-carousel__indicator" @click="goto(1,false)"><button :class="{ isClick: active==1 }" class="el-carousel__button"></button></li>
                 <li class="el-carousel__indicator" @click="goto(2,false)"><button :class="{ isClick: active==2 }" class="el-carousel__button"></button></li>
-            </ul>
+            </ul> -->
             <div class="new-server clearfix " @mouseover="clearText" @mouseout="textRun">
                 <strong class="float-left">资讯</strong>
                 <template v-for="(temp,index) in newList">
@@ -136,7 +136,7 @@ export default {
   .new-server {
     position: absolute;
     left: 200px;
-    bottom: 20px;
+    bottom: 80px;
     z-index: 5;
     width: 419px;
     height: 32px;

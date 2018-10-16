@@ -4,14 +4,13 @@
             <div class="row">
                 <div class="col-xl-2 col-lg-2 col-md-3 col-sm-3 col-3">
                     <div class="logo">
-                        <a href=""><img  src="../../assets/logo.png" alt="" width="40px;height:40px"></a>
-                        <span class="d-none d-sm-inline-block">挖矿</span>
+                        <a href=""><img  src="../../assets/logo.png" alt="" ></a>
                     </div>
                 </div>
                 <div class="col-xl-8 col-lg-7 d-none d-lg-block">
                     <div class="main-menu">
                         <nav>
-                            <a href="#">首页</a>                       
+                            <a href="#" class="a-active">首页</a>                       
                             <a href="#">算力租赁</a>
                             <a href="#">矿机租赁</a>
                             <a href="#">矿机合租</a>
@@ -41,7 +40,7 @@
         </div>
         <transition name="fade">
             <ul v-if="show" class="menu submenu w-200 text-center d-lg-none">
-              <li><a href="#">首页</a></li>
+              <li><a href="#" class="a-active">首页</a></li>
               <li><a href="#">算力租赁</a></li>
               <li><a href="#">矿机租赁</a></li>
               <li><a href="#">矿机合租</a></li>
@@ -76,7 +75,7 @@ li {
 .header {
   width: 100%;
   height: 70px;
-  background: #1a1c1f;
+  background: #252733;
   border-bottom: 1px solid #1a1c1f;
   .main {
     .logo {
@@ -86,8 +85,9 @@ li {
       flex-wrap: no-wrap;
       justify-content: flex-start;
       align-items: center;
-      span {
-        margin-left: 10px;
+      img {
+        position: relative;
+        top: 3px;
       }
     }
     .main-menu {
@@ -100,11 +100,17 @@ li {
         align-items: center;
         a {
           display: inline-block;
-          color: #d2d6dc;
+          color: #f0eeef;
           height: 70px;
+          font-size: 14px;
+          font-weight: 600;
           line-height: 70px;
           text-decoration: none;
-          border-bottom: 4px solid #009ffd;
+
+          &.a-active {
+            color: #d86f06;
+            border-bottom: 4px solid #d86f06;
+          }
         }
       }
     }
@@ -115,12 +121,13 @@ li {
       flex-wrap: no-wrap;
       justify-content: flex-end;
       align-items: center;
-      color: #d2d6dc;
+      color: #f0eeef;
       a {
         display: inline-block;
         width: 45px;
         font-size: 14px;
-        color: #d2d6dc;
+        font-weight: 600;
+        color: #f0eeef;
         text-decoration: none;
         position: relative;
       }
@@ -159,14 +166,14 @@ li {
           z-index: 999;
           li {
             a {
-              color: #1a1c1f;
+              color: #252733;
               font-weight: bold;
               line-height: 30px;
             }
             &:hover {
-              background: red;
+              background: #d86f06;
               a {
-                color: #fff;
+                color: #f0eeef;
               }
             }
           }
@@ -178,18 +185,21 @@ li {
     }
   }
   .menu {
-    background: #1a1c1f;
+    background: #252733;
     a {
       display: inline-block;
       font-size: 14px;
       line-height: 36px;
+      font-weight: 600;
       height: 36px;
       min-width: 100%;
       text-align: center;
       text-decoration: none;
-      font-size: 14px;
-      color: #d2d6dc;
-      border-bottom: 2px solid red;
+      color: #f0eeef;
+
+      &.a-active {
+        border-bottom: 2px solid #d86f06;
+      }
     }
   }
   .submenu {
@@ -223,6 +233,5 @@ li {
     visibility: visible;
   }
 }
-
 </style>
 
