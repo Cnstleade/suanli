@@ -10,13 +10,13 @@
                 <div class="col-xl-8 col-lg-7 d-none d-lg-block">
                     <div class="main-menu">
                         <nav>
-                            <a href="#" class="a-active">首页</a>                       
-                            <a href="#">算力租赁</a>
+                            <a href="#" :class="{aActive:i=='home'}" @click="go('home')">首页</a>                       
+                            <a href="#" :class="{aActive:i=='HashRate'}"  @click="go('HashRate')">算力租赁</a>
                             <a href="#">矿机租赁</a>
                             <a href="#">矿机合租</a>
                             <a href="#">矿机托管</a>
                             <a href="#">矿机商城</a>
-                            <a href="#">计算工具</a>
+                            <a href="#" :class="{aActive:i=='calculator'}"  @click="go('calculator')">计算工具</a>
                         </nav>
                     </div>
                 </div>
@@ -40,13 +40,13 @@
         </div>
         <transition name="fade">
             <ul v-if="show" class="menu submenu w-200 text-center d-lg-none">
-              <li><a href="#" class="a-active">首页</a></li>
-              <li><a href="#">算力租赁</a></li>
+              <li><a href="#" :class="{aActive:i=='home'}" @click="go('home')" >首页</a></li>
+              <li><a href="#"   :class="{aActive:i=='HashRate'}"  @click="go('HashRate')" >算力租赁</a></li>
               <li><a href="#">矿机租赁</a></li>
               <li><a href="#">矿机合租</a></li>
               <li><a href="#">矿机托管</a></li>
               <li><a href="#">矿机商城</a></li>
-              <li><a href="#">计算工具</a></li>
+              <li><a href="#"  :class="{aActive:i=='calculator'}"  @click="go('calculator')">计算工具</a></li>
             </ul>
         </transition>
     </header>
@@ -56,13 +56,25 @@
 export default {
   data() {
     return {
-      show: false
+      show: false,
+      i: "home"
     };
+  },
+  computed: {
+    route() {
+      return this.$route.path;
+    }
   },
   methods: {
     showMenu() {
       this.show = !this.show;
+    },
+    go(i) {
+      this.$router.push(i);
+      this.i = i;
     }
+  },
+  mounted() {
   }
 };
 </script>
@@ -107,7 +119,7 @@ li {
           line-height: 70px;
           text-decoration: none;
 
-          &.a-active {
+          &.aActive {
             color: #d86f06;
             border-bottom: 4px solid #d86f06;
           }
@@ -197,7 +209,7 @@ li {
       text-decoration: none;
       color: #f0eeef;
 
-      &.a-active {
+      &.aActive {
         border-bottom: 2px solid #d86f06;
       }
     }

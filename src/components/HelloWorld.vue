@@ -4,123 +4,8 @@
     <transition name="fade">
       <v-header v-if="isScroll" class="fixeds"></v-header>
     </transition>
-    <v-slider></v-slider>
-    <div class="container echart ">
-        <div class="row">
-          <div class="echart1 col-12 col-lg-8 ">
-             <v-demo class="h-100 w-100"></v-demo>
-          </div>
-          <div class=" d-none d-lg-flex col-4 detail">
-            <img class="img-fluid" src="../../static/bigt_03.jpg" alt="">
-            <div >
-              <img src="../../static/bigt_04.png" alt="">
-              <span>视频展示</span>
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class="container c-card-1 ">
-      <h4 class="text-center">租赁矿机挖矿</h4>
-      <span></span>
-      <p class="text-center">出租矿机算力，让您轻松挖：比特币（BTC）、以太坊（ETH）……</p>
-      <ul >
-        <li class="col-4 col-md-3 ">
-          <div>
-            <i class="icon-1"></i>
-          </div>
-          <p>矿机租赁</p>
-          <p>轻松高效挖矿</p>
-          <span>矿机租赁套餐</span>
-        </li>
-        <li class="col-4 col-md-3">
-          <div>
-          <i class="icon-2"></i>
-
-          </div>
-          <p>算力租赁</p>
-          <p>快速体验挖矿</p>
-          <span>矿机租赁套餐</span>
-        </li>
-        <li class="col-4 col-md-3">
-          <div>
-          <i class="icon-3"></i>
-
-          </div>
-          <p>矿机托管</p>
-          <p>专业海外托管</p>
-          <span>矿机租赁套餐</span>          
-        </li>
-      </ul>
-    </div>
-    <div class="container  c-2">
-      <h4 class="text-center">算力优势</h4>
-      <span></span>
-      <p class="text-center">全球算力节点部署，为您创造最大收益</p>
-      <ul>
-        <li class="col-6 col-lg-3">
-          <img class="img-fluid" src="../../static/suanli1.png" alt="">
-          <p >性价比高</p>
-          <em >矿机价格市场低价</em>
-          <em >享受海外低价电费</em>
-        </li>
-        <li class="col-6 col-lg-3">
-          <img class="img-fluid" src="../../static/suanli2.png" alt="">
-          <p >实力保障</p>
-          <em >海外大型矿场</em>
-          <em>优惠政策支持</em>
-        </li>
-        <li class="col-6 col-lg-3">
-          <img class="img-fluid" src="../../static/suanli3.png" alt="">
-          <p >专业服务</p>
-          <em >规范矿场托管，托管费用透明</em>
-          <em>专业运维团队，保障矿机运行</em>
-        </li>
-        <li class="col-6 col-lg-3">
-          <img class="img-fluid" src="../../static/suanli4.png" alt="">
-          <p >产权模式</p>
-          <em >1秒投产挖矿</em>
-          <em>矿机质保两年</em>
-        </li>                        
-      </ul>
-    </div>
-    <div class="container_fluid  c-3">
-      <h4 class="text-center">平台优势</h4>
-      <span></span>
-      <p class="text-center">以用户为中心，竭诚为您服务</p>
-      <ul class="container" id="platform">
-        <li class="col-12 col-lg-2 clearfix" >
-          <img class="img-fluid" src="../../static/pt-img1.png" alt="">
-          <p >安全稳定</p>
-          <i >安全稳定</i>
-          <i >保障账户安全</i>
-        </li>
-        <li class="col-12 col-lg-2 clearfix">
-          <img class="img-fluid" src="../../static/pt-img2.png" alt="">
-          <p >公开透明</p>
-        <i >平台费用公开透明</i>
-          <i >拒绝任何虚假信息</i>
-        </li>
-        <li class="col-12 col-lg-2 clearfix">
-          <img class="img-fluid" src="../../static/pt-img3.png" alt="">
-          <p >规范管理</p>
-          <i>从矿机选购到产生收益</i>
-          <i >严格把控每个业务流程</i>
-        </li>
-        <li class="col-12 col-lg-2 clearfix">
-          <img class="img-fluid" src="../../static/pt-img4.png" alt="">
-          <p >操作便捷</p>
-          <i >简单高效快捷</i>
-          <i >一键即可开启交易</i>
-        </li> 
-        <li class="col-12 col-lg-2 clearfix">
-          <img class="img-fluid" src="../../static/pt-img5.png" alt="">
-          <p >贴心服务</p>
-          <i >专业客服一对一</i>
-          <i >为您提供优质服务</i>
-        </li>                                
-      </ul>
-    </div>   
-    <v-news></v-news> 
+      <router-view></router-view>
+    <v-footer></v-footer>
   </div>
 </template>
 
@@ -129,6 +14,7 @@ import vHeader from "./header/header";
 import vSlider from "./slider/slider";
 import vDemo from "./echartDemo/echartDemo";
 import vNews from "./news/news";
+import vFooter from "./footer/footer";
 export default {
   name: "HelloWorld",
   data() {
@@ -141,12 +27,18 @@ export default {
     vHeader,
     vSlider,
     vDemo,
-    vNews
+    vNews,
+    vFooter
   },
   methods: {
     menu() {
-      this.scroll = document.body.scrollTop;
-
+      // this.scroll = document.body.scrollTop;
+      console.log(document.body.scrollTop);
+      if (document.documentElement && document.documentElement.scrollTop) {
+        this.scroll = document.documentElement.scrollTop;
+      } else if (document.body) {
+        this.scroll = document.body.scrollTop;
+      }
       this.isScroll = this.scroll > 70;
     }
   },
