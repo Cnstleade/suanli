@@ -32,5 +32,11 @@ export default new Router({
         component: calculator,
       },
     ]
+  }, {
+    path: '/admin',
+    component: resolve => require(['../backstage/common/Home.vue'], resolve),
+    meta: {
+      title: '自述文件'
+    },
   }]
 })
