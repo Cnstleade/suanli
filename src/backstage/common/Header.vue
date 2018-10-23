@@ -3,7 +3,7 @@
     <!-- 折叠按钮 -->
     <div class="header-btn" @click="collapseChage">
       <i class="el-icon-menu"></i>
-      秒达钱包<span style="    margin-left: 10px;font-size: 16px;">后台管理系统</span>
+      助币云<span style="    margin-left: 10px;font-size: 16px;">后台管理系统</span>
     </div>
     <div class="header-logo">
       
