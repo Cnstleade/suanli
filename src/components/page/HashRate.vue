@@ -1,6 +1,8 @@
 <template>
     <div class="hashrate" id="hashrate">
-        <v-slider></v-slider>
+        <!-- <v-slider></v-slider> -->
+        <img src="../../../static/HashRateB.jpg" class=" img-fluid d-none d-lg-block" alt="">
+        <img src="../../../static/HashRateS.jpg" class="w-100 img-fluid d-lg-none" alt="">
         <h1 class="container hashrate-title">比特币算力租赁 <span>(比特币矿机)</span></h1>
         <div class="container order"> 
           <div class="row">

@@ -56,7 +56,7 @@
             <el-table-column prop="ADDTIME" label="添加时间" align="center"></el-table-column>
             <el-table-column prop="ADDBY" label="添加者" align="center"></el-table-column>
             <el-table-column prop="WORKUID" label="维修员ID" align="center"></el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" min-width="150">
               <template slot-scope="scope">
                 <el-button
                   size="mini"
@@ -64,7 +64,7 @@
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                  @click="handleDelete(scope.$index, scope.row)">禁用</el-button>
               </template>
             </el-table-column>            
         </el-table>
@@ -75,15 +75,30 @@
             width="30%"
             >
           <el-form :model="editForm">
-            <el-form-item label="活动名称" label-width="100px">
-              <el-input v-model="editForm.name" autocomplete="off"></el-input>
+            <el-form-item label="名称" label-width="100px">
+              <el-input v-model="editForm.NAME" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="活动区域" label-width="100px">
-              <el-select v-model="editForm.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
+            <el-form-item label="电费(元/度)" label-width="100px">
+              <el-input v-model="editForm.ELECTRICITYFEES" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item label="矿场地址" label-width="100px">
+              <el-input v-model="editForm.ADDRESS" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="矿场管理员" label-width="100px">
+              <el-input v-model="editForm.USERUID" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="机位费" label-width="100px">
+              <el-input v-model="editForm.POSITIONFEES" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="添加时间" label-width="100px">
+              <el-input v-model="editForm.ADDTIME" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="添加者" label-width="100px">
+              <el-input v-model="editForm.ADDBY" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="维修员ID" label-width="100px">
+              <el-input v-model="editForm.WORKUID" autocomplete="off"></el-input>
+            </el-form-item> 
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormEditVisible = false">取 消</el-button>
@@ -97,15 +112,39 @@
             width="30%"
             >
           <el-form :model="addForm">
-            <el-form-item label="活动名称" label-width="100px">
+            <el-form-item label="名称" label-width="100px">
+              <el-input v-model="addForm.NAME" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="电费(元/度)" label-width="100px">
+              <el-input v-model="addForm.ELECTRICITYFEES" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="矿场地址" label-width="100px">
+              <el-input v-model="addForm.ADDRESS" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="矿场管理员" label-width="100px">
+              <el-input v-model="addForm.USERUID" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="机位费" label-width="100px">
+              <el-input v-model="addForm.POSITIONFEES" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="添加时间" label-width="100px">
+              <el-input v-model="addForm.ADDTIME" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="添加者" label-width="100px">
+              <el-input v-model="addForm.ADDBY" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="维修员ID" label-width="100px">
+              <el-input v-model="addForm.WORKUID" autocomplete="off"></el-input>
+            </el-form-item>                                                                                    
+            <!-- <el-form-item label="名称" label-width="100px">
               <el-input v-model="addForm.name" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="活动区域" label-width="100px">
-              <el-select v-model="addForm.region" placeholder="请选择活动区域">
+            <el-form-item label="备注" label-width="100px">
+              <el-select v-model="addForm.region" placeholder="请选择备注">
                 <el-option label="区域一" value="shanghai"></el-option>
                 <el-option label="区域二" value="beijing"></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormAddVisible = false">取 消</el-button>

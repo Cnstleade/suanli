@@ -72,6 +72,10 @@ export default {
               mname: "角色管理"
             },
             {
+              nurl: "passApproval",
+              mname: "用户组管理"
+            },            
+            {
               nurl: "administrator",
               mname: "管理员"
             },
@@ -94,10 +98,7 @@ export default {
               nurl: "subAccountManagement",
               mname: "子账户管理"
             },
-            {
-              nurl: "passApproval",
-              mname: "用户组管理"
-            },
+
             {
               nurl: "walletAddressManagement",
               mname: "钱包地址管理"
@@ -150,7 +151,7 @@ export default {
         {
           icon: "icon-shuju",
           nurl: "orderManagement",
-          mname: "订单管理",
+          mname: "订单电力管理",
           list: [
             {
               nurl: "minerOrderList",
@@ -190,6 +191,14 @@ export default {
             {
               nurl: "cashManagement",
               mname: "提现管理"
+            },
+            {
+              nurl: "yield",
+              mname: "收益率管理"
+            },
+            {
+              nurl: "orderManagement",
+              mname: "订单管理"
             }
           ]
         },
@@ -201,6 +210,17 @@ export default {
             {
               nurl: "informationManagement",
               mname: "资讯列表"
+            }
+          ]
+        },
+        {
+          icon: "icon-xitong",
+          nurl: "threePartiesManagement",
+          mname: "三方管理",
+          list: [
+            {
+              nurl: "threePartiesList",
+              mname: "三方列表"
             }
           ]
         }
@@ -234,7 +254,6 @@ export default {
 };
 </script>
 <style>
-
 #sidebar .el-submenu__title,
 .el-menu-item {
   font-size: 12px;

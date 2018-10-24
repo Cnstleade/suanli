@@ -54,14 +54,14 @@ export default {
   padding: 0;
 }
 
-html,
+/* html,
 body,
-#app,
+
 .wrapper {
   width: 100%;
   height: 100%;
   overflow: hidden;
-}
+} */
 
 body {
   font-family: "PingFang SC", "Helvetica Neue", Helvetica, "microsoft yahei",

@@ -40,6 +40,18 @@ export default new Router({
         path: 'MillRoommates',
         name: 'MillRoommates',
         component: resolve => require(['@/components/page/MillRoommates.vue'], resolve),
+      },
+      {
+        path: 'personalCenter',
+        name: 'personalCenter',
+        component: resolve => require(['@/components/page/personalCenter.vue'], resolve),
+        children: [{
+            path: 'property',
+            name: 'property ',
+            component: resolve => require(['@/components/page/personalCenter/property .vue'], resolve),
+          }
+
+        ]
       }
     ]
   }, {
@@ -322,6 +334,24 @@ export default new Router({
           title: '提现管理',
           role: 'cashManagement'
         }
+      },
+      {
+        path: '/yield',
+        name: 'yield',
+        component: resolve => require(['@/backstage/page/finance/yield.vue'], resolve),
+        meta: {
+          title: '收益率管理',
+          role: 'yield'
+        }
+      },
+      {
+        path: '/orderManagement',
+        name: 'orderManagement',
+        component: resolve => require(['@/backstage/page/finance/orderManagement.vue'], resolve),
+        meta: {
+          title: '订单收益管理',
+          role: 'orderManagement'
+        }
       }
       /*  资讯列表  */
       ,
@@ -332,6 +362,17 @@ export default new Router({
         meta: {
           title: '提现管理',
           role: 'informationManagement'
+        }
+      }
+      /*  三方管理 */
+      ,
+      {
+        path: '/threePartiesList',
+        name: 'threePartiesList',
+        component: resolve => require(['@/backstage/page/threePartiesManagement/threePartiesList.vue'], resolve),
+        meta: {
+          title: '提现管理',
+          role: 'threePartiesList'
         }
       }
     ]

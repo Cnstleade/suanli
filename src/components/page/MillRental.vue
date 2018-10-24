@@ -1,16 +1,18 @@
 <template>
-    <div class="hashrate" id="hashrate">
-        <v-slider></v-slider>
-        <h1 class="container hashrate-title">比特币算力租赁 <span>(比特币矿机)</span></h1>
+    <div class="MillRental" id="MillRental">
+        <!-- <v-slider></v-slider> -->
+        <img src="../../../static/MillRentalB.jpg" class=" img-fluid d-none d-lg-block" alt="">
+        <img src="../../../static/MillRentalS.jpg" class="w-100 img-fluid d-lg-none" alt="">        
+        <h1 class="container MillRental-title">比特币算力租赁 <span>(比特币矿机)</span></h1>
         <div class="container order"> 
           <div class="row">
-            <div class="col-12 col-lg-8 hashrate-1">
+            <div class="col-12 col-lg-8 MillRental-1">
               <div class="row flex-column">
-                <div class="text-center position-relative hashrate-top">
+                <div class="text-center position-relative MillRental-top">
                   蚂蚁矿机的BTC算力
                   <span class="position-absolute detail"> 详细介绍 ></span>
                 </div>
-                <div class="col-12 text-center mt-4 pb-4 hashrate-order">
+                <div class="col-12 text-center mt-4 pb-4 MillRental-order">
                   <div class="row flex-nowrap flex-row  justify-content-around">
                     <div >
                       <p>矿机类型</p>
@@ -60,7 +62,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 col-lg-4 hashrate-buy">
+            <div class="col-12 col-lg-4 MillRental-buy">
               <div class="row flex-column mt-3">
                 <p>￥&nbsp;<span>750.00</span></p>
                 <div class="row justify-content-between" style="align-items: center; ">
@@ -70,7 +72,7 @@
                 <div class="mt-2">
                    <el-checkbox v-model="checked" size="mini" style="font-size:12px;">我已阅读并同意</el-checkbox><a href="#">算力租赁合同</a>
                 </div>
-                <div class="hashrate-buyNow">
+                <div class="MillRental-buyNow">
                     <div class="row">
                       <div class="col-12 col-lg-6"> 
                         <el-button type="primary" class="w-100" size="lage" round>立即购买</el-button>
@@ -83,13 +85,13 @@
         </div>
         <div class="container order"> 
           <div class="row">
-            <div class="col-12 col-lg-8 hashrate-1">
+            <div class="col-12 col-lg-8 MillRental-1">
               <div class="row flex-column">
-                <div class="text-center position-relative hashrate-top">
+                <div class="text-center position-relative MillRental-top">
                   蚂蚁矿机的BTC算力
                   <span class="position-absolute detail"> 详细介绍 ></span>
                 </div>
-                <div class="col-12 text-center mt-4 pb-4 hashrate-order">
+                <div class="col-12 text-center mt-4 pb-4 MillRental-order">
                   <div class="row ">
                     <div class="col-3 ">
                       <p>算力类型</p>
@@ -131,7 +133,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 col-lg-4 hashrate-buy">
+            <div class="col-12 col-lg-4 MillRental-buy">
               <div class="row flex-column mt-3">
                 <p>￥&nbsp;<span>750.00</span></p>
                 <div class="row justify-content-between" style="align-items: center; ">
@@ -141,7 +143,7 @@
                 <div class="mt-2">
                    <el-checkbox v-model="checked" size="mini" style="font-size:12px;">我已阅读并同意</el-checkbox><a href="#">算力租赁合同</a>
                 </div>
-                <div class="hashrate-buyNow">
+                <div class="MillRental-buyNow">
                     <div class="row">
                       <div class="col-12 col-lg-6"> 
                         <el-button type="primary" class="w-100" size="lage" round>立即购买</el-button>
@@ -152,16 +154,16 @@
             </div>
           </div>
         </div>
-      <h1 class="container hashrate-title">以太坊算力租赁  <span>（以太坊矿机)</span></h1>        
+      <h1 class="container MillRental-title">以太坊算力租赁  <span>（以太坊矿机)</span></h1>        
         <div class="container order"> 
           <div class="row">
-            <div class="col-12 col-lg-8 hashrate-1">
+            <div class="col-12 col-lg-8 MillRental-1">
               <div class="row flex-column">
-                <div class="text-center position-relative hashrate-top">
+                <div class="text-center position-relative MillRental-top">
                   蚂蚁矿机的BTC算力
                   <span class="position-absolute detail"> 详细介绍 ></span>
                 </div>
-                <div class="col-12 text-center mt-4 pb-4 hashrate-order">
+                <div class="col-12 text-center mt-4 pb-4 MillRental-order">
                   <div class="row ">
                     <div class="col-3 ">
                       <p>算力类型</p>
@@ -203,7 +205,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 col-lg-4 hashrate-buy">
+            <div class="col-12 col-lg-4 MillRental-buy">
               <div class="row flex-column mt-3">
                 <p>￥&nbsp;<span>750.00</span></p>
                 <div class="row justify-content-between" style="align-items: center; ">
@@ -213,7 +215,7 @@
                 <div class="mt-2">
                    <el-checkbox v-model="checked" size="mini" style="font-size:12px;">我已阅读并同意</el-checkbox><a href="#">算力租赁合同</a>
                 </div>
-                <div class="hashrate-buyNow">
+                <div class="MillRental-buyNow">
                     <div class="row">
                       <div class="col-12 col-lg-6"> 
                         <el-button type="primary" class="w-100" size="lage" round>立即购买</el-button>
@@ -226,13 +228,13 @@
         </div>
         <div class="container order"> 
           <div class="row">
-            <div class="col-12 col-lg-8 hashrate-1">
+            <div class="col-12 col-lg-8 MillRental-1">
               <div class="row flex-column">
-                <div class="text-center position-relative hashrate-top">
+                <div class="text-center position-relative MillRental-top">
                   蚂蚁矿机的BTC算力
                   <span class="position-absolute detail"> 详细介绍 ></span>
                 </div>
-                <div class="col-12 text-center mt-4 pb-4 hashrate-order">
+                <div class="col-12 text-center mt-4 pb-4 MillRental-order">
                   <div class="row ">
                     <div class="col-3 ">
                       <p>算力类型</p>
@@ -274,7 +276,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 col-lg-4 hashrate-buy">
+            <div class="col-12 col-lg-4 MillRental-buy">
               <div class="row flex-column mt-3">
                 <p>￥&nbsp;<span>750.00</span></p>
                 <div class="row justify-content-between" style="align-items: center; ">
@@ -284,7 +286,7 @@
                 <div class="mt-2">
                    <el-checkbox v-model="checked" size="mini" style="font-size:12px;">我已阅读并同意</el-checkbox><a href="#">算力租赁合同</a>
                 </div>
-                <div class="hashrate-buyNow">
+                <div class="MillRental-buyNow">
                     <div class="row">
                       <div class="col-12 col-lg-6"> 
                         <el-button type="primary" class="w-100" size="lage" round>立即购买</el-button>
@@ -317,7 +319,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.hashrate {
+.MillRental {
   .detail {
     right: 0;
     top: 20px;
@@ -332,8 +334,8 @@ export default {
     border-radius: 2px;
     box-shadow: #ddd 1px 2px 9px;
   }
-  .hashrate-1 {
-    .hashrate-top {
+  .MillRental-1 {
+    .MillRental-top {
       color: #333;
       padding: 20px 0;
       font-family: "\5FAE\8F6F\96C5\9ED1", tahoma, arial, "Hiragino Sans GB",
@@ -382,11 +384,11 @@ export default {
         }
       }
     }
-    .hashrate-order {
+    .MillRental-order {
       border-bottom: 1px solid #ebebeb;
     }
   }
-  .hashrate-buy {
+  .MillRental-buy {
     background-color: #f8f8f8;
 
     & > div {
@@ -413,12 +415,12 @@ export default {
         color: #ff9055;
         margin-left: 10px;
       }
-      .hashrate-buyNow {
+      .MillRental-buyNow {
         margin-top: 30px;
       }
     }
   }
-  .hashrate-title {
+  .MillRental-title {
     font-family: "\5FAE\8F6F\96C5\9ED1", tahoma, arial, "Hiragino Sans GB",
       "\5b8b\4f53", sans-serif;
     line-height: 26px;
@@ -437,7 +439,7 @@ export default {
 }
 </style>
 <style>
-#hashrate .el-checkbox__label {
+#MillRental .el-checkbox__label {
   font-size: 12px;
 }
 </style>

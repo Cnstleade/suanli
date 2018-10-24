@@ -52,7 +52,7 @@
             <el-table-column prop="CODE" label="当前功耗" align="center"></el-table-column>
             <el-table-column prop="MINERUID" label="变化时间" align="center"></el-table-column>
             <el-table-column prop="ROW" label="添加者" align="center"></el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" min-width="150">
               <template slot-scope="scope">
                 <el-button
                   size="mini"
@@ -60,7 +60,7 @@
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                  @click="handleDelete(scope.$index, scope.row)">禁用</el-button>
               </template>
             </el-table-column>            
         </el-table>
@@ -71,11 +71,11 @@
             width="30%"
             >
           <el-form :model="editForm">
-            <el-form-item label="活动名称" label-width="100px">
+            <el-form-item label="名称" label-width="100px">
               <el-input v-model="editForm.name" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="活动区域" label-width="100px">
-              <el-select v-model="editForm.region" placeholder="请选择活动区域">
+            <el-form-item label="备注" label-width="100px">
+              <el-select v-model="editForm.region" placeholder="请选择备注">
                 <el-option label="区域一" value="shanghai"></el-option>
                 <el-option label="区域二" value="beijing"></el-option>
               </el-select>
@@ -93,11 +93,11 @@
             width="30%"
             >
           <el-form :model="addForm">
-            <el-form-item label="活动名称" label-width="100px">
+            <el-form-item label="名称" label-width="100px">
               <el-input v-model="addForm.name" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="活动区域" label-width="100px">
-              <el-select v-model="addForm.region" placeholder="请选择活动区域">
+            <el-form-item label="备注" label-width="100px">
+              <el-select v-model="addForm.region" placeholder="请选择备注">
                 <el-option label="区域一" value="shanghai"></el-option>
                 <el-option label="区域二" value="beijing"></el-option>
               </el-select>

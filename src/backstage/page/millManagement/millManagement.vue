@@ -47,6 +47,7 @@
             style="width: 100%;font-weight:bold"
             class="mt-3"
             v-loading="loading">
+ 
             <el-table-column prop="MACHINEUID" label="ID" align="center"></el-table-column>
             <el-table-column prop="MACHINENAME" label="矿机名称" align="center"></el-table-column>
             <el-table-column prop="CODE" label="编号" align="center"></el-table-column>
@@ -69,7 +70,7 @@
             <el-table-column prop="MINER_DESC" label="矿工名称" align="center"></el-table-column>
             <el-table-column prop="OVERCLOCK" label="是否超频" align="center"></el-table-column>
             <el-table-column prop="PRODUCTION_TIME" label="出厂时间" align="center"></el-table-column>
-            <el-table-column label="操作" align="center" min-width="150">
+            <el-table-column label="操作" align="center" min-width="150" >
               <template slot-scope="scope">
                 <el-button
                   size="mini"
@@ -77,7 +78,7 @@
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                  @click="handleDelete(scope.$index, scope.row)">禁用</el-button>
               </template>
             </el-table-column>            
         </el-table>
@@ -88,15 +89,69 @@
             width="30%"
             >
           <el-form :model="editForm">
-            <el-form-item label="活动名称" label-width="100px">
-              <el-input v-model="editForm.name" autocomplete="off"></el-input>
+            <el-form-item label="矿机名称" label-width="100px">
+              <el-input v-model="editForm.MACHINENAME" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="活动区域" label-width="100px">
-              <el-select v-model="editForm.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
+            <el-form-item label="编号" label-width="100px">
+              <el-input v-model="editForm.CODE" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item label="所在矿场" label-width="100px">
+              <el-input v-model="editForm.MINERUID" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="位置行" label-width="100px">
+              <el-input v-model="editForm.ROW" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="位置列" label-width="100px">
+              <el-input v-model="editForm.CLOS" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="所属型号" label-width="100px">
+              <el-input v-model="editForm.MODELUID" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="标准算力" label-width="100px">
+              <el-input v-model="editForm.STANDARDPOWER" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="当前算力" label-width="100px">
+              <el-input v-model="editForm.NOWPOWER" autocomplete="off"></el-input>
+            </el-form-item>            
+            <el-form-item label="矿机价格" label-width="100px">
+              <el-input v-model="editForm.PRICE" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="所在矿池" label-width="100px">
+              <el-input v-model="editForm.POOL" autocomplete="off"></el-input>
+            </el-form-item>                
+            <el-form-item label="当前执行的币种" label-width="100px">
+              <el-input v-model="editForm.CURRENCY" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="矿机所属类型" label-width="100px">
+              <el-input v-model="editForm.TYPE" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="维修费" label-width="100px">
+              <el-input v-model="editForm.REPAIRFEES" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="是否启用" label-width="100px">
+              <el-input v-model="editForm.ISSHOW" autocomplete="off"></el-input>
+            </el-form-item>                                                  
+            <!-- <el-form-item label="已售出" label-width="100px">
+              <el-input v-model="addForm.NOWPOWER" autocomplete="off"></el-input>
+            </el-form-item>   -->
+            <el-form-item label="添加时间" label-width="100px">
+              <el-input v-model="editForm.ADDTIME" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="添加者" label-width="100px">
+              <el-input v-model="editForm.ADDBY" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="矿工子账号" label-width="100px">
+              <el-input v-model="editForm.MINER_ACCOUNT" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="矿工名称" label-width="100px">
+              <el-input v-model="editForm.MINER_DESC" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="是否超频" label-width="100px">
+              <el-input v-model="editForm.OVERCLOCK" autocomplete="off"></el-input>
+            </el-form-item>                                                              
+            <el-form-item label="出厂时间" label-width="100px">
+              <el-input v-model="editForm.PRODUCTION_TIME" autocomplete="off"></el-input>
+            </el-form-item> 
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormEditVisible = false">取 消</el-button>
@@ -110,15 +165,77 @@
             width="30%"
             >
           <el-form :model="addForm">
-            <el-form-item label="活动名称" label-width="100px">
-              <el-input v-model="addForm.name" autocomplete="off"></el-input>
+            <el-switch
+              v-model="num"
+              active-text="批量添加"
+              inactive-text="单个添加">
+            </el-switch>
+            <el-form-item label="数量" label-width="100px" v-if="num" class="mt-4">
+              <el-input v-model="addForm.Num" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="活动区域" label-width="100px">
-              <el-select v-model="addForm.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
+            <el-form-item label="矿机名称" label-width="100px">
+              <el-input v-model="addForm.MACHINENAME" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item label="编号" label-width="100px">
+              <el-input v-model="addForm.CODE" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="所在矿场" label-width="100px">
+              <el-input v-model="addForm.MINERUID" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="位置行" label-width="100px">
+              <el-input v-model="addForm.ROW" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="位置列" label-width="100px">
+              <el-input v-model="addForm.CLOS" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="所属型号" label-width="100px">
+              <el-input v-model="addForm.MODELUID" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="标准算力" label-width="100px">
+              <el-input v-model="addForm.STANDARDPOWER" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="当前算力" label-width="100px">
+              <el-input v-model="addForm.NOWPOWER" autocomplete="off"></el-input>
+            </el-form-item>            
+            <el-form-item label="矿机价格" label-width="100px">
+              <el-input v-model="addForm.PRICE" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="所在矿池" label-width="100px">
+              <el-input v-model="addForm.POOL" autocomplete="off"></el-input>
+            </el-form-item>                
+            <el-form-item label="当前执行的币种" label-width="100px">
+              <el-input v-model="addForm.CURRENCY" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="矿机所属类型" label-width="100px">
+              <el-input v-model="addForm.TYPE" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="维修费" label-width="100px">
+              <el-input v-model="addForm.REPAIRFEES" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="是否启用" label-width="100px">
+              <el-input v-model="addForm.ISSHOW" autocomplete="off"></el-input>
+            </el-form-item>                                                  
+            <!-- <el-form-item label="已售出" label-width="100px">
+              <el-input v-model="addForm.NOWPOWER" autocomplete="off"></el-input>
+            </el-form-item>   -->
+            <el-form-item label="添加时间" label-width="100px">
+              <el-input v-model="addForm.ADDTIME" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="添加者" label-width="100px">
+              <el-input v-model="addForm.ADDBY" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="矿工子账号" label-width="100px">
+              <el-input v-model="addForm.MINER_ACCOUNT" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="矿工名称" label-width="100px">
+              <el-input v-model="addForm.MINER_DESC" autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="是否超频" label-width="100px">
+              <el-input v-model="addForm.OVERCLOCK" autocomplete="off"></el-input>
+            </el-form-item>                                                              
+            <el-form-item label="出厂时间" label-width="100px">
+              <el-input v-model="addForm.PRODUCTION_TIME" autocomplete="off"></el-input>
+            </el-form-item> 
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormAddVisible = false">取 消</el-button>
@@ -133,6 +250,7 @@ export default {
     return {
       search: {},
       loading: false,
+      num: true,
       tableData: [{ MACHINEUID: 1 }],
       npage: 1,
       pagesize: 10,
