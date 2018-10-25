@@ -1,8 +1,8 @@
 <template>
   <div class="container_fuild" id="hello">
-    <v-header  v-if="!isScroll"></v-header>
+    <v-header  v-if="!isScroll" class=" "></v-header>
     <transition name="fade">
-      <v-header v-if="isScroll" class="fixeds"></v-header>
+      <v-header v-if="isScroll" class="fixeds d-lg-block d-none"  ></v-header>
     </transition>
       <router-view></router-view>
     <v-footer></v-footer>

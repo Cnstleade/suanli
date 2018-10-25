@@ -31,23 +31,22 @@
                         <el-menu
                                 default-active="2"
                                 class="el-menu-vertical-demo w-100 nav-vertical-demo"
-                                @open="handleOpen"
-                                @close="handleClose"
+                             @select="handleSelect"
                                   text-color="#000"
                                  active-text-color="#d86f06">
-                                <el-menu-item index="1">
+                                <el-menu-item index="property">
                                   <i class="el-icon-menu"></i>
                                   <span slot="title">资产总览</span>
                                 </el-menu-item>                            
-                                <el-menu-item index="2">
+                                <el-menu-item index="hashrate">
                                   <i class="el-icon-menu"></i>
                                   <span slot="title">算力租赁</span>
                                 </el-menu-item>
-                                <el-menu-item index="3">
+                                <el-menu-item index="mill">
                                   <i class="el-icon-document"></i>
                                   <span slot="title">矿机租赁</span>
                                 </el-menu-item>
-                                <el-menu-item index="4">
+                                <el-menu-item index="millRoommates">
                                   <i class="el-icon-setting"></i>
                                   <span slot="title">矿机合租</span>
                                 </el-menu-item>
@@ -55,11 +54,11 @@
                                   <i class="el-icon-setting"></i>
                                   <span slot="title">商城订单</span>
                                 </el-menu-item>
-                                <el-menu-item index="6">
+                                <el-menu-item index="pCenter">
                                   <i class="el-icon-setting"></i>
                                   <span slot="title">个人中心</span>
                                 </el-menu-item>
-                                <el-menu-item index="7">
+                                <el-menu-item index="recharge">
                                   <i class="el-icon-setting"></i>
                                   <span slot="title">我要充值</span>
                                 </el-menu-item>
@@ -75,25 +74,25 @@
                     </div>
                     <div class="row  d-lg-none mt-4">
                         <el-menu default-active="2" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                                    <el-menu-item index="1">
+                                    <el-menu-item index="property">
                                       资产总览
                                     </el-menu-item>                            
-                                    <el-menu-item index="2">
+                                    <el-menu-item index="hashrate">
                                      算力租赁
                                     </el-menu-item>
-                                    <el-menu-item index="3">
+                                    <el-menu-item index="mill">
                                       矿机租赁
                                     </el-menu-item>
-                                    <el-menu-item index="4">
+                                    <el-menu-item index="millRoommates">
                                     矿机合租
                                     </el-menu-item>
                                     <el-menu-item index="5">
                                     商城订单
                                     </el-menu-item>
-                                    <el-menu-item index="6">
+                                    <el-menu-item index="pCenter">
                                     个人中心
                                     </el-menu-item>
-                                    <el-menu-item index="7">
+                                    <el-menu-item index="recharge">
                                     我要充值
                                     </el-menu-item>
                                     <el-menu-item index="8">
@@ -132,7 +131,7 @@ export default {
       console.log(key, keyPath);
     },
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+      this.$router.push(key);
     }
   }
 };

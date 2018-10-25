@@ -48,7 +48,27 @@ export default new Router({
         children: [{
             path: 'property',
             name: 'property ',
-            component: resolve => require(['@/components/page/personalCenter/property .vue'], resolve),
+            component: resolve => require(['@/components/page/personalCenter/property.vue'], resolve),
+          }, {
+            path: 'hashrate',
+            name: 'hashrate ',
+            component: resolve => require(['@/components/page/personalCenter/hashrate.vue'], resolve),
+          }, {
+            path: 'mill',
+            name: 'mill ',
+            component: resolve => require(['@/components/page/personalCenter/mill.vue'], resolve),
+          }, {
+            path: 'millRoommates',
+            name: 'millRoommates',
+            component: resolve => require(['@/components/page/personalCenter/millRoommates.vue'], resolve),
+          }, {
+            path: 'pCenter',
+            name: 'pCenter',
+            component: resolve => require(['@/components/page/personalCenter/pCenter.vue'], resolve),
+          }, {
+            path: 'recharge',
+            name: 'recharge',
+            component: resolve => require(['@/components/page/personalCenter/recharge.vue'], resolve),
           }
 
         ]

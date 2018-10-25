@@ -29,7 +29,7 @@
                         <div class="language-info position-relative">
                             <a href="#">语言</a>
                             <ul class="submenu w-200 text-center">
-                                <li><a href="#"><i class="iconfont icon-zhongwen"></i>中文</a></li>
+                                <li><a href="#"><i class="iconfont icon-zhongwen" ></i>中文</a></li>
                                 <li><a href="#"><i class="iconfont icon-yingwen"></i>英文</a></li>
                             </ul>                            
                         </div>
