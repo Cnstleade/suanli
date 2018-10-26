@@ -1,4 +1,7 @@
 import {
+  ADD_LOGIN_USER,
+  SIGN_OUT,
+
   RECORD_ADDRESS,
   ADD_CART,
   REDUCE_CART,
@@ -37,6 +40,45 @@ import {
 
 
 export default {
+  //   ADD_LOGIN_USER (state,data) {  //登入，保存状态  
+  //     sessionStorage.setItem("username", data);  //添加到sessionStorage  
+  //     sessionStorage.setItem("isLogin",true);  
+  //     state.username=data,             //同步的改变store中的状态  
+  //     state.isLogin=true  
+  // },  
+  // SIGN_OUT (state) {   //退出，删除状态  
+  //     sessionStorage.removeItem("username");  //移除sessionStorage  
+  //     sessionStorage.removeItem("isLogin");  
+  //     state.username=''                //同步的改变story中的状态  
+  //     state.isLogin=false  
+  // }
+
+
+  /*  用户登录 */
+  [ADD_LOGIN_USER](state, data) {
+    sessionStorage.setItem("username", data); //添加到sessionStorage  
+    sessionStorage.setItem("isLogin", true);
+    state.username = data, //同步的改变store中的状态  
+      state.isLogin = true
+  },
+
+  /*  用户退出 */
+  [SIGN_OUT](state) {
+    sessionStorage.removeItem("username"); //移除sessionStorage  
+    sessionStorage.removeItem("isLogin");
+    state.username = '' //同步的改变story中的状态  
+    state.isLogin = false
+  },
+
+
+  // SIGN_OUT (state) {   //退出，删除状态  
+  //     sessionStorage.removeItem("username");  //移除sessionStorage  
+  //     sessionStorage.removeItem("isLogin");  
+  //     state.username=''                //同步的改变story中的状态  
+  //     state.isLogin=false  
+  // }
+
+
 
   // 加入购物车
   [ADD_CART](state, {
@@ -142,7 +184,7 @@ export default {
       username
     })
   },
-  
+
   //退出登录
   [OUT_LOGIN](state) {
     state.userInfo = {};

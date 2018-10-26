@@ -62,11 +62,11 @@
                                   <i class="el-icon-setting"></i>
                                   <span slot="title">我要充值</span>
                                 </el-menu-item>
-                                <el-menu-item index="8">
+                                <el-menu-item index="asset">
                                   <i class="el-icon-setting"></i>
                                   <span slot="title">提取资产</span>
                                 </el-menu-item> 
-                               <el-menu-item index="9">
+                               <el-menu-item index="billing">
                                   <i class="el-icon-setting"></i>
                                   <span slot="title">账单明细</span>
                                 </el-menu-item>                                                                                                                                            
@@ -95,10 +95,10 @@
                                     <el-menu-item index="recharge">
                                     我要充值
                                     </el-menu-item>
-                                    <el-menu-item index="8">
+                                    <el-menu-item index="asset">
                                     提取资产
                                     </el-menu-item> 
-                                   <el-menu-item index="9">
+                                   <el-menu-item index="billing">
                                     账单明细
                                     </el-menu-item>                
                         </el-menu>
@@ -114,6 +114,7 @@
 </template>
 <script>
 import vSlider from "../slider/slider";
+import { animate } from "@/config/animate";
 export default {
   data() {
     return {
@@ -132,8 +133,56 @@ export default {
     },
     handleSelect(key, keyPath) {
       this.$router.push(key);
+    },
+    //返回顶部
+    backTop() {
+      animate(document.body, { scrollTop: "0" }, 400, "ease-out");
     }
+  },
+  // beforeCreate: function() {
+  //   console.group("------beforeCreate创建前状态------");
+  //   console.log("%c%s", "color:red", "el     : " + this.$el); //undefined
+  //   console.log("%c%s", "color:red", "data   : " + this.$data); //undefined
+  //   console.log("%c%s", "color:red", "message: " + this.message);
+  // },
+  // created: function() {
+  //   console.group("------created创建完毕状态------");
+  //   console.log("%c%s", "color:red", "el     : " + this.$el); //undefined
+  //   console.log("%c%s", "color:red", "data   : " + this.$data); //已被初始化
+  //   console.log("%c%s", "color:red", "message: " + this.message); //已被初始化
+  // },
+  // beforeMount: function() {
+  //   console.group("------beforeMount挂载前状态------");
+  //   console.log("%c%s", "color:red", "el     : " + this.$el); //已被初始化
+  //   console.log(this.$el);
+  //   console.log("%c%s", "color:red", "data   : " + this.$data); //已被初始化
+  //   console.log("%c%s", "color:red", "message: " + this.message); //已被初始化
+  // },
+  // mounted: function() {
+  //   console.group("------mounted 挂载结束状态------");
+  //   console.log("%c%s", "color:red", "el     : " + this.$el); //已被初始化
+  //   console.log(this.$el);
+  //   console.log("%c%s", "color:red", "data   : " + this.$data); //已被初始化
+  //   console.log("%c%s", "color:red", "message: " + this.message); //已被初始化
+  // },
+  beforeUpdate: function() {},
+  updated: function() {
+    this.backTop();
   }
+  // beforeDestroy: function() {
+  //   console.group("beforeDestroy 销毁前状态===============》");
+  //   console.log("%c%s", "color:red", "el     : " + this.$el);
+  //   console.log(this.$el);
+  //   console.log("%c%s", "color:red", "data   : " + this.$data);
+  //   console.log("%c%s", "color:red", "message: " + this.message);
+  // },
+  // destroyed: function() {
+  //   console.group("destroyed 销毁完成状态===============》");
+  //   console.log("%c%s", "color:red", "el     : " + this.$el);
+  //   console.log(this.$el);
+  //   console.log("%c%s", "color:red", "data   : " + this.$data);
+  //   console.log("%c%s", "color:red", "message: " + this.message);
+  // }
 };
 </script>
 <style lang="less" scoped>

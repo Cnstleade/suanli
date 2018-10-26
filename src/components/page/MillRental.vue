@@ -2,7 +2,7 @@
     <div class="MillRental" id="MillRental">
         <!-- <v-slider></v-slider> -->
         <img src="../../../static/MillRentalB.jpg" class=" img-fluid d-none d-lg-block" alt="">
-        <img src="../../../static/MillRentalS.jpg" class="w-100 img-fluid d-lg-none" alt="">        
+        <img src="../../../static/MillRentalS.jpg" class="w-100 img-fluid d-lg-none" alt=""> 
         <h1 class="container MillRental-title">比特币算力租赁 <span>(比特币矿机)</span></h1>
         <div class="container order"> 
           <div class="row">
@@ -300,6 +300,7 @@
     </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import vSlider from "../slider/slider";
 export default {
   data() {
@@ -311,10 +312,20 @@ export default {
   components: {
     vSlider
   },
+  computed: {
+    // 使用对象展开运算符将 getter 混入 computed 对象中
+    ...mapGetters([
+      "username"
+      // ...
+    ])
+  },
   methods: {
     handleChange(value) {
       console.log(value);
     }
+  },
+  mounted() {
+    console.log(this.isLogin);
   }
 };
 </script>

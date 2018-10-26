@@ -42,13 +42,13 @@ export default {
       if (item) {
         delItem.path === this.$route.path && this.$router.push(item.path);
       } else {
-        this.$router.push("/myWorkbench");
+        this.$router.push("/admin/siteConfiguration");
       }
     },
     // 关闭全部标签
     closeAll() {
       this.tagsList = [];
-      this.$router.push("/myWorkbench");
+      this.$router.push("/admin/siteConfiguration");
     },
     // 关闭其他标签
     closeOther() {

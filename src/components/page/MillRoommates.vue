@@ -73,13 +73,28 @@
     </div>
 </template>
 <script>
+import { mapMutations, mapState, mapGetters } from "vuex";
 import vSlider from "../slider/slider";
 export default {
   data() {
     return {};
   },
+  computed: {
+    // 使用对象展开运算符将 getter 混入 computed 对象中
+    ...mapGetters([
+      "username"
+      // ...
+    ])
+  },
   components: {
     vSlider
+  },
+  methods: {
+    ...mapMutations(["ADD_LOGIN_USER"])
+  },
+  mounted() {
+    this.ADD_LOGIN_USER("你好");
+    console.log(this.username);
   }
 };
 </script>

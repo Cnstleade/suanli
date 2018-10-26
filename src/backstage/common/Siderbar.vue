@@ -4,17 +4,17 @@
                  text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
             <template v-for="item in items">
                 <template v-if="item.list">
-                    <el-submenu :index="item.nurl" :key="item.nurl">
+                    <el-submenu :index="'/admin/'+item.nurl" :key="'/admin/'+item.nurl">
                         <template slot="title">
                             <i class="iconfont" :class="item.icon"></i><span slot="title">{{ item.mname }}</span>
                         </template>
-                        <el-menu-item v-for="(subItem,i) in item.list" :key="i" :index="subItem.nurl">
+                        <el-menu-item v-for="(subItem,i) in item.list" :key="i" :index="'/admin/'+subItem.nurl">
                             <i :class="subItem.icon"></i><span slot="title">{{subItem.mname}}</span>
                         </el-menu-item>
                     </el-submenu>
                 </template>
                 <template v-else>
-                    <el-menu-item :index="item.nurl" :key="item.nurl">
+                    <el-menu-item :index="'/admin/'+item.nurl" :key="'/admin/'+item.nurl">
                         <i class="iconfont" :class="item.icon"></i><span slot="title">{{ item.mname }}</span>
                     </el-menu-item>
                 </template>
@@ -74,7 +74,7 @@ export default {
             {
               nurl: "passApproval",
               mname: "用户组管理"
-            },            
+            },
             {
               nurl: "administrator",
               mname: "管理员"
@@ -229,7 +229,8 @@ export default {
   },
   computed: {
     onRoutes() {
-      return this.$route.path.replace("/", "");
+      console.log(this.$route.path);
+      return this.$route.path.replace("/admin/", "");
     },
     // 使用对象展开运算符将 getter 混入 computed 对象中
     ...mapGetters([
@@ -253,9 +254,9 @@ export default {
   }
 };
 </script>
-<style>
+<style >
 #sidebar .el-submenu__title,
-.el-menu-item {
+#sidebar .el-menu-item {
   font-size: 12px;
   height: 36px;
   line-height: 36px;

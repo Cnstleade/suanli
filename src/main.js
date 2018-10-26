@@ -13,6 +13,7 @@ import router from './router'
 import FastClick from 'fastclick'
 import echarts from 'echarts'
 import ElementLocale from 'element-ui/lib/locale'
+import 'babel-polyfill'
 import {
   messages
 } from './config/language'

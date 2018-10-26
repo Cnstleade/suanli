@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { animate } from "@/config/animate";
 export default {
   data() {
     return {
@@ -109,7 +110,12 @@ export default {
           return false;
         }
       });
-    }
+    },
+
+  },
+
+  mounted(){
+
   }
 };
 </script>

@@ -62,7 +62,7 @@ Copyright © 2006-2018 RHY.com 版权所有    <span>粤ICP备13049532号-9</spa
 
 <style lang="less" scoped>
 .footer {
-  margin-top: 50px;
+//   margin-top: 50px;
   padding-top: 50px;
   background: #1a1c1f;
   color: #f0eeef;

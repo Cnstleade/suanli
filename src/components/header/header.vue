@@ -10,13 +10,13 @@
                 <div class="col-xl-8 col-lg-7 d-none d-lg-block">
                     <div class="main-menu">
                         <nav>
-                            <a href="#" :class="{aActive:i=='home'}" @click="go('home')" @mouseover="run('home')" @mouseout="clear">首页</a>                       
-                            <a href="#" :class="{aActive:i=='HashRate'}"  @click="go('HashRate')" @mouseover="run('HashRate')" @mouseout="clear">算力租赁</a>
-                            <a href="#" :class="{aActive:i=='MillRental'}"  @click="go('MillRental')" @mouseover="run('MillRental')" @mouseout="clear">矿机租赁</a>
-                            <a href="#" :class="{aActive:i=='MillRoommates'}"  @click="go('MillRoommates')" @mouseover="run('MillRoommates')" @mouseout="clear">矿机合租</a>
-                            <a href="#" @mouseover="clear" @mouseout="run">矿机托管</a>
-                            <a href="#" @mouseover="clear" @mouseout="run">矿机商城</a>
-                            <a href="#" :class="{aActive:i=='calculator'}"  @click="go('calculator')" @mouseover="run('calculator')" @mouseout="clear">计算工具</a>
+                            <a href="#"  @click.prevent="go('home')" @mouseover="run('home')" @mouseout="clear">首页</a>                       
+                            <a href="#"   @click.prevent="go('HashRate')" @mouseover="run('HashRate')" @mouseout="clear">算力租赁</a>
+                            <a href="#"   @click.prevent="go('MillRental')" @mouseover="run('MillRental')" @mouseout="clear">矿机租赁</a>
+                            <a href="#"   @click.prevent="go('MillRoommates')" @mouseover="run('MillRoommates')" @mouseout="clear">矿机合租</a>
+                            <a href="#" @click.prevent="go('personalCenter')" @mouseover="clear" @mouseout="run">矿机托管</a>
+                            <a href="#" @click.prevent="go('personalCenter')"  @mouseover="clear" @mouseout="run">矿机商城</a>
+                            <a href="#" :class="{aActive:i=='calculator'}"  @click.prevent="go('calculator')" @mouseover="run('calculator')" @mouseout="clear">计算工具</a>
                         </nav>
                     </div>
                 </div>
@@ -40,13 +40,13 @@
         </div>
         <transition name="fade">
             <ul v-if="show" class="menu submenu w-200 text-center d-lg-none">
-              <li><a href="#" :class="{aActive:i=='home'}" @click="go('home')" >首页</a></li>
-              <li><a href="#"   :class="{aActive:i=='HashRate'}"  @click="go('HashRate')" >算力租赁</a></li>
-              <li><a href="#">矿机租赁</a></li>
-              <li><a href="#">矿机合租</a></li>
+              <li><a href="#" :class="{aActive:i=='home'}" @click.prevent="go('home')" >首页</a></li>
+              <li><a href="#"   :class="{aActive:i=='HashRate'}"  @click.prevent="go('HashRate')" >算力租赁</a></li>
+              <li><a href="#" @click.prevent="go('MillRental')">矿机租赁</a></li>
+              <li><a href="#"  @click.prevent="go('MillRoommates')">矿机合租</a></li>
               <li><a href="#">矿机托管</a></li>
               <li><a href="#">矿机商城</a></li>
-              <li><a href="#"  :class="{aActive:i=='calculator'}"  @click="go('calculator')">计算工具</a></li>
+              <li><a href="#"  :class="{aActive:i=='calculator'}"  @click.prevent="go('calculator')">计算工具</a></li>
             </ul>
         </transition>
     </header>
@@ -60,25 +60,18 @@ export default {
       i: "home"
     };
   },
-  computed: {
-    route() {
-      return this.$route.path;
-    }
-  },
+  computed: {},
   methods: {
     showMenu() {
       this.show = !this.show;
     },
     go(i) {
-      this.$router.push(i);
-      this.i = i;
+      this.$router.push({ path: "/index/" + i });
     },
     clear() {
       this.i = "home";
     },
-    run(index) {
-      this.i = index;
-    }
+    run(index) {}
   },
   mounted() {}
 };
@@ -123,7 +116,7 @@ li {
           font-weight: 600;
           line-height: 70px;
           text-decoration: none;
-          text-align:center;
+          text-align: center;
           flex-grow: 1;
           &.aActive {
             color: #d86f06;
