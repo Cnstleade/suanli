@@ -3,7 +3,7 @@
         <div class="login-wrap">
             <img src="../assets/logo.png" alt="">
             <div class="login-detail">
-                  <h1>用户登录</h1>
+                  <h1>用户登录{{isLogin}}</h1>
                   <input type="text" placeholder="请输入手机号码">
                   <input type="text" placeholder="密码">
                   <p>
@@ -27,6 +27,7 @@
 
 <script>
 import DragDiv from "./common/dragDiv";
+import { mapState, mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -42,6 +43,9 @@ export default {
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       }
     };
+  },
+  computed: {
+     ...mapGetters(["isLogin"])
   },
   components: {
     DragDiv
@@ -76,11 +80,6 @@ export default {
     }
   },
   mounted() {
-    sessionStorage.removeItem("USERNAME");
-    sessionStorage.removeItem("ROLE");
-    sessionStorage.removeItem("LOGINID");
-    sessionStorage.removeItem("fk_username");
-    console.log("登录");
     // this.$store.dispatch("Logout");
   }
 };

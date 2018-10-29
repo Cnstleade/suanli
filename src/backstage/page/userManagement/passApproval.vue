@@ -132,6 +132,8 @@ export default {
     };
   },
   methods: {
+
+   
     reset() {},
     handleSearch() {},
     submitForm() {},
@@ -144,7 +146,8 @@ export default {
     },
     handleDelete(index, row) {},
     onSubmit() {}
-  }
+  },
+  mounted() {}
 };
 </script>
 <style lang="less" scoped>

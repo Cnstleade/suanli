@@ -90,10 +90,8 @@ export default {
     vSlider
   },
   methods: {
-    ...mapMutations(["ADD_LOGIN_USER"])
   },
   mounted() {
-    this.ADD_LOGIN_USER("你好");
     console.log(this.username);
   }
 };

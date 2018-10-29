@@ -30,3 +30,4 @@ export const BUY_CART = 'BUY_CART'
 /*  */
 export const ADD_LOGIN_USER = 'ADD_LOGIN_USER'
 export const SIGN_OUT = 'SIGN_OUT'
+export const SET_NEWROUER = 'SET_NEWROUER'

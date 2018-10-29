@@ -24,213 +24,19 @@
 </template>
 
 <script>
+import { httpGetMenu } from "@/service/http";
 import { mapGetters } from "vuex";
 import bus from "../../config/bus";
 export default {
   data() {
     return {
       collapse: false,
-      items: [
-        {
-          icon: "icon-yonhu",
-          nurl: "basicManagement",
-          mname: "基础管理",
-          list: [
-            {
-              nurl: "siteConfiguration",
-              mname: "网站配置"
-            },
-            {
-              nurl: "contractTemplate",
-              mname: "合同模板"
-            },
-            {
-              nurl: "minerBrandManagement",
-              mname: "矿机品牌管理"
-            },
-            {
-              nurl: "mineModelNumberManagement",
-              mname: "矿机型号管理"
-            },
-            {
-              nurl: "orePoolManagement",
-              mname: "矿池管理"
-            }
-          ]
-        },
-        {
-          icon: "icon-dingdan",
-          nurl: "administratorManagement",
-          mname: "管理员管理",
-          list: [
-            {
-              nurl: "authorityManagement",
-              mname: "权限管理"
-            },
-            {
-              nurl: "roleManagement",
-              mname: "角色管理"
-            },
-            {
-              nurl: "passApproval",
-              mname: "用户组管理"
-            },
-            {
-              nurl: "administrator",
-              mname: "管理员"
-            },
-            {
-              nurl: "invitationCode",
-              mname: "邀请码"
-            }
-          ]
-        },
-        {
-          icon: "icon-zuanshi",
-          nurl: "userManagement",
-          mname: "用户管理",
-          list: [
-            {
-              nurl: "userManagement",
-              mname: "用户管理"
-            },
-            {
-              nurl: "subAccountManagement",
-              mname: "子账户管理"
-            },
-
-            {
-              nurl: "walletAddressManagement",
-              mname: "钱包地址管理"
-            },
-            {
-              nurl: "LogOnToLog",
-              mname: "登录日志"
-            }
-          ]
-        },
-        {
-          icon: "icon-qian",
-          nurl: "millManagement",
-          mname: "矿机管理",
-          list: [
-            {
-              nurl: "mineManagement",
-              mname: "矿场管理"
-            },
-            {
-              nurl: "millManagement",
-              mname: "矿机管理"
-            },
-            {
-              nurl: "changeManagementOfMinerPowerConsumption",
-              mname: "矿机功耗变化管理"
-            },
-            {
-              nurl: "miningMachineWorkOrderManagement",
-              mname: "矿机工单管理"
-            }
-          ]
-        },
-        {
-          icon: "icon-zuanshi-copy",
-          nurl: "packageManagement",
-          mname: "套餐管理",
-          list: [
-            {
-              nurl: "millSetMeal",
-              mname: "矿机套餐"
-            },
-
-            {
-              nurl: "powerRentalPackages",
-              mname: "算力租赁套餐"
-            }
-          ]
-        },
-        {
-          icon: "icon-shuju",
-          nurl: "orderManagement",
-          mname: "订单电力管理",
-          list: [
-            {
-              nurl: "minerOrderList",
-              mname: "矿机订单列表"
-            },
-            {
-              nurl: "calculateTheForceOrderList",
-              mname: "算力订单列表"
-            },
-            {
-              nurl: "minerHostingList",
-              mname: "矿机托管列表"
-            },
-            {
-              nurl: "rechargeOrderList",
-              mname: "充值订单列表"
-            },
-            {
-              nurl: "electricityOrderList",
-              mname: "电费订单列表"
-            }
-          ]
-        },
-        {
-          icon: "icon-yonhu",
-          nurl: "finance",
-          mname: "财务",
-          list: [
-            {
-              nurl: "millProceeds",
-              mname: "矿机收益"
-            },
-            {
-              nurl: "theUserBenefits",
-              mname: "用户收益"
-            },
-            {
-              nurl: "cashManagement",
-              mname: "提现管理"
-            },
-            {
-              nurl: "yield",
-              mname: "收益率管理"
-            },
-            {
-              nurl: "orderManagement",
-              mname: "订单管理"
-            }
-          ]
-        },
-        {
-          icon: "icon-xitong",
-          nurl: "informationManagement",
-          mname: "资讯管理",
-          list: [
-            {
-              nurl: "informationManagement",
-              mname: "资讯列表"
-            }
-          ]
-        },
-        {
-          icon: "icon-xitong",
-          nurl: "threePartiesManagement",
-          mname: "三方管理",
-          list: [
-            {
-              nurl: "threePartiesList",
-              mname: "三方列表"
-            }
-          ]
-        }
-      ]
+      items: []
     };
   },
   computed: {
     onRoutes() {
-      console.log(this.$route.path);
-      return this.$route.path.replace("/admin/", "");
+      return this.$route.path.replace("", "");
     },
     // 使用对象展开运算符将 getter 混入 computed 对象中
     ...mapGetters([
@@ -239,12 +45,15 @@ export default {
     ])
   },
   methods: {
-    getHttpGetCreditMenuList(id) {
-      let _this = this;
+    getHttpGetCreditMenuList() {
+      httpGetMenu(this.loginId).then(res => {
+        let data = res.data;
+        this.items = JSON.parse(JSON.stringify(data));
+      });
     }
   },
   mounted() {
-    // this.getHttpGetCreditMenuList(this.loginId);
+    this.getHttpGetCreditMenuList();
   },
   created() {
     // 通过 Event Bus 进行组件间通信，来折叠侧边栏

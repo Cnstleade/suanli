@@ -46,12 +46,16 @@
             style="width: 100%;font-weight:bold"
             class="mt-3"
             v-loading="loading">
-            <el-table-column prop="GROUPUID" label="ID" align="center"></el-table-column>
-            <el-table-column prop="GROUPNAME" label="角色名称" align="center"></el-table-column>
-            <el-table-column prop="ADDTIME" label="添加时间" align="center"></el-table-column>
+            <el-table-column prop="rid" label="ID" align="center"></el-table-column>
+            <el-table-column prop="rname" label="角色名称" align="center"></el-table-column>
+            <el-table-column prop="ADDTIME" label="添加时间" align="center">
+                <template slot-scope="scope">
+                    {{scope.row.createtime|dateServer}}
+                </template>                
+            </el-table-column>
             <el-table-column prop="ENABLED" label="状态" align="center"></el-table-column>
             <el-table-column prop="RULES" label="规则" align="center"></el-table-column>
-            <el-table-column prop="DESCRIPTION" label="描述" align="center"></el-table-column>
+            <el-table-column prop="jobTitle" label="描述" align="center"></el-table-column>
             <el-table-column label="操作" align="center" min-width="150">
               <template slot-scope="scope">
                 <el-button
@@ -111,12 +115,13 @@
     </div> 
 </template>
 <script>
+import { httpRoleList } from "@/service/http";
 export default {
   data() {
     return {
       search: {},
       loading: false,
-      tableData: [{ 	GROUPUID: 1 }],
+      tableData: [],
       npage: 1,
       pagesize: 10,
       total: 0,
@@ -129,6 +134,13 @@ export default {
     };
   },
   methods: {
+    /*  得到角色 */
+    gethttpRoleList(startDate, EndDate) {
+      httpRoleList(startDate, EndDate).then(res => {
+        let data = res.data;
+        this.tableData = data;
+      });
+    },
     reset() {},
     handleSearch() {},
     submitForm() {},
@@ -141,6 +153,9 @@ export default {
     },
     handleDelete(index, row) {},
     onSubmit() {}
+  },
+  mounted() {
+    this.gethttpRoleList();
   }
 };
 </script>

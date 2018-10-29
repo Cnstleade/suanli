@@ -117,12 +117,17 @@
     </div> 
 </template>
 <script>
+import {} from "@/service/http";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
       search: {},
       loading: false,
-      tableData: [{ TRUSTEESHIPUID: 1,NUMBER:1 },{ TRUSTEESHIPUID: 2,NUMBER:2 }],
+      tableData: [
+        { TRUSTEESHIPUID: 1, NUMBER: 1 },
+        { TRUSTEESHIPUID: 2, NUMBER: 2 }
+      ],
       npage: 1,
       pagesize: 10,
       total: 0,
@@ -133,6 +138,13 @@ export default {
       dialogFormEditVisible: false,
       dialogFormAddVisible: false
     };
+  },
+  computed: {
+    // 使用对象展开运算符将 getter 混入 computed 对象中
+    ...mapGetters([
+      "loginId"
+      // ...
+    ])
   },
   methods: {
     reset() {},
@@ -147,7 +159,8 @@ export default {
     },
     handleDelete(index, row) {},
     onSubmit() {}
-  }
+  },
+  mounted() {}
 };
 </script>
 <style lang="less" scoped>

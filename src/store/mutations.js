@@ -1,6 +1,7 @@
 import {
   ADD_LOGIN_USER,
   SIGN_OUT,
+  SET_NEWROUER,
 
   RECORD_ADDRESS,
   ADD_CART,
@@ -56,19 +57,29 @@ export default {
 
   /*  用户登录 */
   [ADD_LOGIN_USER](state, data) {
-    sessionStorage.setItem("username", data); //添加到sessionStorage  
-    sessionStorage.setItem("isLogin", true);
-    state.username = data, //同步的改变store中的状态  
+    // sessionStorage.setItem("zby_username", data); //添加到sessionStorage  
+    console.log(data);
+    sessionStorage.setItem("zby_isLogin", true);
+    sessionStorage.setItem("zby_loginId", data.loginId);
+    sessionStorage.setItem("zby_role", data.data);
+    state.loginId = data.loginId, //同步的改变store中的状态  
+      state.role = data.data, //同步的改变store中的状态  
       state.isLogin = true
   },
 
   /*  用户退出 */
   [SIGN_OUT](state) {
-    sessionStorage.removeItem("username"); //移除sessionStorage  
-    sessionStorage.removeItem("isLogin");
-    state.username = '' //同步的改变story中的状态  
+    sessionStorage.removeItem("zby_loginId"); //移除sessionStorage  
+    sessionStorage.removeItem("zby_isLogin");
+    state.loginId = '' //同步的改变story中的状态  
     state.isLogin = false
   },
+
+  /*   存储最新的路由 */
+  SET_NEWROUER: (state, newrouter) => {
+    state.newrouter = newrouter;
+  },
+
 
 
   // SIGN_OUT (state) {   //退出，删除状态  

@@ -6,6 +6,7 @@
             <v-tags></v-tags>
             <div class="content">
                 <transition name="move" mode="out-in">
+                  {{isLogin}}
                     <router-view></router-view>
                 </transition>
             </div>
@@ -18,7 +19,7 @@ import vHead from "./Header.vue";
 import vSidebar from "./Siderbar.vue";
 import vTags from "./Tags.vue";
 import bus from "../../config/bus";
-import { mapState } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -27,13 +28,26 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo"]),
+    ...mapGetters(["isLogin"])
   },
   components: {
     vHead,
     vSidebar,
     vTags
   },
+  // watch: {
+  //   isLogin(n, o) {
+  //     console.log(n);
+  //     if (!n) {
+  //       this.$router.push("/adminlogin");
+  //     }
+  //   }
+  // },
+  methods: {
+    ...mapMutations(["ADD_LOGIN_USER"])
+  },
+
   created() {
     bus.$on("collapse", msg => {
       this.collapse = msg;
@@ -43,7 +57,6 @@ export default {
     });
   },
   mounted() {
-    console.log(this.userInfo);
   }
 };
 </script>

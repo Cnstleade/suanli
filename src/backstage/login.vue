@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+import { httpSysLogin } from "@/service/http";
 export default {
   data() {
     return {
@@ -42,13 +44,28 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["ADD_LOGIN_USER"]),
     submitForm() {
       if (this.ruleForm.username != "" && this.ruleForm.password != "") {
-        let params = {
-          username: this.ruleForm.username,
-          password: this.ruleForm.password
-        };
-        this.$store.dispatch("SETLogin");
+        httpSysLogin(this.ruleForm.username, this.ruleForm.password).then(
+          res => {
+            let data = res.data;
+            if (data.code == 200) {
+              this.ADD_LOGIN_USER(data);
+              this.$message({
+                message: data.message,
+                type: "success"
+              });
+              this.$router.push('admin/'+"siteConfiguration");
+            } else {
+              this.$message({
+                message: data.message,
+                type: "error"
+              });
+            }
+          }
+        );
+        // this.$store.dispatch("SETLogin");
       } else {
         Message({
           message: "填写用户名和密码",
@@ -71,8 +88,6 @@ export default {
     sessionStorage.removeItem("ROLE");
     sessionStorage.removeItem("LOGINID");
     sessionStorage.removeItem("fk_username");
-    console.log("登录");
-    // this.$store.dispatch("Logout");
   }
 };
 </script>
