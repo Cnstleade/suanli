@@ -84,37 +84,37 @@ export default {
   },
   computed: {
     username() {
-      let username = sessionStorage.getItem("fk_username");
+      let username = JSON.parse(sessionStorage.getItem("zby_userInfo"))
+        .username;
       if (username != "" && username != null && username != "undefined") {
-        return username ? username : this.name;
+        return username ? username : "";
       } else {
         // this.$router.push("/login");
       }
     },
     ...mapGetters([
-      "isLogin",
+      "isLogin"
       // ...
     ])
   },
   methods: {
     // 用户名下拉菜单选择事件
     handleCommand(command) {
-    //   if (command == "loginout") {
-    //     this.$store
-    //       .dispatch("Logout")
-    //       .then(() => {
-    //       })
-    //       .catch(err => {
-    //         this.$message.error(err);
-    //       });
-    //     sessionStorage.removeItem("fk_username");
-    //   } else {
-    //     this.$router.push("/" + command);
-    //   }
+      //   if (command == "loginout") {
+      //     this.$store
+      //       .dispatch("Logout")
+      //       .then(() => {
+      //       })
+      //       .catch(err => {
+      //         this.$message.error(err);
+      //       });
+      //     sessionStorage.removeItem("fk_username");
+      //   } else {
+      //     this.$router.push("/" + command);
+      //   }
     },
     // 侧边栏折叠
     collapseChage() {
-      
       this.collapse = !this.collapse;
       bus.$emit("collapse", this.collapse);
     },
@@ -146,7 +146,7 @@ export default {
       this.fullscreen = !this.fullscreen;
     }
   },
-  watch:{
+  watch: {
     // isLogin(n,o){
     //   if(!n){
     //     this.$router.push("/login");

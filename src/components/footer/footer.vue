@@ -46,10 +46,10 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 footer-bottom1">
-区块链数据中心第一股（股票代码：835727）
+区块链数据中心第一股
                     </div>
                     <div class="col-12 footer-bottom2">
-Copyright © 2006-2018 RHY.com 版权所有    <span>粤ICP备13049532号-9</span>   
+Copyright © 2006-2018 ZBY.com 版权所有    <span>琼ICP备18004314号-1</span>   
                     </div>                    
                 </div>
             </div>
@@ -62,7 +62,7 @@ Copyright © 2006-2018 RHY.com 版权所有    <span>粤ICP备13049532号-9</spa
 
 <style lang="less" scoped>
 .footer {
-//   margin-top: 50px;
+  //   margin-top: 50px;
   padding-top: 50px;
   background: #1a1c1f;
   color: #f0eeef;

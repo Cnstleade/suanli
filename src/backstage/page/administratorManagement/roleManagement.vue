@@ -12,15 +12,9 @@
                 <el-button  icon="el-icon-plus" @click="handleAdd" type="primary">新增</el-button>
             </div>             
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-              <el-form-item >
-                <el-input v-model="formInline.user" placeholder="关键字"></el-input>
-              </el-form-item>
-              <el-form-item >
-                <el-select v-model="formInline.region" placeholder="父级">
-                  <!-- <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option> -->
-                </el-select>
-              </el-form-item>
+             <el-form-item>
+                  <el-button type="success" @click="reset">重置</el-button>
+              </el-form-item>  
               <el-form-item >
                 <el-date-picker
                 style="width:400px"
@@ -60,35 +54,33 @@
               <template slot-scope="scope">
                 <el-button
                   size="mini"
-                  @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                  type="success"
+                  @click="handleEdit(scope.$index, scope.row)">角色修改</el-button>
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete(scope.$index, scope.row)">禁用</el-button>
+                  @click="handleChange(scope.$index, scope.row)">菜单修改</el-button>
               </template>
             </el-table-column>            
         </el-table>
-        <el-dialog 
-            title="编辑角色" 
-            :visible.sync="dialogFormEditVisible" 
-            center
-            width="30%"
-            >
-          <el-form :model="editForm">
-            <el-form-item label="名称" label-width="100px">
-              <el-input v-model="editForm.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="备注" label-width="100px">
-              <el-select v-model="editForm.region" placeholder="请选择备注">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormEditVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormEditVisible = false">确 定</el-button>
-          </div>
+        <el-dialog
+          title="角色修改"
+          :visible.sync="dialogFormEditVisible"
+          center
+          width="30%"
+          >
+            <el-form :model="editForm" status-icon  ref="editForm" label-width="100px"  >
+              <el-form-item label="角色名:" prop="rname" >
+                <el-input type="input" v-model="editForm.rname"  ></el-input>
+              </el-form-item>
+              <el-form-item label="角色备注:" prop="jobTitle" >
+                <el-input type="textarea"  v-model="editForm.jobTitle" ></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('editForm')">提交</el-button>
+                <el-button type="primary" style="margin-left:30px" @click="qx1('editForm')">取消</el-button>
+              </el-form-item>
+            </el-form>
         </el-dialog> 
         <el-dialog 
             title="新增角色" 
@@ -96,26 +88,49 @@
             center
             width="30%"
             >
-          <el-form :model="addForm">
-            <el-form-item label="名称" label-width="100px">
-              <el-input v-model="addForm.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="备注" label-width="100px">
-              <el-select v-model="addForm.region" placeholder="请选择备注">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormAddVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormAddVisible = false">确 定</el-button>
-          </div>
-        </el-dialog>                
+            <el-form :model="addForm" status-icon  ref="addForm" label-width="100px"  >
+              <el-form-item label="角色名:" prop="rname" >
+                <el-input type="input" v-model="addForm.rname"  ></el-input>
+              </el-form-item>
+              <el-form-item label="角色备注:" prop="jobTitle" >
+                <el-input type="textarea"  v-model="addForm.jobTitle" ></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('addForm')">提交</el-button>
+                <el-button type="primary" style="margin-left:30px" @click="qx1('editForm')">取消</el-button>
+              </el-form-item>
+            </el-form>
+        </el-dialog>                 
+        <el-dialog
+          title="角色修改"
+          :visible.sync="dialogFormChangeVisible"
+          center
+          width="30%"
+          >
+              <el-tree
+              ref="tree"
+              default-expand-all
+                :data="treeData"
+                show-checkbox
+                node-key="mid"
+                :default-checked-keys="showCheck"
+                :props="defaultProps">
+              </el-tree>
+              <el-row style="text-align:center" class="m20">
+                <el-button type="primary" style="margin-left:30px" @click="getCheckedKeys">修改</el-button>
+                <el-button type="primary" style="margin-left:30px" @click="dialogFormChangeVisible=false">取消</el-button>    
+              </el-row>
+        </el-dialog>                      
     </div> 
 </template>
 <script>
-import { httpRoleList } from "@/service/http";
+import {
+  httpRoleList,
+  httpSysMinerlist,
+  changeRoleList,
+  findRoleMenu,
+  httpSaveRoleMenu
+} from "@/service/http";
 export default {
   data() {
     return {
@@ -130,7 +145,15 @@ export default {
       editForm: {},
       addForm: {},
       dialogFormEditVisible: false,
-      dialogFormAddVisible: false
+      dialogFormAddVisible: false,
+      dialogFormChangeVisible: false,
+      treeData: [],
+      showCheck: [],
+      defaultProps: {
+        children: "list",
+        label: "mname"
+      },
+      roleId: null
     };
   },
   methods: {
@@ -147,12 +170,131 @@ export default {
     changeDialog() {},
     handleEdit(index, row) {
       this.dialogFormEditVisible = true;
+      this.editForm = null;
+      this.editForm = Object.assign({}, row);
     },
+    /*  点击添加 */
     handleAdd() {
+      this.addForm = {};
       this.dialogFormAddVisible = true;
     },
     handleDelete(index, row) {},
-    onSubmit() {}
+    onSubmit() {},
+    /* 提交 */
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (formName == "editForm") {
+            changeRoleList(
+              this.editForm.rid,
+              this.editForm.rname,
+              this.editForm.jobTitle
+            ).then(res => {
+              let data = res.data;
+              if (data.success) {
+                setTimeout(() => {
+                  this.dialogFormEditVisible = false;
+                }, 20);
+                this.$message({
+                  message: "修改角色成功",
+                  type: "success"
+                });
+                this.handleSearch();
+              } else {
+                this.$message.error("修改角色失败");
+              }
+            });
+          }
+          if (formName == "addForm") {
+            changeRoleList(
+              null,
+              this.addForm.rname,
+              this.addForm.jobTitle
+            ).then(res => {
+              let data = res.data;
+              if (data.success) {
+                setTimeout(() => {
+                  this.dialogFormAddVisible = false;
+                }, 20);
+                this.$message({
+                  message: "添加角色成功",
+                  type: "success"
+                });
+                this.handleSearch();
+              } else {
+                this.$message.error("添加角色失败");
+              }
+            });
+          }
+        } else {
+          return false;
+        }
+      });
+    },
+    /*     重置选择 */
+    reset() {
+      this.formInline = {};
+      this.handleSearch();
+    },
+    /* 按条件搜索 */
+    handleSearch(type = true) {
+      if (type) {
+        this.npage = 1;
+        this.pagesize = 10;
+      }
+      if (this.formInline.time && this.formInline.time.length) {
+        this.gethttpRoleList(this.formInline.time[0], this.formInline.time[1]);
+      } else {
+        this.gethttpRoleList();
+      }
+    },
+    /* 菜单修改 */
+    handleChange(index, row) {
+      let RoleId = row.rid;
+      this.roleId = null;
+      this.roleId = RoleId;
+      findRoleMenu(RoleId)
+        .then(res => {
+          this.treeData = null;
+          let data = res.data;
+          this.treeData = JSON.parse(JSON.stringify(data));
+          this.dialogFormChangeVisible = true;
+          let showCheck = [];
+          for (let a = 0; a < this.treeData.length; a++) {
+            if (this.treeData[a].checked) {
+            }
+            if (this.treeData[a].list && this.treeData[a].list.length > 0) {
+              for (let b = 0; b < this.treeData[a].list.length; b++) {
+                if (this.treeData[a].list[b].checked) {
+                  showCheck.push(this.treeData[a].list[b].mid);
+                }
+              }
+            }
+          }
+          this.showCheck.length = 0;
+          this.showCheck = showCheck;
+        })
+        .catch();
+    },
+    /*  修改菜单 */
+    getCheckedKeys() {
+      httpSaveRoleMenu(
+        this.roleId,
+        this.$refs.tree.getCheckedKeys().join(",")
+      ).then(res => {
+        let data = res.data;
+        if (data.success) {
+          this.$message({
+            message: "修改成功",
+            type: "success"
+          });
+          this.dialogFormChangeVisible = false;
+          this.handleSearch();
+        } else {
+          this.$message.error("修改失败,请联系管理员");
+        }
+      });
+    }
   },
   mounted() {
     this.gethttpRoleList();

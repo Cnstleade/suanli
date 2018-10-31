@@ -28,7 +28,6 @@ Object.keys(custom).forEach(key => {
 Vue.prototype.$echarts = echarts
 // Vue.use(VueI18n);
 Vue.use(ElementUI, {
-  locale,
   size: 'small',
   zIndex: 3000
 });

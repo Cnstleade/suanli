@@ -8,15 +8,15 @@
                             <i class="el-icon-service logo"></i>
                         </div>
                         <div class="col-8 col-lg-12 tel">
-                            <p>153****7281</p>
-                            <span><i class="el-icon-service "></i>153****7281</span>
-                            <span><i class="el-icon-service "></i>184***@qq.com</span>
+                            <p>{{this.userInfo.username}}</p>
+                            <span><i class="el-icon-service "></i>{{this.userInfo.username}}</span>
+                            <span><i class="el-icon-service "></i>{{this.userInfo.email}}</span>
                         </div>
                         <div class="col-12 time">
-                            上次登录时间：2018-10-23 18:30:47
+                            上次登录时间：	{{this.userInfo.lip}}
                         </div>
                         <div class="col-12 ip">
-                            上次登录IP：	180.111.133.94
+                            上次登录IP：	{{this.userInfo.ltime|dateServer}}
                         </div> 
                         <div class="col-12 start">
                             <div class="row">
@@ -29,10 +29,11 @@
                     </div>
                     <div class="row d-none d-lg-block mt-4  ">
                         <el-menu
-                                default-active="2"
+                                default-active="property"
+                                 background-color="#545c64"
                                 class="el-menu-vertical-demo w-100 nav-vertical-demo"
                              @select="handleSelect"
-                                  text-color="#000"
+                                  text-color="#fff"
                                  active-text-color="#d86f06">
                                 <el-menu-item index="property">
                                   <i class="el-icon-menu"></i>
@@ -73,7 +74,7 @@
                         </el-menu>
                     </div>
                     <div class="row  d-lg-none mt-4">
-                        <el-menu default-active="2" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                        <el-menu default-active="property" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                                     <el-menu-item index="property">
                                       资产总览
                                     </el-menu-item>                            
@@ -115,6 +116,7 @@
 <script>
 import vSlider from "../slider/slider";
 import { animate } from "@/config/animate";
+import { mapState, mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -123,6 +125,9 @@ export default {
   },
   components: {
     vSlider
+  },
+  computed: {
+    ...mapGetters(["userInfo", "isLogin"])
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -139,54 +144,19 @@ export default {
       animate(document.body, { scrollTop: "0" }, 400, "ease-out");
     }
   },
-  // beforeCreate: function() {
-  //   console.group("------beforeCreate创建前状态------");
-  //   console.log("%c%s", "color:red", "el     : " + this.$el); //undefined
-  //   console.log("%c%s", "color:red", "data   : " + this.$data); //undefined
-  //   console.log("%c%s", "color:red", "message: " + this.message);
-  // },
-  // created: function() {
-  //   console.group("------created创建完毕状态------");
-  //   console.log("%c%s", "color:red", "el     : " + this.$el); //undefined
-  //   console.log("%c%s", "color:red", "data   : " + this.$data); //已被初始化
-  //   console.log("%c%s", "color:red", "message: " + this.message); //已被初始化
-  // },
-  // beforeMount: function() {
-  //   console.group("------beforeMount挂载前状态------");
-  //   console.log("%c%s", "color:red", "el     : " + this.$el); //已被初始化
-  //   console.log(this.$el);
-  //   console.log("%c%s", "color:red", "data   : " + this.$data); //已被初始化
-  //   console.log("%c%s", "color:red", "message: " + this.message); //已被初始化
-  // },
-  // mounted: function() {
-  //   console.group("------mounted 挂载结束状态------");
-  //   console.log("%c%s", "color:red", "el     : " + this.$el); //已被初始化
-  //   console.log(this.$el);
-  //   console.log("%c%s", "color:red", "data   : " + this.$data); //已被初始化
-  //   console.log("%c%s", "color:red", "message: " + this.message); //已被初始化
-  // },
+
   beforeUpdate: function() {},
   updated: function() {
     this.backTop();
+  },
+  mounted() {
+    this.backTop();
   }
-  // beforeDestroy: function() {
-  //   console.group("beforeDestroy 销毁前状态===============》");
-  //   console.log("%c%s", "color:red", "el     : " + this.$el);
-  //   console.log(this.$el);
-  //   console.log("%c%s", "color:red", "data   : " + this.$data);
-  //   console.log("%c%s", "color:red", "message: " + this.message);
-  // },
-  // destroyed: function() {
-  //   console.group("destroyed 销毁完成状态===============》");
-  //   console.log("%c%s", "color:red", "el     : " + this.$el);
-  //   console.log(this.$el);
-  //   console.log("%c%s", "color:red", "data   : " + this.$data);
-  //   console.log("%c%s", "color:red", "message: " + this.message);
-  // }
 };
 </script>
 <style lang="less" scoped>
 .personalCenter {
+  margin-bottom: 20px;
   .logo {
     font-size: 72px;
   }

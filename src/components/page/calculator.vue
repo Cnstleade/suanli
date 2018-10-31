@@ -121,6 +121,7 @@
 </template>
 
 <script>
+import { animate } from "@/config/animate";
 export default {
   data() {
     return {
@@ -135,6 +136,15 @@ export default {
       select4: "MH/s",
       select5: "MH/s"
     };
+  },
+  methods: {
+    //返回顶部
+    backTop() {
+      animate(document.body, { scrollTop: "0" }, 400, "ease-out");
+    }
+  },
+  mounted() {
+    this.backTop();
   }
 };
 </script>

@@ -28,6 +28,7 @@ export const SAVE_QUESTION = 'SAVE_QUESTION'
 export const ADD_ADDRESS = 'ADD_ADDRESS'
 export const BUY_CART = 'BUY_CART'
 /*  */
-export const ADD_LOGIN_USER = 'ADD_LOGIN_USER'
+export const ADD_LOGIN_USER = 'ADD_LOGIN_USER' //后台用户登录
 export const SIGN_OUT = 'SIGN_OUT'
-export const SET_NEWROUER = 'SET_NEWROUER'
+export const SET_NEWROUER = 'SET_NEWROUER' //后台新路由
+export const USER_LOGIN = 'USER_LOGIN' //前台用户登录

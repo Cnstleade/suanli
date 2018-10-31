@@ -23,6 +23,10 @@ export default {
     }
     return state.role
   },
+  userInfo(state) {
+    state.userInfo = JSON.parse(sessionStorage.getItem('zby_userInfo')); //从sessionStorage中读取状态  
+    return state.userInfo
+  },
   newrouter: state => state.newrouter,
   username: state => state.username,
 }

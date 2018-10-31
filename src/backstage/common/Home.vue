@@ -56,8 +56,7 @@ export default {
       this.error = msg;
     });
   },
-  mounted() {
-  }
+  mounted() {}
 };
 </script>
 

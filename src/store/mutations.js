@@ -2,6 +2,8 @@ import {
   ADD_LOGIN_USER,
   SIGN_OUT,
   SET_NEWROUER,
+  USER_LOGIN,
+
 
   RECORD_ADDRESS,
   ADD_CART,
@@ -54,11 +56,19 @@ export default {
   //     state.isLogin=false  
   // }
 
+  /* 前台用户登录 */
+  [USER_LOGIN](state, data) {
+    sessionStorage.setItem("zby_isLogin", true);
+    sessionStorage.setItem("zby_userInfo", JSON.stringify(data));
+    state.userInfo = data, //同步的改变store中的状态  
+      state.isLogin = true
+  },
 
-  /*  用户登录 */
+
+
+  /*  后台用户登录 */
   [ADD_LOGIN_USER](state, data) {
     // sessionStorage.setItem("zby_username", data); //添加到sessionStorage  
-    console.log(data);
     sessionStorage.setItem("zby_isLogin", true);
     sessionStorage.setItem("zby_loginId", data.loginId);
     sessionStorage.setItem("zby_role", data.data);
@@ -71,6 +81,8 @@ export default {
   [SIGN_OUT](state) {
     sessionStorage.removeItem("zby_loginId"); //移除sessionStorage  
     sessionStorage.removeItem("zby_isLogin");
+    sessionStorage.removeItem("zby_userInfo");
+    state.userInfo = {};
     state.loginId = '' //同步的改变story中的状态  
     state.isLogin = false
   },

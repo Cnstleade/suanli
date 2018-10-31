@@ -11,9 +11,7 @@ const state = {
   loginId: sessionStorage.getItem('zby_loginId'),
   role: sessionStorage.getItem('zby_role'),
   newrouter: [],
-  userInfo: {
-    id: 2
-  }, //用户信息
+  userInfo: {}, //用户信息
   cartList: {}, // 加入购物车的商品列表
   remarkText: null, //可选备注内容
   login: true, //是否登录

@@ -7,26 +7,26 @@
         </ul>
         <ul  class="pCenter-top-right">
           <li>
-            <span><i>UID</i><strong>100725</strong></span>
+            <span><i>UID</i><strong>{{userCenter.uid}}</strong></span>
             
           </li>
           <li>
-            <span><i>账户昵称</i><strong>-</strong></span>
+            <span><i>账户昵称</i><strong>{{userCenter.username}}</strong></span>
             
             <button @click.prevent="dialogName = true">修改</button>
           </li>
           <li>
-            <span><i>身份认证</i><strong>未认证</strong></span>
+            <span><i>身份认证</i><strong>{{userCenter.idcard}}</strong></span>
             
             <button @click.prevent="dialogID = true">去认证</button>            
           </li>
           <li>
-            <span><i>手机绑定</i><strong>153****7281</strong></span>
+            <span><i>手机绑定</i><strong>{{userCenter.phoneNumber}}</strong></span>
             
             <button @click.prevent="dialogPhone = true">去修改</button>             
           </li>
           <li>
-            <span><i>邮箱绑定</i><strong>184***@qq.com</strong></span>
+            <span><i>邮箱绑定</i><strong>{{userCenter.email}}</strong></span>
             
             <button @click.prevent="dialogEmail = true">去修改</button>                 
           </li>
@@ -50,46 +50,71 @@
                       :data="tableData"
                       style="width: 100%">
                       <el-table-column
-                        prop="date"
+                        prop="ltime"
                         label="时间"
+                        align="center"
                         width="180">
+                          <template slot-scope="scope">
+                            {{scope.row.ltime|dateServer}}
+                          </template>  
                       </el-table-column>
                       <el-table-column
                         prop="name"
                         label="登录地区"
+                        align="center"
                         width="180">
                       </el-table-column>
                       <el-table-column
-                        prop="address"
+                        prop="lip"
+                        align="center"
                         label="登录IP">
                       </el-table-column>
                       <el-table-column
-                        prop="address"
+                        prop="lfrom"
+                        align="center"
                         label="登录方式">
                       </el-table-column>
                       <el-table-column
-                        prop="address"
+                        prop="status"
+                        align="center"
                         label="状态">
                       </el-table-column>                                            
                     </el-table>
                   </el-tab-pane>
                   <el-tab-pane label="登录记录" name="second">
                     <el-table
-                      :data="tableData"
+                      :data="alllog"
                       style="width: 100%">
                       <el-table-column
-                        prop="date"
-                        label="明细"
+                        prop="ltime"
+                        label="时间"        align="center"
                         width="180">
+                          <template slot-scope="scope">
+                            {{scope.row.ltime|dateServer}}
+                          </template>                          
                       </el-table-column>
                       <el-table-column
                         prop="name"
-                        label="净收益"
+                        label="登录地区"
+                                align="center"
                         width="180">
                       </el-table-column>
                       <el-table-column
-                        prop="address"
-                        label="累计收益">
+                        prop="lip"
+                        label="IP"
+                                align="center"
+                        width="180">
+                      </el-table-column>
+                      <el-table-column
+                        prop="lfrom"
+                        label="登录来源"
+                                align="center"
+                        width="180">
+                      </el-table-column>                                            
+                      <el-table-column
+                        prop="status"
+                                align="center"
+                        label="登录状态">
                       </el-table-column>
                     </el-table>
                   </el-tab-pane>
@@ -112,6 +137,8 @@
 </template>
 
 <script>
+import { httpUserSingle, httpUserAllLog } from "@/service/http";
+import { mapState, mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -124,28 +151,9 @@ export default {
       dialogPass: false,
       dialogMoney: false,
       activeName: "first",
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ]
+      tableData: [],
+      userCenter: {},
+      alllog: []
     };
   },
   watch: {
@@ -164,10 +172,39 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(["userInfo", "isLogin"])
+  },
   methods: {
-    handleClick() {}
+    handleClick() {},
+    /*  个人中心初始化 */
+    _httpUserSingle(uid) {
+      httpUserSingle(uid).then(res => {
+        let data = res.data;
+        if (data.code == 200) {
+          this.tableData = data.data.loginlogten;
+          this.userCenter = JSON.parse(JSON.stringify(data.data));
+        } else {
+          this.$message.error(data.msg);
+        }
+      });
+    },
+    /* 个人中心——登录记录 */
+    _httpUserAllLog(uid) {
+      httpUserAllLog(uid).then(res => {
+        let data = res.data;
+        this.alllog = data;
+        // if (data.code == 200) {
+
+        // } else {
+        //   this.$message.error(data.msg);
+        // }
+      });
+    }
   },
   mounted() {
+    this._httpUserSingle(this.userInfo.uid);
+    this._httpUserAllLog(this.userInfo.uid);
     const that = this;
     window.onresize = () => {
       return (() => {

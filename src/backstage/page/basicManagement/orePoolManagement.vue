@@ -13,15 +13,6 @@
             </div>             
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
               <el-form-item >
-                <el-input v-model="formInline.user" placeholder="关键字"></el-input>
-              </el-form-item>
-              <el-form-item >
-                <el-select v-model="formInline.region" placeholder="品牌">
-                  <!-- <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option> -->
-                </el-select>
-              </el-form-item>
-              <el-form-item >
                 <el-date-picker
                 style="width:400px"
                       v-model="formInline.time"
@@ -46,10 +37,14 @@
             style="width: 100%;font-weight:bold"
             class="mt-3"
             v-loading="loading">
-            <el-table-column prop="BRANDUID" label="ID" align="center"></el-table-column>
-            <el-table-column prop="BRANDNAME" label="品牌名称" align="center"></el-table-column>
-            <el-table-column prop="ADDTIME" label="添加时间" align="center"></el-table-column>
-            <el-table-column prop="ADDBY" label="添加者" align="center"></el-table-column>
+            <el-table-column prop="id" label="ID" align="center"></el-table-column>
+            <el-table-column prop="name" label="品牌名称" align="center"></el-table-column>
+            <el-table-column prop="electricityFees" label="电费" align="center"></el-table-column>
+            <el-table-column prop="adress" label="地址" align="center"></el-table-column>
+            <el-table-column prop="positionFrees" label="创建时间" align="center"></el-table-column>
+            <el-table-column prop="addTime" label="添加时间" align="center"></el-table-column>
+            <el-table-column prop="addUserName" label="添加者" align="center"></el-table-column>
+            <el-table-column prop="administratorName" label="管理员姓名" align="center"></el-table-column>
             <el-table-column label="操作" align="center" min-width="150">
               <template slot-scope="scope">
                 <el-button
@@ -62,6 +57,20 @@
               </template>
             </el-table-column>            
         </el-table>
+        <el-row class="mt-4" v-if="total>0">
+             <div style="float:right">
+                 <el-pagination
+                   @current-change="handleCurrentChange"
+                    @size-change="handleSizeChange"
+                   :current-page="npage"
+                    :page-sizes="[10, 20, 50, 100, 1000,990000]"
+                     :page-size="pagesize"
+                   background
+                   layout="total,sizes,prev, pager, next,jumper"
+                   :total="total">
+                 </el-pagination>   
+             </div>
+        </el-row>         
         <el-dialog 
             title="编辑矿池" 
             :visible.sync="dialogFormEditVisible" 
@@ -109,6 +118,7 @@
     </div> 
 </template>
 <script>
+import { httpSysMinerslist } from "@/service/http";
 export default {
   data() {
     return {
@@ -138,7 +148,61 @@ export default {
       this.dialogFormAddVisible = true;
     },
     handleDelete(index, row) {},
-    onSubmit() {}
+    onSubmit() {},
+
+    /* 后台管理模块 / 矿场列表展示 */
+    gethttpSysMinerslist(npage, pagesize, begainTimeString, endTimeString) {
+      this.loading = true;
+      httpSysMinerslist(npage, pagesize, begainTimeString, endTimeString).then(
+        res => {
+          let data = res.data;
+          if (data.code == 200) {
+            this.tableData = data.data.list;
+            this.total = data.data.allPageNumber;
+            this.$message({
+              message: "查询成功",
+              type: "success"
+            });
+          } else {
+            this.$message({
+              message: data.msg,
+              type: "error"
+            });
+          }
+          this.loading = false;
+        }
+      );
+    },
+    /*   选取第几页 */
+    handleCurrentChange(val) {
+      this.npage = val;
+      this.handleSearch(false);
+    },
+    /* 选取页数 */
+    handleSizeChange(val) {
+      this.pagesize = val;
+      this.handleSearch(false);
+    },
+    /* 按条件搜索 */
+    handleSearch(type = true) {
+      if (type) {
+        this.npage = 1;
+        this.pagesize = 10;
+      }
+      if (this.formInline.time && this.formInline.time.length) {
+        this.gethttpSysMinerslist(
+          this.npage,
+          this.pagesize,
+          this.formInline.time[0],
+          this.formInline.time[1]
+        );
+      } else {
+        this.gethttpSysMinerslist(this.npage, this.pagesize);
+      }
+    }
+  },
+  mounted() {
+    this.gethttpSysMinerslist(this.npage, this.pagesize);
   }
 };
 </script>

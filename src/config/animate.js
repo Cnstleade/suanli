@@ -164,7 +164,6 @@ export const showBack = callback => {
  * @param {function}    callback  可选，回调函数，链式动画
  */
 export const animate = (element, target, duration = 400, mode = 'ease-out', callback) => {
-  console.log(1);
   clearInterval(element.timer);
 
   //判断不同参数的情况

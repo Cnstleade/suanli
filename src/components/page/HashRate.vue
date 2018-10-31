@@ -293,6 +293,7 @@
 </template>
 <script>
 import vSlider from "../slider/slider";
+import { animate } from "@/config/animate";
 export default {
   data() {
     return {
@@ -306,7 +307,15 @@ export default {
   methods: {
     handleChange(value) {
       console.log(value);
+    },
+        //返回顶部
+    backTop() {
+      animate(document.body, { scrollTop: "0" }, 400, "ease-out");
     }
+  },
+
+  mounted() {
+    this.backTop();
   }
 };
 </script>

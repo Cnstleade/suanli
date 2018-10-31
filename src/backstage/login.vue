@@ -56,7 +56,7 @@ export default {
                 message: data.message,
                 type: "success"
               });
-              this.$router.push('admin/'+"siteConfiguration");
+              this.$router.push("admin/" + "siteConfiguration");
             } else {
               this.$message({
                 message: data.message,
@@ -67,9 +67,9 @@ export default {
         );
         // this.$store.dispatch("SETLogin");
       } else {
-        Message({
-          message: "填写用户名和密码",
-          center: true
+        this.$message({
+          message: '请填写用户名和密码',
+          type: "error"
         });
       }
 

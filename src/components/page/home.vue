@@ -131,6 +131,7 @@ import vSlider from "../slider/slider";
 import vDemo from "../echartDemo/echartDemo";
 import vNews from "../news/news";
 import vFooter from "../footer/footer";
+import { animate } from "@/config/animate";
 export default {
   name: "home",
   data() {
@@ -151,10 +152,15 @@ export default {
       this.scroll = document.body.scrollTop;
 
       this.isScroll = this.scroll > 70;
+    },
+    //返回顶部
+    backTop() {
+      animate(document.body, { scrollTop: "0" }, 400, "ease-out");
     }
   },
   mounted() {
     window.addEventListener("scroll", this.menu);
+    this.backTop();
   }
 };
 </script>

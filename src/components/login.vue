@@ -3,85 +3,74 @@
         <div class="login-wrap">
             <img src="../assets/logo.png" alt="">
             <div class="login-detail">
-                  <h1>用户登录{{isLogin}}</h1>
-                  <input type="text" placeholder="请输入手机号码">
-                  <input type="text" placeholder="密码">
+                  <h1>用户登录</h1>
+                  <input type="text" placeholder="请输入手机号码" v-model="username"  @focus="show=false">
+                  <input type="text" placeholder="密码" v-model="password"  @focus="show=false">
                   <p>
                     <a href="#">忘记密码?</a>
                   </p>
-                  <DragDiv @confirm="showConfig"></DragDiv>
-                  <button class="logins">登录</button>
+                  <DragDiv @confirm="showConfig" v-if="show"></DragDiv>
+                  <button class="logins" @click="submitForm" :disabled="show">登录</button>
                   <a class="add">创建一个新账号</a>
             </div>
         </div>
-        <!-- <div class="login-wrap">
-          <div class="ms-title">
-            <img src="../assets/logo.png" alt="">
-          </div>
-          <div class="ms-login">
-
-          </div>
-        </div>         -->
     </div>
 </template>
 
 <script>
 import DragDiv from "./common/dragDiv";
 import { mapState, mapGetters, mapMutations } from "vuex";
+import { httpLogin } from "@/service/http";
 export default {
   data() {
     return {
       changF: false,
-      ruleForm: {
-        username: "",
-        password: ""
-      },
-      rules: {
-        username: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
-        ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
-      }
+      username: "",
+      password: "",
+      show: false
     };
   },
   computed: {
-     ...mapGetters(["isLogin"])
+    ...mapGetters(["userInfo"])
   },
   components: {
     DragDiv
   },
   methods: {
+    ...mapMutations(["USER_LOGIN"]),
+    _httpLogin(username, loginPassword) {
+      httpLogin(username, loginPassword).then(res => {
+        let data = res.data;
+        if (data.code == 200) {
+          this.$message({
+            message: "登录成功",
+            type: "success"
+          });
+          this.USER_LOGIN(data.data);
+          this.$router.push({ path: "/index/" });
+        } else {
+          this.$message({
+            message: data.msg,
+            type: "error"
+          });
+        }
+      });
+    },
     submitForm() {
-      if (this.ruleForm.username != "" && this.ruleForm.password != "") {
-        let params = {
-          username: this.ruleForm.username,
-          password: this.ruleForm.password
-        };
-        this.$store.dispatch("SETLogin");
+      if (this.username != "" && this.password != "") {
+        this.show = true;
       } else {
-        Message({
-          message: "填写用户名和密码",
-          center: true
+        this.$message({
+          message: "请输入用户名或密码",
+          type: "error"
         });
       }
-
-      /*this.$refs[formName].validate(valid => {
-          if (valid) {
-            localStorage.setItem("fk_username", this.ruleForm.username);
-            this.$router.push("/");
-          } else {
-            return false;
-          }
-        });*/
     },
     showConfig(msg) {
-      console.log(msg);
-      this.changF = msg;
+      this._httpLogin(this.username, this.password);
     }
   },
-  mounted() {
-    // this.$store.dispatch("Logout");
-  }
+  mounted() {}
 };
 </script>
 
@@ -116,7 +105,7 @@ export default {
         width: 500px;
         position: absolute;
         left: 50%;
-        top: 50%;
+        top: 40%;
         transform: translateX(-50%) translateY(-50%);
       }
     }
@@ -162,6 +151,8 @@ export default {
         border-radius: 8px;
         background: #373b47;
         outline: none;
+        color: #fff;
+        font-weight: bold;
       }
       .logins {
         margin: 15px 0;

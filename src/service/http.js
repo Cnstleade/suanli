@@ -1,11 +1,35 @@
 import axios from 'axios';
 import Vue from 'vue';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI, {
+  size: 'small',
+  zIndex: 3000
+});
 var qs = require('qs');
 //axios 配置
 axios.defaults.timeout = 6000000;
-axios.defaults.baseURL = 'http://47.88.171.117:8088';
-//axios.defaults.baseURL =  'http://101.132.171.38:7994'
+//axios.defaults.baseURL = 'http://localhost:8088'; //本地服务器
 
+axios.defaults.baseURL = 'http://47.88.171.117:8088';
+
+
+
+
+// http response 拦截器
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    console.log(error);
+    ElementUI.Message({
+      message: '网络错误,请联系管理员',
+      type: "error"
+    })
+    return Promise.reject(error)
+  }
+);
 //   /*得到代办人/
 // export function httpFindAllSignature() {
 //     return axios({
@@ -71,6 +95,29 @@ export function httpMenulist(pageSize, pageNum, parentId, mname) {
   })
 }
 
+// 后台管理模块  获取所有父菜单
+export function httpFindFatherMenu() {
+  return axios({
+    url: "/sys/findFatherMenu",
+    method: "get"
+  })
+}
+
+
+//后台管理模块 / 修改菜单
+export function httpSaveMenu(parentId, mname, sort, mid) {
+  let data = {
+    parentId,
+    mname,
+    sort,
+    mid
+  };
+  return axios({
+    url: '/sys/saveMenu',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
 
 //后台管理模块 / 角色展示
 export function httpRoleList(startDate, EndDate) {
@@ -80,6 +127,45 @@ export function httpRoleList(startDate, EndDate) {
   };
   return axios({
     url: '/admin/rolelist',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 / 角色展示 添加或修改角色·
+export function changeRoleList(rid, rname, jobTitle) {
+  let data = {
+    rid,
+    rname,
+    jobTitle
+  };
+  return axios({
+    url: '/admin/addRole',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 / 角色菜单的查找
+export function findRoleMenu(RoleId) {
+  let data = {
+    RoleId
+  };
+  return axios({
+    url: '/admin/findRoleMenu',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 / 保存菜单栏
+export function httpSaveRoleMenu(rid, mids) {
+  let data = {
+    rid,
+    mids
+  };
+  return axios({
+    url: '/admin/saveRoleMenu',
     method: 'post',
     data: qs.stringify(data)
   })
@@ -109,15 +195,19 @@ export function httpSysAddminer(machineName, code, row, clos, standardPower, pri
   return axios({
     url: '/sys/addminer',
     method: 'post',
+    // headers: {
+    //   'Content-type': 'application/json  '
+    // },
+    // data: JSON.stringify(data)
     data: qs.stringify(data)
   })
 }
 
-//后台管理模块 / 角色展示
-export function httpSysMinerlist(nPageNumber, pageSize, begainTimeString, endTimeString) {
+//后台管理模块 / 矿机列表展示
+export function httpSysMinerlist(npage, pagesize, begainTimeString, endTimeString) {
   let data = {
-    nPageNumber,
-    pageSize,
+    npage,
+    pagesize,
     conditionVo: {
       begainTimeString,
       endTimeString
@@ -125,6 +215,319 @@ export function httpSysMinerlist(nPageNumber, pageSize, begainTimeString, endTim
   };
   return axios({
     url: '/sys/minerlist',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 / 矿场列表展示
+export function httpSysMinerslist(npage, pagesize, begainTimeString, endTimeString) {
+  let data = {
+    npage,
+    pagesize,
+    conditionVo: {
+      begainTimeString,
+      endTimeString
+    }
+  };
+  return axios({
+    url: '/sys/minerslist',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 / 矿场修改
+export function httpSysUpdateminers(name, electricityFees, adress, positionFrees, addUserName, loginId, id) {
+  let data = {
+    name,
+    electricityFees,
+    adress,
+    positionFrees,
+    addUserName,
+    loginId,
+    id
+  };
+  return axios({
+    url: '/sys/updateminers',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 / 矿场新增
+export function httpSysAddminers(name, electricityFees, adress, positionFrees, addUserName, loginId) {
+  let data = {
+    name,
+    electricityFees,
+    adress,
+    positionFrees,
+    addUserName,
+    loginId,
+  };
+  return axios({
+    url: '/sys/addminers',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 / 订单查询
+export function httpIncomeAllorder(npage, pagesize, orderNumString, begainTimeString, endTimeString) {
+  let data = {
+    npage,
+    pagesize,
+    conditionVo: {
+      orderNumString,
+      begainTimeString,
+      endTimeString,
+    }
+  };
+  return axios({
+    url: '/income/allorder',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 / 用户收益菜单
+export function httpIncomeAllorderbyuserid(npage, pagesize, userId, begainTimeString, endTimeString) {
+  let data = {
+    npage,
+    pagesize,
+    conditionVo: {
+      userId,
+      begainTimeString,
+      endTimeString,
+    }
+  };
+  return axios({
+    url: '/income/allorderbyuserid',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 / 矿机品牌列表展示
+export function httpSysGetminerbrandlist(npage, pagesize, begainTimeString, endTimeString) {
+  let data = {
+    npage,
+    pagesize,
+    conditionVo: {
+      begainTimeString,
+      endTimeString,
+    }
+  };
+  return axios({
+    url: '/sys/getminerbrandlist',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+
+//后台管理模块 / 矿机品牌添加
+export function httpSysAddminerbrand(brandName, loginId) {
+  let data = {
+    brandName,
+    loginId
+  };
+  return axios({
+    url: '/sys/addminerbrand',
+    method: 'post',
+    data: qs.stringify(data)
+    // headers: {
+    //   'Content-type': 'application/json  '
+    // },
+    //data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 / 矿机品牌修改
+export function httpSysUpdateminerbrand(brandName, loginId, id) {
+  let data = {
+    brandName,
+    loginId,
+    id
+  };
+  return axios({
+    url: '/sys/updateminerbrand',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 / 矿机型号列表展示
+export function httpSysGetminermodellist(npage, pagesize, begainTimeString, endTimeString) {
+  let data = {
+    npage,
+    pagesize,
+    conditionVo: {
+      begainTimeString,
+      endTimeString,
+    }
+  };
+  return axios({
+    url: '/sys/getminermodellist',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+
+//后台管理模块 / 矿机型号添加
+export function httpSysAddminermodel(loginId, modelName, modelPower, price, powerWaste, attaction, size, brandName, qa) {
+  let data = {
+    loginId,
+    modelName,
+    modelPower,
+    price,
+    powerWaste,
+    attaction,
+    size,
+    brandName,
+    qa
+  };
+  return axios({
+    url: '/sys/addminermodel',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+
+//后台管理模块 / 矿机型号添加 传递 图片格式
+export function httpSysAddminermodelImg(loginId, modelName, modelPower, price, powerWaste, attaction, size, brandName, qa, imgaeUrl) {
+  let param = new FormData(); //创建form对象
+  param.append('file', imgaeUrl); //通过append向form对象添加数据
+  param.append('loginId', loginId); //通过append向form对象添加数据
+  param.append('modelName', modelName); //通过append向form对象添加数据
+  param.append('modelPower', modelPower); //通过append向form对象添加数据
+  param.append('price', price); //通过append向form对象添加数据
+  param.append('powerWaste', powerWaste); //通过append向form对象添加数据
+  param.append('attaction', attaction); //通过append向form对象添加数据
+  param.append('size', size); //通过append向form对象添加数据
+  param.append('brandName', brandName); //通过append向form对象添加数据
+  param.append('qa', qa); //通过append向form对象添加数据
+  return axios({
+    url: '/sys/addminermodel',
+    method: 'post',
+    headers: {
+      "Content-Type": "multipart/form-data"
+    },
+    data: param
+  })
+}
+
+
+
+//后台管理模块 / 收益率管理
+export function httpIncomeCurrencyparameter(npage, pagesize, begainTimeString, endTimeString, currencyParameterId) {
+  let data = {
+    npage,
+    pagesize,
+    conditionVo: {
+      begainTimeString,
+      endTimeString,
+    }
+  };
+  return axios({
+    url: '/income/currencyparameter',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 / 矿机算力功率变化列表展示
+export function httpSysMinerpowerlist(npage, pagesize, begainTimeString, endTimeString) {
+  let data = {
+    npage,
+    pagesize,
+    conditionVo: {
+      begainTimeString,
+      endTimeString,
+    }
+  };
+  return axios({
+    url: '/sys/minerpowerlist',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+
+
+/* 前台页面 */
+
+//前台管理模块 / 客户登录
+export function httpLogin(username, loginPassword) {
+  let data = {
+    username,
+    loginPassword
+  };
+  return axios({
+    url: '/user/login',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//前台管理模块 / 个人中心——初始化
+export function httpUserSingle(uid) {
+  let data = {
+    uid
+  };
+  return axios({
+    url: '/user/single',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//前台管理模块 / 个人中心——登录记录
+export function httpUserAllLog(uid) {
+  let data = {
+    uid
+  };
+  return axios({
+    url: '/user/alllog',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//算力租赁——收益记录
+export function httpUserProfit(cp, uid) {
+  let data = {
+    cp,
+    uid
+  };
+  return axios({
+    url: '/user/profit',
     method: 'post',
     data: qs.stringify(data)
   })

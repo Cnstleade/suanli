@@ -13,15 +13,12 @@
                 <!-- <el-button  icon="el-icon-plus" @click="handleAdd" type="primary">新增</el-button> -->
             </div>             
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
+             <el-form-item>
+                  <el-button type="success" @click="reset">重置</el-button>
+              </el-form-item>                
               <el-form-item >
-                <el-input v-model="formInline.user" placeholder="关键字"></el-input>
+                <el-input v-model="formInline.userId" placeholder="用户ID"></el-input>
               </el-form-item>
-              <!-- <el-form-item >
-                <el-select v-model="formInline.region" placeholder="角色">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
-                </el-select>
-              </el-form-item> -->
               <el-form-item >
                 <el-date-picker
                 style="width:400px"
@@ -113,12 +110,13 @@
     </div> 
 </template>
 <script>
+import { httpIncomeAllorderbyuserid } from "@/service/http";
 export default {
   data() {
     return {
       search: {},
       loading: false,
-      tableData: [{ PROFITUID: 1 }],
+      tableData: [],
       npage: 1,
       pagesize: 10,
       total: 0,
@@ -132,7 +130,7 @@ export default {
   },
   methods: {
     reset() {},
-    handleSearch() {},
+
     submitForm() {},
     changeDialog() {},
     handleEdit(index, row) {
@@ -142,7 +140,79 @@ export default {
       this.dialogFormAddVisible = true;
     },
     handleDelete(index, row) {},
-    onSubmit() {}
+    onSubmit() {},
+    /*  得到用户收益表 */
+    gethttpIncomeAllorderbyuserid(
+      npage,
+      pagesize,
+      userId,
+      begainTimeString,
+      endTimeString
+    ) {
+      httpIncomeAllorderbyuserid(
+        npage,
+        pagesize,
+        userId,
+        begainTimeString,
+        endTimeString
+      ).then(res => {
+        let data = res.data;
+        if (data.code == 200) {
+          this.tableData = data.data.list;
+          this.total = data.data.allPageNumber;
+          this.$message({
+            message: "查询成功",
+            type: "success"
+          });
+        } else {
+          this.$message({
+            message: data.msg,
+            type: "error"
+          });
+        }
+        this.loading = false;
+      });
+    },
+    /*     重置选择 */
+    reset() {
+      this.formInline = {};
+      this.handleSearch();
+    },
+    /*   选取第几页 */
+    handleCurrentChange(val) {
+      this.npage = val;
+      this.handleSearch(false);
+    },
+    /* 选取页数 */
+    handleSizeChange(val) {
+      this.pagesize = val;
+      this.handleSearch(false);
+    },
+    /* 按条件搜索 */
+    handleSearch(type = true) {
+      if (type) {
+        this.npage = 1;
+        this.pagesize = 10;
+      }
+      if (this.formInline.time && this.formInline.time.length) {
+        this.gethttpIncomeAllorderbyuserid(
+          this.npage,
+          this.pagesize,
+          this.formInline.userId,
+          this.formInline.time[0],
+          this.formInline.time[1]
+        );
+      } else {
+        this.gethttpIncomeAllorderbyuserid(
+          this.npage,
+          this.pagesize,
+          this.formInline.userId
+        );
+      }
+    }
+  },
+  mounted() {
+    this.gethttpIncomeAllorderbyuserid(this.npage, this.pagesize);
   }
 };
 </script>

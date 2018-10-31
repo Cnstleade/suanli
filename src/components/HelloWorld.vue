@@ -15,6 +15,7 @@ import vSlider from "./slider/slider";
 import vDemo from "./echartDemo/echartDemo";
 import vNews from "./news/news";
 import vFooter from "./footer/footer";
+
 export default {
   name: "HelloWorld",
   data() {
@@ -40,11 +41,13 @@ export default {
         this.scroll = document.body.scrollTop;
       }
       this.isScroll = this.scroll > 70;
-    }
+    },
+
   },
   mounted() {
     window.addEventListener("scroll", this.menu);
-  }
+  },
+
 };
 </script>
 

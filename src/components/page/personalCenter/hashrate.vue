@@ -43,20 +43,36 @@
                       :data="tableData"
                       style="width: 100%">
                       <el-table-column
-                        prop="date"
-                        label="明细"
+                        prop="ptime"
+                        label="时间"
+                        align="center"
                         width="180">
+                          <template slot-scope="scope">
+                            {{scope.row.ptime|dateServer}}
+                          </template> 
                       </el-table-column>
                       <el-table-column
                         prop="name"
                         label="净收益"
+                        align="center"
                         width="180">
                       </el-table-column>
                       <el-table-column
-                        prop="address"
+                        prop="addUpProfit"
+                        align="center"
                         label="累计收益">
                       </el-table-column>
                     </el-table>
+                    <el-row class="mt-4" v-if="total>0">
+                         <div style="float:right">
+                             <el-pagination
+                               @current-change="handleCurrentChange"
+                               :current-page="npage"
+                               background
+                               :total="total">
+                             </el-pagination>   
+                         </div>
+                    </el-row>                     
                   </el-tab-pane>
                   <el-tab-pane label="购买记录" name="second">
                     <el-table
@@ -85,36 +101,38 @@
 </template>
 
 <script>
+import { httpUserProfit } from "@/service/http";
+import { mapState, mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
       activeName: "first",
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ]
+      npage: 1,
+      total: 0,
+      tableData: []
     };
   },
+  computed: {
+    ...mapGetters(["userInfo", "isLogin"])
+  },
   methods: {
-    handleClick() {}
+    handleClick(cp, uid) {},
+    /* 算力租赁——收益记录 */
+    _httpUserProfit(cp, uid) {
+      httpUserProfit(cp, uid).then(res => {
+        let data = res.data;
+        this.tableData = data.list;
+        this.total = data.total;
+      });
+    },
+    handleCurrentChange(val) {
+      this.npage = val;
+      this._httpUserProfit(this.npage, this.userInfo.uid);
+    }
+  },
+  mounted() {
+    //this._httpUserProfit(this.npage, this.userInfo.uid);
+    this._httpUserProfit(this.npage, this.userInfo.uid);
   }
 };
 </script>

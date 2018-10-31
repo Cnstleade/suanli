@@ -74,6 +74,7 @@
 </template>
 <script>
 import { mapMutations, mapState, mapGetters } from "vuex";
+import { animate } from "@/config/animate";
 import vSlider from "../slider/slider";
 export default {
   data() {
@@ -90,9 +91,14 @@ export default {
     vSlider
   },
   methods: {
+    //返回顶部
+    backTop() {
+      animate(document.body, { scrollTop: "0" }, 400, "ease-out");
+    }
   },
   mounted() {
     console.log(this.username);
+    this.backTop();
   }
 };
 </script>
