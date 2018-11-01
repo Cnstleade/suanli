@@ -15,8 +15,7 @@ const state = {
   cartList: {}, // 加入购物车的商品列表
   remarkText: null, //可选备注内容
   login: true, //是否登录
-  cartPrice: null, //会员卡价格
-
+  cartPrice: null, //会员卡价格 价格很好了
 }
 
 

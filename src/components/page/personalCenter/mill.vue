@@ -43,17 +43,20 @@
                       :data="tableData"
                       style="width: 100%">
                       <el-table-column
-                        prop="date"
-                        label="明细"
+                        prop="ptime"
+                        label="时间"
+                        align="center"
                         width="180">
                       </el-table-column>
                       <el-table-column
-                        prop="name"
+                        prop="profit"
                         label="净收益"
+                        align="center"
                         width="180">
                       </el-table-column>
                       <el-table-column
-                        prop="address"
+                        prop="addUpProfit"
+                        align="center"
                         label="累计收益">
                       </el-table-column>
                     </el-table>
@@ -77,6 +80,16 @@
                         label="累计收益">
                       </el-table-column>
                     </el-table>
+                    <el-row class="mt-4" v-if="total>0">
+                         <div style="float:right">
+                             <el-pagination
+                               @current-change="handleCurrentChange"
+                               :current-page="npage"
+                               background
+                               :total="total">
+                             </el-pagination>   
+                         </div>
+                    </el-row>                      
                   </el-tab-pane>
                 </el-tabs>
             </div>
@@ -85,10 +98,14 @@
 </template>
 
 <script>
+import { httpUserMachineProfit } from "@/service/http";
+import { mapState, mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      total: 0,
       activeName: "first",
+      npage: 1,
       tableData: [
         {
           date: "2016-05-02",
@@ -113,8 +130,27 @@ export default {
       ]
     };
   },
+  computed: {
+    ...mapGetters(["userInfo", "isLogin"])
+  },
   methods: {
-    handleClick() {}
+    handleClick() {},
+    /*  矿机租赁——收益记录 */
+    _httpUserMachineProfit(cp, uid) {
+      httpUserMachineProfit(cp, uid).then(res => {
+        let data = res.data;
+        this.tableData = data.list;
+        this.total = data.total;
+      });
+    },
+    handleCurrentChange(val) {
+      this.npage = val;
+      this._httpUserMachineProfit(this.npage, this.userInfo.uid);
+    }
+  },
+  mounted() {
+    this._httpUserMachineProfit(this.npage, this.userInfo.uid);
+    console.log(this.userInfo);
   }
 };
 </script>

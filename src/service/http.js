@@ -437,14 +437,61 @@ export function httpSysAddminermodelImg(loginId, modelName, modelPower, price, p
   })
 }
 
+//后台管理模块 / 矿机型号修改
+export function httpSysUpdateminermodel(loginId, id, modelName, modelPower, price, powerWaste, attaction, size, brandName, qa) {
+  let data = {
+    loginId,
+    id,
+    modelName,
+    modelPower,
+    price,
+    powerWaste,
+    attaction,
+    size,
+    brandName,
+    qa
+  };
+  return axios({
+    url: '/sys/updateminermodel',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+
+//后台管理模块 / 矿机型号修改 传递 图片格式
+export function httpSysUpdateminermodelImg(loginId, id, modelName, modelPower, price, powerWaste, attaction, size, brandName, qa, imgaeUrl) {
+  let param = new FormData(); //创建form对象
+  param.append('file', imgaeUrl); //通过append向form对象添加数据
+  param.append('id', id); //通过append向form对象添加数据
+  param.append('loginId', loginId); //通过append向form对象添加数据
+  param.append('modelName', modelName); //通过append向form对象添加数据
+  param.append('modelPower', modelPower); //通过append向form对象添加数据
+  param.append('price', price); //通过append向form对象添加数据
+  param.append('powerWaste', powerWaste); //通过append向form对象添加数据
+  param.append('attaction', attaction); //通过append向form对象添加数据
+  param.append('size', size); //通过append向form对象添加数据
+  param.append('brandName', brandName); //通过append向form对象添加数据
+  param.append('qa', qa); //通过append向form对象添加数据
+  return axios({
+    url: '/sys/updateminermodel',
+    method: 'post',
+    headers: {
+      "Content-Type": "multipart/form-data"
+    },
+    data: param
+  })
+}
+
 
 
 //后台管理模块 / 收益率管理
-export function httpIncomeCurrencyparameter(npage, pagesize, begainTimeString, endTimeString, currencyParameterId) {
+export function httpIncomeCurrencyparameter(npage, pagesize, currencyParameterId, begainTimeString, endTimeString) {
   let data = {
     npage,
     pagesize,
     conditionVo: {
+      currencyParameterId,
       begainTimeString,
       endTimeString,
     }
@@ -528,6 +575,60 @@ export function httpUserProfit(cp, uid) {
   };
   return axios({
     url: '/user/profit',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+
+//矿机租赁——收益记录
+export function httpUserMachineProfit(cp, uid) {
+  let data = {
+    cp,
+    uid
+  };
+  return axios({
+    url: '/user/machine/profit',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+
+//矿机租赁——购买记录
+export function httpUserMachineBuyrecord(cp, uid) {
+  let data = {
+    cp,
+    uid
+  };
+  return axios({
+    url: 'user/machine/buyrecord',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//算力租赁——购买记录
+export function httpUserPowerBuyRecord(cp, uid) {
+  let data = {
+    cp,
+    uid
+  };
+  return axios({
+    url: '/user/power/buyrecord',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//获得钱包地址
+export function httpSysCustuserwalleturl(cp, uid) {
+  let data = {
+    cp,
+    uid
+  };
+  return axios({
+    url: '/sys/getcustuserwalleturl',
     method: 'post',
     data: qs.stringify(data)
   })

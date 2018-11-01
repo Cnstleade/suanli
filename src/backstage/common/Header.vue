@@ -84,13 +84,14 @@ export default {
   },
   computed: {
     username() {
-      let username = JSON.parse(sessionStorage.getItem("zby_userInfo"))
-        .username;
-      if (username != "" && username != null && username != "undefined") {
-        return username ? username : "";
-      } else {
-        // this.$router.push("/login");
-      }
+      return "admin";
+      // let username = JSON.parse(sessionStorage.getItem("zby_userInfo"))
+      //   .username;
+      // if (username != "" && username != null && username != "undefined") {
+      //   return username ? username : "";
+      // } else {
+      //   // this.$router.push("/login");
+      // }
     },
     ...mapGetters([
       "isLogin"

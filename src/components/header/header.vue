@@ -22,14 +22,14 @@
                 </div>
                 <div class="col-xl-2 col-lg-3 col-md-9 col-sm-9 col-9">
                     <div class="main-config" >
-                        <div class="user-info main-config-a" v-if="!isLogin">
+                        <div class="user-info main-config-a" v-if="!userInfo">
                             <a href="#" @click.prevent="go('login')">登录</a>
                             <a href="#" @click.prevent="go('register')">注册</a>
                         </div>
-                        <div class="user-info position-relative" v-if="isLogin">
+                        <div class="user-info position-relative" v-if="userInfo">
                           <div class="user-info-show">
                              <i class="el-icon-delete"></i>
-                             <span>{{userInfo.username}}</span>
+                             <span >{{userInfo.username}}</span>
                               <i class="el-icon-caret-bottom"></i>
                             </div>
                             <ul class="submenu w-200 text-center">

@@ -8,18 +8,7 @@
             type="success">
             </el-alert>           
         </el-row>
-<el-upload
-  class="upload-demo"
-  ref="upload"
-  action="1"
-  :before-upload="beforeAvatarUpload"
-  :on-preview="handlePreview"
-  :on-remove="handleRemove"
-  :auto-upload="false">
-  <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-  <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-</el-upload>           
+        
         <el-row class="mt-4 d-flex flex-row flex-nowrap justify-content-end">
             <div style="flex-grow:1" >
                 <el-button  icon="el-icon-plus" @click="handleAdd" type="primary">新增</el-button>
@@ -103,10 +92,52 @@
             center
             width="30%"
             >
-          <el-form :model="editForm"  ref="editForm" :rules="rules">
-            <el-form-item label="矿机型号" label-width="100px">
-              <el-input v-model="editForm.brandName" autocomplete="off"></el-input>
+          <el-form :model="editForm" ref="editForm" :rules="rules" >
+            <el-form-item label="品牌名" label-width="100px">
+              <el-input v-model="editForm.modelName" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="额定算力" label-width="100px">
+              <el-input v-model="editForm.modelPower" autocomplete="off"></el-input>
             </el-form-item>            
+            <el-form-item label="价格" label-width="100px">
+              <el-input v-model="editForm.price" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="功耗" label-width="100px">
+              <el-input v-model="editForm.powerWaste" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="注意事项" label-width="100px">
+              <el-input v-model="editForm.attaction" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="规格" label-width="100px">
+              <el-input v-model="editForm.size" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="品牌名" label-width="100px">
+              <el-input v-model="editForm.brandName" autocomplete="off"></el-input>
+            </el-form-item> 
+            <el-form-item label="质保" label-width="100px">
+              <el-input v-model="editForm.qa" autocomplete="off"></el-input>
+            </el-form-item> 
+            <el-form-item label="是否上传图片" label-width="100px">
+              <el-switch
+                v-model="editForm.isImg"
+                active-text="是"
+                inactive-text="否">
+              </el-switch>
+            </el-form-item>  
+            <el-form-item v-if="editForm.isImg"  label="选取图片" label-width="100px">
+              <el-upload
+                class="upload-demo"
+                ref="uploadEdit"
+                action="1"
+                :limit="3"
+                :before-upload="beforeAvatarUploadEdit"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
+              </el-upload>                 
+            </el-form-item>                                                                                                                      
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormEditVisible = false">取 消</el-button>
@@ -120,9 +151,51 @@
             width="30%"
             >
           <el-form :model="addForm" ref="addForm" :rules="rules" >
-            <el-form-item label="矿机型号" label-width="100px">
-              <el-input v-model="addForm.brandName" autocomplete="off"></el-input>
+            <el-form-item label="品牌名" label-width="100px">
+              <el-input v-model="addForm.modelName" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item label="额定算力" label-width="100px">
+              <el-input v-model="addForm.modelPower" autocomplete="off"></el-input>
+            </el-form-item>            
+            <el-form-item label="价格" label-width="100px">
+              <el-input v-model="addForm.price" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="功耗" label-width="100px">
+              <el-input v-model="addForm.powerWaste" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="注意事项" label-width="100px">
+              <el-input v-model="addForm.attaction" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="规格" label-width="100px">
+              <el-input v-model="addForm.size" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="品牌名" label-width="100px">
+              <el-input v-model="addForm.brandName" autocomplete="off"></el-input>
+            </el-form-item> 
+            <el-form-item label="质保" label-width="100px">
+              <el-input v-model="addForm.qa" autocomplete="off"></el-input>
+            </el-form-item> 
+            <el-form-item label="是否上传图片" label-width="100px">
+              <el-switch
+                v-model="addForm.isImg"
+                active-text="是"
+                inactive-text="否">
+              </el-switch>
+            </el-form-item>  
+            <el-form-item v-if="addForm.isImg"  label="选取图片" label-width="100px">
+              <el-upload
+                class="upload-demo"
+                ref="upload"
+                action="1"
+                :limit="3"
+                :before-upload="beforeAvatarUploadAdd"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
+              </el-upload>                 
+            </el-form-item>                                                                                                                      
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormAddVisible = false">取 消</el-button>
@@ -132,16 +205,12 @@
     </div> 
 </template>
 <script>
-import axios from "axios";
 import {
-  httpSysMinerlist,
-  httpSysAddminer,
-  httpSysAddminerbrand,
-  httpSysGetminerbrandlist,
-  httpSysUpdateminerbrand,
   httpSysGetminermodellist,
   httpSysAddminermodelImg, //带图片的添加
-  httpSysAddminermodel //不带图片的添加
+  httpSysAddminermodel, //不带图片的添加
+  httpSysUpdateminermodel,
+  httpSysUpdateminermodelImg
 } from "@/service/http";
 import { mapGetters } from "vuex";
 import { timeFormat } from "@/config/time";
@@ -219,18 +288,10 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (formName == "addForm") {
-            this.handleAddForm(
-              this.addForm.brandName,
-              new Date().getTime(),
-              this.loginId
-            );
+            this.handleAddForm();
           }
           if (formName == "editForm") {
-            this.handleEditForm(
-              this.addForm.brandName,
-              this.loginId,
-              this.editForm.id
-            );
+            this.handleEditForm();
           }
         } else {
           console.log("error submit!!");
@@ -274,40 +335,94 @@ export default {
       });
     },
     /* 新增矿机型号 后台管理模块 / 矿机型号添加 */
-    handleAddForm(brandName, createTime, loginId) {
-      httpSysAddminerbrand(brandName, createTime, loginId).then(res => {
-        let data = res.data;
-        if (data.code == 200) {
-          this.$message({
-            message: data.msg,
-            type: "success"
-          });
-          this.handleSearch(false);
-        } else {
-          this.$message({
-            message: data.msg,
-            type: "error"
-          });
-        }
-      });
+    handleAddForm(
+      loginId,
+      modelName,
+      modelPower,
+      price,
+      powerWaste,
+      attaction,
+      size,
+      brandName,
+      qa,
+      imgaeUrl
+    ) {
+      if (this.addForm.isImg) {
+        this.$refs.upload.submit();
+      } else {
+        httpSysAddminermodel(
+          this.loginId,
+          this.addForm.modelName,
+          this.addForm.modelPower,
+          this.addForm.price,
+          this.addForm.powerWaste,
+          this.addForm.attaction,
+          this.addForm.size,
+          this.addForm.brandName,
+          this.addForm.qa
+        ).then(res => {
+          let data = res.data;
+          if (data.code == 200) {
+            this.$message({
+              message: data.msg,
+              type: "success"
+            });
+            this.dialogFormAddVisible = false;
+            this.reset();
+          } else {
+            this.$message({
+              message: data.msg,
+              type: "error"
+            });
+          }
+        });
+      }
     },
     /* 新增矿机型号 后台管理模块 / 矿机型号修改 */
-    handleEditForm(brandName, loginId, id) {
-      httpSysUpdateminerbrand(brandName, loginId, id).then(res => {
-        let data = res.data;
-        if (data.code == 200) {
-          this.$message({
-            message: data.msg,
-            type: "success"
-          });
-          this.handleSearch(false);
-        } else {
-          this.$message({
-            message: data.msg,
-            type: "error"
-          });
-        }
-      });
+    handleEditForm(
+      loginId,
+      id,
+      modelName,
+      modelPower,
+      price,
+      powerWaste,
+      attaction,
+      size,
+      brandName,
+      qa,
+      imgaeUrl
+    ) {
+      if (this.editForm.isImg) {
+        this.$refs.uploadEdit.submit();
+      } else {
+        httpSysUpdateminermodel(
+          this.loginId,
+          this.editForm.id,
+          this.editForm.modelName,
+          this.editForm.modelPower,
+          this.editForm.price,
+          this.editForm.powerWaste,
+          this.editForm.attaction,
+          this.editForm.size,
+          this.editForm.brandName,
+          this.editForm.qa
+        ).then(res => {
+          let data = res.data;
+          if (data.code == 200) {
+            this.$message({
+              message: data.msg,
+              type: "success"
+            });
+            this.dialogFormEditVisible = false;
+            this.reset();
+          } else {
+            this.$message({
+              message: data.msg,
+              type: "error"
+            });
+          }
+        });
+      }
     },
     submitUpload() {
       this.$refs.upload.submit();
@@ -318,8 +433,66 @@ export default {
     handlePreview(file) {
       console.log(file);
     },
-    beforeAvatarUpload(e) {
-      httpSysAddminermodelImg(e).then(res => {});
+    /* 新增矿机型号 后台管理模块 / 矿机型号新增 添加图片 */
+    beforeAvatarUploadAdd(file) {
+      httpSysAddminermodelImg(
+        this.loginId,
+        this.addForm.modelName,
+        this.addForm.modelPower,
+        this.addForm.price,
+        this.addForm.powerWaste,
+        this.addForm.attaction,
+        this.addForm.size,
+        this.addForm.brandName,
+        this.addForm.qa,
+        file
+      ).then(res => {
+        let data = res.data;
+        if (data.code == 200) {
+          this.$message({
+            message: data.msg,
+            type: "success"
+          });
+          this.dialogFormAddVisible = false;
+          this.reset();
+        } else {
+          this.$message({
+            message: data.msg,
+            type: "error"
+          });
+        }
+      });
+    },
+    /* 新增矿机型号 后台管理模块 / 矿机型号修改 添加图片 */
+    beforeAvatarUploadEdit(file) {
+      httpSysUpdateminermodelImg(
+        this.loginId,
+        this.editForm.id,
+        this.editForm.modelName,
+        this.editForm.modelPower,
+        this.editForm.price,
+        this.editForm.powerWaste,
+        this.editForm.attaction,
+        this.editForm.size,
+        this.editForm.brandName,
+        this.editForm.qa,
+        file
+      ).then(res => {
+        let data = res.data;
+        if (data.code == 200) {
+          this.$message({
+            message: data.msg,
+            type: "success"
+          });
+          this.dialogFormEditVisible = false;
+          this.reset();
+        } else {
+          this.$message({
+            message: data.msg,
+            type: "error"
+          });
+        }
+      });
     }
   },
   mounted() {

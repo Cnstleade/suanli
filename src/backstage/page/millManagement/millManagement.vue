@@ -321,9 +321,11 @@ export default {
   methods: {
     changeDialog() {},
     handleEdit(index, row) {
+      this.editForm = JSON.parse(JSON.stringify(row));
       this.dialogFormEditVisible = true;
     },
     handleAdd() {
+      this.addForm = {};
       this.dialogFormAddVisible = true;
     },
     handleDelete(index, row) {},
@@ -457,7 +459,22 @@ export default {
         poolId,
         isell,
         overclock
-      ).then();
+      ).then(res => {
+        let data = res.data;
+        if (data.code == 200) {
+          this.$message({
+            message: data.msg,
+            type: "success"
+          });
+          this.dialogFormAddVisible = false;
+          this.reset();
+        } else {
+          this.$message({
+            message: data.msg,
+            type: "error"
+          });
+        }
+      });
     }
   },
   mounted() {
