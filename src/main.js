@@ -44,7 +44,7 @@ Vue.config.productionTip = false;
 
 
 router.beforeEach((to, from, next) => {
-  if (/index/.test(to.fullPath.slice(1)) || /dashboard/.test(to.fullPath.slice(1))) {
+  if (/index/.test(to.fullPath.slice(1)) || /dashboard/.test(to.fullPath.slice(1))|| /dashboard1/.test(to.fullPath.slice(1))) {
     next();
   } else
   if (store.getters.role) { //判断role 是否存在
@@ -113,6 +113,10 @@ new Vue({
   store,
   components: {
     App
+  },
+  data: {
+    eventHub: new Vue(),
+    charts: []
   },
   template: '<App/>'
 })

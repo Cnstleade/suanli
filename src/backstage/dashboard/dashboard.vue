@@ -1,61 +1,58 @@
 <template>
     <div class="dashboard">
-        <div class="flex-container column">
-            <div class="item one" @click="clickChart('1')" style="transform:translate(-22.4%,-33.5%) scale(0.33)">
-                这是1号
-            </div>
-            <div class="item two" @click="clickChart('2')" style="transform:translate(-22.4%,0.5%) scale(0.33)">
-                这是2号
-            </div>
-            <div class="item three" @click="clickChart('3')" style="transform: translate(-22.4%,34.5%) scale(0.33)">
-                这是3号
-            </div>
-            <div class="item four active" @click="clickChart('4')" style="transform: translate(43.7%, 0) scale(1)">
-              这是4号
-            </div>            
+      <canvas id="cvs" width="100%" height="400" style="border:1px solid pink;margin:20px auto;">
+
+      </canvas>
+      <div>
+        <div>
+          <img height="70px" src="../../../static/zby.png" alt="">
+          <div id="elForm">
+            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+              <el-form-item label="审批人">
+                <el-input v-model="formInline.user" placeholder="审批人"></el-input>
+              </el-form-item>
+              <el-form-item label="活动区域">
+                <el-select v-model="formInline.region" placeholder="活动区域">
+                  <el-option label="区域一" value="shanghai"></el-option>
+                  <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+          </div>
         </div>
-    </div>    
+        <div></div>
+        <div></div>
+      </div>
+    </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      items: []
+      ims: "../../../static/logo.png",
+      formInline: {}
     };
   },
   mounted() {
     this._init();
-    console.log(this.$data);
   },
   methods: {
-    _resize() {
-      this.$root.charts.forEach(myChart => {
-        myChart.resize();
-      });
-    },
     _init() {
-      this.items = document.querySelectorAll(".flex-container .item");
-      for (let i = 0; i < this.items.length; i++) {
-        this.items[i].dataset.order = i + 1;
-      }
-    },
-    clickChart(clickIndex) {
-      let activeItem = document.querySelector(".flex-container .active");
-      let activeIndex = activeItem.dataset.order;
-      let clickItem = this.items[clickIndex - 1];
-      if (activeIndex === clickIndex) {
-        return;
-      }
-      activeItem.classList.remove("active");
-      clickItem.classList.add("active");
-      this._setStyle(clickItem, activeItem);
-    },
-    _setStyle(el1, el2) {
-      let transform1 = el1.style.transform;
-      let transform2 = el2.style.transform;
-      el1.style.transform = transform2;
-      el2.style.transform = transform1;
+      var cvs = document.getElementById("cvs");
+      var cW = cvs.style.width;
+      var cH = cvs.style.height;
+      var imgObj = new Image();
+      imgObj.src = this.ims;
+      var imgW = "100";
+      var imgH = "50";
+
+      imgObj.onload = function() {
+        imgW = imgObj.width;
+        imgH = imgObj.height;
+        var ctx = cvs.getContext("2d");
+        ctx.drawImage(this, 0, 0, 100, 50);
+      };
     }
   }
 };
@@ -76,32 +73,36 @@ export default {
   padding-top: 5%;
   background: url("../../assets/bg.jpg");
   background-size: 100% 100%;
-  color: red;
-  .flex-container.column {
-    position: relative;
-    height: 90%;
-    width: 90%;
-    overflow: hidden;
-    margin: 0 auto 100px auto;
-    box-sizing: content-box;
-  }
-  .item {
-    padding: 0px;
-    margin: 0px;
-    width: 68%;
-    height: 100%;
-    position: absolute;
-    transform: scale(0.33);
-    text-align: center;
-    transition: all 0.8s;
-    background: rgba(32, 32, 35, 0.5);
-  }
-  .active {
-    height: 100%;
-    width: 69%;
-    margin-left: 10px;
-    line-height: 300px;
+  #cvs {
+    width: 100%;
+    display: none;
   }
 }
 </style>
+<style  lang="less">
+#elForm {
+  input {
+    background: none;
+    border: 1px solid #62bee0;
+    color: #62bee0;
+  }
+  ::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #62bee0;
+  }
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #62bee0;
+  }
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #62bee0;
+  }
+  :-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #62bee0;
+  }
+}
+</style>
+
 

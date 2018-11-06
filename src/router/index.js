@@ -22,6 +22,16 @@ export default new Router({
         role: 'dashboard'
       }
     },
+    /* 大盘 */
+    {
+      path: '/dashboard1',
+      name: 'dashboard1',
+      component: resolve => require(['@/backstage/dashboard/dashboard1.vue'], resolve),
+      meta: {
+        title: '大盘',
+        role: 'dashboard1'
+      }
+    },    
     /* 登录 */
     {
       path: '/adminlogin',

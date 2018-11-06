@@ -75,9 +75,51 @@ export default {
 </script>
 
 <style lang="less" scoped>
+ul,
+li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 .title {
   position: relative;
   display: flex;
-  
+  width: 100%;
+  height: 50px;
+  color: #fff;
+  line-height: 50px;
+  background-color: rgba(32, 32, 35, 0.2);
+  h1 {
+    flex: 0 0 120px;
+    font-size: 21px;
+    font-weight: bold;
+    padding-left: 20px;
+    line-height: 50px;
+  }
+  ul {
+    position: absolute;
+    right: 0;
+    padding-right: 20px;
+    margin-top: -2px;
+    li {
+      display: inline-block;
+      mmin-width: 59px;
+      padding: 2px 10px 2px 10px;
+      font-size: 11px;
+      line-height: 20px;
+      text-align: center;
+      &:first-child {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+      &:last-child {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+      & + li {
+        margin-left: -1px;
+      }
+    }
+  }
 }
 </style>
