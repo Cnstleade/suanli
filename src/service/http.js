@@ -526,6 +526,128 @@ export function httpSysMinerpowerlist(npage, pagesize, begainTimeString, endTime
   })
 }
 
+//后台管理模块 / 工单管理 我的工单
+export function httpHoHandleorderlist(npage, pagesize, repairmanId, handleorderId, faultType, as_id, handleorderStatus, handleorderRank, begainTimeString, endTimeString) {
+  let data = {
+    npage,
+    pagesize,
+    conditionVo: {
+      repairmanId,
+      handleorderId,
+      faultType,
+      as_id,
+      handleorderStatus,
+      handleorderRank,
+      begainTimeString,
+      endTimeString
+    }
+  };
+  return axios({
+    url: '/ho/handleorderlist',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+
+//后台管理模块 / 工单管理 接单
+export function httpHoReceivehandleorder(id, repairmanId) {
+  let data = {
+    id,
+    repairmanId
+  };
+  return axios({
+    url: '/ho/receivehandleorder',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 / 工单管理 反馈
+export function httpHoResponsehandleorder(id, repairmanId, faultType, remake) {
+  let data = {
+    id,
+    repairmanId,
+    faultType,
+    remake
+  };
+  return axios({
+    url: '/ho/responsehandleorder',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 / 工单管理 结单
+export function httpHoOverhandleorder(id, repairmanId, faultType, remake) {
+  let data = {
+    id,
+    repairmanId,
+    faultType,
+    remake
+  };
+  return axios({
+    url: '/ho/overhandleorder',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 / 错误类型 查询所有错误类型
+export function httpFtFindAllfaulttype() {
+  return axios({
+    url: '/ft/findAllfaulttype',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+  })
+}
+
+//后台管理模块 / 错误类型 修改
+export function httpFtModifyfaulttype(id, faultType, deadline) {
+  let data = {
+    id,
+    faultType,
+    deadline
+  };
+  return axios({
+    url: '/ft/modifyfaulttype',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 / 错误类型 新增
+export function httpFtAddfaulttype( faultType, deadline) {
+  let data = {
+    faultType,
+    deadline
+  };
+  return axios({
+    url: '/ft/addfaulttype',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
 
 
 /* 前台页面 */

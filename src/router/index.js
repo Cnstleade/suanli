@@ -31,7 +31,7 @@ export default new Router({
         title: '大盘',
         role: 'dashboard1'
       }
-    },    
+    },
     /* 登录 */
     {
       path: '/adminlogin',
@@ -154,6 +154,24 @@ export default new Router({
           meta: {
             title: '网站配置',
             role: 'siteConfiguration'
+          }
+        },
+        {
+          path: 'myWorkOrder',
+          name: 'myWorkOrder',
+          component: resolve => require(['@/backstage/page/workorder/myWorkOrder.vue'], resolve),
+          meta: {
+            title: '我的工单',
+            role: 'myWorkOrder'
+          }
+        },
+        {
+          path: 'errorTYpe',
+          name: 'errorTYpe',
+          component: resolve => require(['@/backstage/page/workorder/errorTYpe.vue'], resolve),
+          meta: {
+            title: '错误类型',
+            role: 'errorTYpe'
           }
         },
       ]
@@ -478,6 +496,23 @@ export const powerRouter = [{
         role: 'threePartiesList'
       }
     },
-
+    {
+      path: 'myWorkOrder',
+      name: 'myWorkOrder',
+      component: resolve => require(['@/backstage/page/workorder/myWorkOrder.vue'], resolve),
+      meta: {
+        title: '我的工单',
+        role: 'myWorkOrder'
+      }
+    },
+    {
+      path: 'errorTYpe',
+      name: 'errorTYpe',
+      component: resolve => require(['@/backstage/page/workorder/errorTYpe.vue'], resolve),
+      meta: {
+        title: '错误类型',
+        role: 'errorTYpe'
+      }
+    },
   ]
 }]

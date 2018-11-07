@@ -71,9 +71,11 @@ export default {
     // sessionStorage.setItem("zby_username", data); //添加到sessionStorage  
     sessionStorage.setItem("zby_isLogin", true);
     sessionStorage.setItem("zby_loginId", data.loginId);
-    sessionStorage.setItem("zby_role", data.data);
+    // sessionStorage.setItem("zby_role", data.data);
+    sessionStorage.setItem("zby_role", ['myWorkOrder', 'errorType']);
     state.loginId = data.loginId, //同步的改变store中的状态  
-      state.role = data.data, //同步的改变store中的状态  
+      //  state.role = data.data, //同步的改变store中的状态  
+      state.role = ['myWorkOrder', 'errorType'], //同步的改变store中的状态  
       state.isLogin = true
   },
 

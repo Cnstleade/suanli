@@ -49,12 +49,7 @@ export default {
       );
     },
     _getCityData() {
-      //   axios.get("static/data/cityData.json").then(res => {
-      //     this.geoCoordMap = res.data;
-      //     this.$nextTick(() => {
-      //       this._getMyChart();
-      //     });
-      //   });
+
       this.geoCoordMap = {
         海门: [121.15, 31.89],
         鄂尔多斯: [109.781327, 39.608266],
@@ -274,127 +269,6 @@ export default {
       return res;
     },
     _getMyChart() {
-      //   axios.get("static/data/point/testData.json").then(res => {
-      //     let options = {
-      //       // backgroundColor: '#404a59',
-      //       title: {
-      //         show: false
-      //       },
-      //       tooltip: {
-      //         trigger: "item",
-      //         formatter: function(params) {
-      //           return params.name + " : " + params.value[2];
-      //         }
-      //       },
-      //       legend: {
-      //         show: false
-      //       },
-      //       visualMap: {
-      //         min: 0,
-      //         max: 200,
-      //         bottom: 50,
-      //         splitNumber: 5,
-      //         inRange: {
-      //           color: ["#255B78", "#2A7484", "#2F9696", "#3BBCB0", "#51D4EB"]
-      //         },
-      //         textStyle: {
-      //           color: "#fff"
-      //         }
-      //       },
-      //       geo: {
-      //         map: "china",
-      //         label: {
-      //           emphasis: {
-      //             show: false
-      //           }
-      //         },
-      //         zoom: 1,
-      //         top: 50,
-      //         itemStyle: {
-      //           normal: {
-      //             color: "#3c4247",
-      //             opacity: 0.6,
-      //             borderColor: "rgba(255, 255, 255, 0.35)"
-      //           },
-      //           emphasis: {
-      //             color: "#2a333d"
-      //           }
-      //         }
-      //       },
-      //       series: [
-      //         {
-      //           name: "标签1",
-      //           type: "scatter",
-      //           coordinateSystem: "geo",
-      //           symbolSize: function(val) {
-      //             return val[2] / 6;
-      //           },
-      //           label: {
-      //             normal: {
-      //               show: false
-      //             },
-      //             emphasis: {
-      //               show: false
-      //             }
-      //           },
-      //           itemStyle: {
-      //             emphasis: {
-      //               borderColor: "#fff",
-      //               borderWidth: 1
-      //             }
-      //           },
-      //           data: this.convertData(res.data)
-      //         },
-      //         {
-      //           name: "标签2",
-      //           type: "scatter",
-      //           coordinateSystem: "geo",
-      //           symbolSize: function(val) {
-      //             return val[2] / 6;
-      //           },
-      //           label: {
-      //             normal: {
-      //               show: false
-      //             },
-      //             emphasis: {
-      //               show: false
-      //             }
-      //           },
-      //           itemStyle: {
-      //             emphasis: {
-      //               borderColor: "#fff",
-      //               borderWidth: 1
-      //             }
-      //           },
-      //           data: this.convertData(res.data)
-      //         },
-      //         {
-      //           name: "标签3",
-      //           type: "scatter",
-      //           coordinateSystem: "geo",
-      //           symbolSize: function(val) {
-      //             return val[2] / 6;
-      //           },
-      //           label: {
-      //             normal: {
-      //               show: false
-      //             },
-      //             emphasis: {
-      //               show: false
-      //             }
-      //           },
-      //           itemStyle: {
-      //             emphasis: {
-      //               borderColor: "#fff",
-      //               borderWidth: 1
-      //             }
-      //           },
-      //           data: this.convertData(res.data)
-      //         }
-      //       ]
-      //     };
-      //     this._init(options);
-      //   });
       let data = [
         {
           name: "海门",
