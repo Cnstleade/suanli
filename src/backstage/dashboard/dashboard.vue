@@ -1,187 +1,196 @@
 <template>
     <div class="dashboard">
-      <canvas id="cvs"   height="114" >
-      </canvas>
-      <div class="dashboard-top">
-        <div class="dashboard-children">
-          <img height="50px" src="../../../static/zby.png" alt="">
-          <div id="elForm">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline" size="mini">
-              <el-form-item label="当前账号：">
-                <el-select v-model="formInline.region" placeholder="活动区域">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item prop="delivery">
-                <el-switch v-model="formInline.regio"
-                  active-color="#13ce66"
-                  inactive-color="#62bee0"
-                  active-text="轮播"
-                ></el-switch>
-              </el-form-item>              
-            </el-form>
+      <template v-show="dashboardShow">
+        <canvas id="cvs"   height="114" >
+        </canvas>
+        <div class="dashboard-top">
+          <div class="dashboard-children">
+            <img height="50px" src="../../../static/zby.png" alt="">
+            <div id="elForm">
+              <el-form :inline="true" :model="formInline" class="demo-form-inline" size="mini" >
+                <el-form-item label="当前账号：">
+                  <el-select v-model="formInline.region" placeholder="活动区域" style="width:190px;">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item prop="delivery">
+                  <el-switch v-model="formInline.regio"
+                    active-color="#13ce66"
+                    inactive-color="#62bee0"
+                    active-text="轮播"
+                  ></el-switch>
+                </el-form-item>              
+              </el-form>
+            </div>
+          </div>
+          <div  class="dashboard-title">助币云矿机监控平台</div> 
+          <div id="elButton">
+            <span>{{date|dateServer}}</span>
+             <el-button type="primary" icon="el-icon-back" size="mini" class="elButton">返回</el-button>
           </div>
         </div>
-        <div  class="dashboard-title">助币云矿机监控平台</div> 
-        <div id="elButton">
-          <span>2018-11-6 15:00</span>
-           <el-button type="primary" icon="el-icon-back" size="mini" class="elButton">返回</el-button>
+        <div class="dashboard-middle">
+          <div class="dashboard-middle-container">
+            <div class="dashboard-middle-container-pro" >
+              <div >
+                <img class="dashboard-middle-container-pro-i1" src="../../assets/images/2_03.png" width="100px" alt="">
+                <img class="dashboard-middle-container-pro-i2" src="../../assets/images/2_05.png" width="80px" alt="">
+                <img class="dashboard-middle-container-pro-i3" src="../../assets/images/2_08.png" width="60px" alt="">
+              </div>
+              <div class="dashboard-middle-container-pro-detail">
+                  矿机故障数
+                <span>{{tableData.minerFaultCount?tableData.minerFaultCount:''}}</span>
+              </div>
+            </div>
+            <div class="dashboard-middle-container-num">
+              <img  src="../../assets/images/3_06.png" width="120px" alt="">
+              <div >
+                <p>矿机总数</p>
+                <span>{{tableData.minerCount?tableData.minerCount:''}}</span>
+                <p>活跃矿机总数</p>
+                <span>{{tableData.minerActiveCount?tableData.minerActiveCount:''}}</span>
+              </div>
+            </div>
+            <div class="dashboard-middle-container-yield">
+              <div>收益总览</div>
+              <ul>
+                <li>
+                  <img src="../../assets/images/3_10.png" alt="">
+                  <p>
+                    <span>{{yields.total_paid?yields.total_paid:''}}</span><b>BTC</b>
+                  </p>
+                  <span>已支付</span>
+                </li>
+                <li>
+                  <img src="../../assets/images/3_12.png" alt="">
+                  <p>
+                    <span>{{yields.unpaid?yields.unpaid:''}}</span><b>BTC</b>
+                  </p>
+                  <span>余额</span>
+                </li>              
+                <li>
+                  <img src="../../assets/images/3_14.png" alt="">
+                  <p>
+                    <span>{{yields.earnings_today?yields.earnings_today:''}}</span><b>BTC</b>
+                  </p>
+                  <span>今日预估</span>
+                </li>
+                <li>
+                  <img src="../../assets/images/3_16.png" alt="">
+                  <p>
+                    <span>{{yields.earnings_yesterday?yields.earnings_yesterday:''}}</span><b>BTC</b>
+                  </p>
+                  <span>昨日收益</span>
+                </li>                            
+              </ul>
+              <canvas id="cvs1" width="600"   height="50" >
+              </canvas>            
+            </div>
+            <i class="el-icon-arrow-left dashboard-middle-icon dashboard-middle-1"></i>
+            <i class="el-icon-arrow-right dashboard-middle-icon dashboard-middle-2"></i>
+            <i class="el-icon-arrow-left dashboard-middle-icon dashboard-middle-3"></i>
+            <i class="el-icon-arrow-right dashboard-middle-icon dashboard-middle-4"></i>
+            <img class="img1" src="../../assets/images/7_03.png" alt="">
+            <img class="img2" src="../../assets/images/7_09.png" alt="">
+            <img class="img3" src="../../assets/images/7_03.png" alt="">
+            <img class="img4" src="../../assets/images/7_09.png" alt="">          
+            <img class="img5" src="../../assets/images/7_03.png" alt="">
+            <img class="img6" src="../../assets/images/7_09.png" alt="">
+            <img class="img7" src="../../assets/images/7_03.png" alt="">
+            <img class="img8" src="../../assets/images/7_09.png" alt="">                    
+          </div>
         </div>
-      </div>
-      <div class="dashboard-middle">
-        <div class="dashboard-middle-container">
-          <div class="dashboard-middle-container-pro" >
-            <div >
-              <img class="dashboard-middle-container-pro-i1" src="../../assets/images/2_03.png" width="100px" alt="">
-              <img class="dashboard-middle-container-pro-i2" src="../../assets/images/2_05.png" width="80px" alt="">
-              <img class="dashboard-middle-container-pro-i3" src="../../assets/images/2_08.png" width="60px" alt="">
+        <div class="dashboard-bottom">
+          <div class="broken">
+            <p>
+              <span class="broken-left">1小时算力曲线</span>
+              <span class="broken-right">总收益<b class="broken-right-top">37.6</b>%</span>
+            </p>
+            <div class="echart echart1">
+
             </div>
-            <div class="dashboard-middle-container-pro-detail">
-                矿机故障数
-              <span>46</span>
+            <p>
+              <span class="broken-left">数据信息</span>
+              <span class="broken-right">总装机容量<b class="broken-right-bottom">1054</b>MW</span>
+            </p>
+            <div class="dashboard-progress">
+              <div >
+                <p style="color:#04BA18">井网容量<span>(798MV)</span></p>
+                <canvas id="dashboard-progress-1" width="400" height="30" >
+                </canvas>             
+              </div>
+              <div>
+                <p style="color:#FFFF00">在建容量<span>(398MV)</span></p>
+                <canvas id="dashboard-progress-2" width="400" height="30" >
+                </canvas>                
+              </div>
+              <div>
+                <p style="color:#D2D2D2">未建容量<span>(398MV)</span></p>
+                <canvas id="dashboard-progress-3" width="400" height="30" >
+                </canvas>                  
+              </div>
             </div>
           </div>
-          <div class="dashboard-middle-container-num">
-            <img  src="../../assets/images/3_06.png" width="120px" alt="">
-            <div >
-              <p>矿机总数</p>
-              <span>8888888</span>
-              <p>活跃矿机总数</p>
-              <span>8888883</span>
+          <div class="broken">
+            <p>
+              <span class="broken-left">24小时算力曲线</span>
+              <span class="broken-right">总收益<b class="broken-right-top">37.6</b>%</span>
+            </p>
+            <div class="echart echart2">
+
+            </div>
+            <p>
+              <span class="broken-left">实时算力</span>
+              <!-- <span class="broken-right">总装机容量<b class="broken-right-bottom">1054</b>MW</span> -->
+            </p>
+            <div class="dashboard-progress">
+              <div >
+                <p style="color:#04BA18">一分钟<span>({{realTimePower.shares_1m?realTimePower.shares_1m:''}}&nbsp;PH/S)</span></p>
+                <canvas id="dashboard-progress-4" width="400" height="30" >
+                </canvas>             
+              </div>
+              <div>
+                <p style="color:#FFFF00">五分钟<span>({{realTimePower.shares_5m?realTimePower.shares_5m:''}}&nbsp;PH/S)</span></p>
+                <canvas id="dashboard-progress-5" width="400" height="30"  >
+                </canvas>                
+              </div>
+              <div>
+                <p style="color:#D2D2D2">十五分钟<span>({{realTimePower.shares_15m?realTimePower.shares_15m:''}}&nbsp;PH/S)</span></p>
+                <canvas id="dashboard-progress-6" width="400" height="30" >
+                </canvas>                  
+              </div>
             </div>
           </div>
-          <div class="dashboard-middle-container-yield">
-            <div>收益总览</div>
-            <ul>
+          <div class="map">
+            <p>矿机状态</p>
+            <canvas  id="chinaEchart" width="400" height="35" >
+
+            </canvas>
+            <div class="chinaEchart">
+              <img src="../../assets/images/6_03.png" alt="" style="width:100%">
+            </div>
+            <ul class="map-detail">
               <li>
-                <img src="../../assets/images/3_10.png" alt="">
-                <p>
-                  <span>31.16200820</span><b>BTC</b>
-                </p>
-                <span>已支付</span>
+                <p>{{showData.minersCount?showData.minersCount:''}}</p>
+                <span>矿场总数</span>
               </li>
               <li>
-                <img src="../../assets/images/3_12.png" alt="">
-                <p>
-                  <span>0.09365967</span><b>BTC</b>
-                </p>
-                <span>余额</span>
-              </li>              
-              <li>
-                <img src="../../assets/images/3_14.png" alt="">
-                <p>
-                  <span>0.09365967</span><b>BTC</b>
-                </p>
-                <span>今日预估</span>
+                <p>{{showData.subAccountCount?showData.subAccountCount:''}}</p>
+                <span>子账号总数</span>              
               </li>
-              <li>
-                <img src="../../assets/images/3_16.png" alt="">
-                <p>
-                  <span>0.39083636</span><b>BTC</b>
-                </p>
-                <span>昨日收益</span>
-              </li>                            
+              <li style="margin-top:5px">
+                <p>{{showData.minerCount?showData.minerCount:''}}</p>
+                <span>矿机总数</span>              
+              </li>
+              <li style="margin-top:5px">
+                <p>{{showData.minerCount?showData.minerCount:''}}</p>
+                <span>工单总数</span>              
+              </li>
             </ul>
-            <canvas id="cvs1" width="600"   height="50" >
-            </canvas>            
           </div>
-          <i class="el-icon-arrow-left dashboard-middle-icon dashboard-middle-1"></i>
-          <i class="el-icon-arrow-right dashboard-middle-icon dashboard-middle-2"></i>
-          <i class="el-icon-arrow-left dashboard-middle-icon dashboard-middle-3"></i>
-          <i class="el-icon-arrow-right dashboard-middle-icon dashboard-middle-4"></i>
- 
-        </div>
-      </div>
-      <div class="dashboard-bottom">
-        <div class="broken">
-          <p>
-            <span class="broken-left">1小时算力曲线</span>
-            <span class="broken-right">总收益<b class="broken-right-top">37.6</b>%</span>
-          </p>
-          <div class="echart echart1">
-            
-          </div>
-          <p>
-            <span class="broken-left">数据信息</span>
-            <span class="broken-right">总装机容量<b class="broken-right-bottom">1054</b>MW</span>
-          </p>
-          <div class="dashboard-progress">
-            <div >
-              <p style="color:#04BA18">井网容量<span>(798MV)</span></p>
-              <canvas id="dashboard-progress-1" width="400" height="30" >
-              </canvas>             
-            </div>
-            <div>
-              <p style="color:#FFFF00">在建容量<span>(398MV)</span></p>
-              <canvas id="dashboard-progress-2" width="400" height="30" >
-              </canvas>                
-            </div>
-            <div>
-              <p style="color:#D2D2D2">未建容量<span>(398MV)</span></p>
-              <canvas id="dashboard-progress-3" width="400" height="30" >
-              </canvas>                  
-            </div>
-          </div>
-        </div>
-        <div class="broken">
-          <p>
-            <span class="broken-left">24小时算力曲线</span>
-            <span class="broken-right">总收益<b class="broken-right-top">37.6</b>%</span>
-          </p>
-          <div class="echart echart2">
-            
-          </div>
-          <p>
-            <span class="broken-left">数据信息</span>
-            <span class="broken-right">总装机容量<b class="broken-right-bottom">1054</b>MW</span>
-          </p>
-          <div class="dashboard-progress">
-            <div >
-              <p style="color:#04BA18">井网容量<span>(798MV)</span></p>
-              <canvas id="dashboard-progress-4" width="400" height="30" >
-              </canvas>             
-            </div>
-            <div>
-              <p style="color:#FFFF00">在建容量<span>(398MV)</span></p>
-              <canvas id="dashboard-progress-5" width="400" height="30"  >
-              </canvas>                
-            </div>
-            <div>
-              <p style="color:#D2D2D2">未建容量<span>(398MV)</span></p>
-              <canvas id="dashboard-progress-6" width="400" height="30" >
-              </canvas>                  
-            </div>
-          </div>
-        </div>
-        <div class="map">
-          <p>矿机状态</p>
-          <canvas  id="chinaEchart" width="400" height="35" >
-
-          </canvas>
-          <div class="chinaEchart">
-
-          </div>
-          <ul class="map-detail">
-            <li>
-              <p>2</p>
-              <span>矿场总数</span>
-            </li>
-            <li>
-              <p>8</p>
-              <span>子账号总数</span>              
-            </li>
-            <li style="margin-top:5px">
-              <p>8888</p>
-              <span>矿机总数</span>              
-            </li>
-            <li style="margin-top:5px">
-              <p>888</p>
-              <span>工单总数</span>              
-            </li>
-          </ul>
-        </div>
-      </div>
+        </div>        
+      </template>
     </div>
 </template>
 
@@ -189,16 +198,32 @@
 import echarts from "echarts";
 import china from "echarts/map/js/china";
 import line from "@/backstage/dashboard/line/line";
+import {
+  httpGETpoolstatsmerge,
+  httpStaFindMarkDo,
+  httpStaFind
+} from "@/service/http";
 export default {
   data() {
     return {
+      date: new Date(),
       ims: "../../../static/logo.png",
       formInline: {},
       screenWidth: document.body.clientWidth,
-      width: document.body.clientWidth
+      width: document.body.clientWidth,
+      tableData: [],
+      yields: {},
+      realTimePower: {}, //实时算力
+      dashboardShow: false,
+      scroe1: [],
+      scroe2: [],
+      showData: []
     };
   },
   mounted() {
+    setInterval(() => {
+      this.date = new Date();
+    }, 1000);
     this._init();
     window.onresize = () => {
       return (() => {
@@ -437,127 +462,148 @@ export default {
     // 基于准备好的dom，初始化echarts实例
     this.myChart1 = echarts.init(document.querySelector(".echart1"));
     this.myChart2 = echarts.init(document.querySelector(".echart2"));
-    this.myChina = echarts.init(document.querySelector(".chinaEchart"));
-    this.myChina.setOption({
-      // backgroundColor: '#404a59',
-      // title: {
-      //   show: false
-      // },
-      // tooltip: {
-      //   trigger: "item",
-      //   formatter: function(params) {
-      //     return params.name + " : " + params.value[2];
-      //   }
-      // },
-      // legend: {
-      //   show: false
-      // },
-      // visualMap: {
-      //   min: 0,
-      //   max: 200,
-      //   bottom: 50,
-      //   splitNumber: 5,
-      //   inRange: {
-      //     color: ["#255B78", "#2A7484", "#2F9696", "#3BBCB0", "#51D4EB"]
-      //   },
-      //   textStyle: {
-      //     color: "#fff"
-      //   }
-      // },
-      geo: {
-        map: "china",
-        zoom: 1,
-        top: 50,
-        itemStyle: {
-          normal: {
-            // 普通状态下的样式
-            color: "#3c4247",
-            opacity: 0.6,
-            borderColor: "rgba(255, 255, 255, 0.35)"
-          },
-          emphasis: {
-            // 高亮状态下的样式
-            color: "#2a333d"
-          }
-        }
-      },
-      series: [
-        // {
-        //   name: "rode",
-        //   type: "lines",
-        //   coordinateSystem: "geo",
-        //   data: this.convertData(mapdata),
-        //   effect: {
-        //     show: true,
-        //     period: 6,
-        //     trailLength: 0
-        //   },
-        //   lineStyle: {
-        //     normal: {
-        //       color: "#389BB7",
-        //       width: 1,
-        //       opacity: 0.4,
-        //       curveness: 0.2
-        //     }
-        //   }
-        // },
-        {
-          name: "city",
-          type: "effectScatter",
-          coordinateSystem: "geo",
-          rippleEffect: {
-            brushType: "stroke"
-          },
-          label: {
-            normal: {
-              show: true,
-              position: "right",
-              formatter: "{b}"
-            }
-          },
-          symbolSize: 8,
-          itemStyle: {
-            normal: {
-              color: "#389BB7"
-            }
-          },
-          data: this.convertData(mapdata)
-        }
+    // this.myChina = echarts.init(document.querySelector(".chinaEchart"));
+    // this.myChina.setOption({
+    //   // backgroundColor: '#404a59',
+    //   // title: {
+    //   //   show: false
+    //   // },
+    //   // tooltip: {
+    //   //   trigger: "item",
+    //   //   formatter: function(params) {
+    //   //     return params.name + " : " + params.value[2];
+    //   //   }
+    //   // },
+    //   // legend: {
+    //   //   show: false
+    //   // },
+    //   // visualMap: {
+    //   //   min: 0,
+    //   //   max: 200,
+    //   //   bottom: 50,
+    //   //   splitNumber: 5,
+    //   //   inRange: {
+    //   //     color: ["#255B78", "#2A7484", "#2F9696", "#3BBCB0", "#51D4EB"]
+    //   //   },
+    //   //   textStyle: {
+    //   //     color: "#fff"
+    //   //   }
+    //   // },
+    //   geo: {
+    //     map: "china",
+    //     zoom: 1,
+    //     top: 50,
+    //     itemStyle: {
+    //       normal: {
+    //         // 普通状态下的样式
+    //         color: "#3c4247",
+    //         opacity: 0.6,
+    //         borderColor: "rgba(255, 255, 255, 0.35)"
+    //       },
+    //       emphasis: {
+    //         // 高亮状态下的样式
+    //         color: "#2a333d"
+    //       }
+    //     }
+    //   },
+    //   series: [
+    //     // {
+    //     //   name: "rode",
+    //     //   type: "lines",
+    //     //   coordinateSystem: "geo",
+    //     //   data: this.convertData(mapdata),
+    //     //   effect: {
+    //     //     show: true,
+    //     //     period: 6,
+    //     //     trailLength: 0
+    //     //   },
+    //     //   lineStyle: {
+    //     //     normal: {
+    //     //       color: "#389BB7",
+    //     //       width: 1,
+    //     //       opacity: 0.4,
+    //     //       curveness: 0.2
+    //     //     }
+    //     //   }
+    //     // },
+    //     {
+    //       name: "city",
+    //       type: "effectScatter",
+    //       layoutCenter: ["50%", "50%"],
+    //       layoutSize: "100%",
+    //       coordinateSystem: "geo",
+    //       rippleEffect: {
+    //         brushType: "stroke"
+    //       },
 
-        // {
-        //   name: "销量", // series名称
-        //   type: "scatter", // series图表类型
-        //   coordinateSystem: "geo", // series坐标系类型
-        //   data: this.convertData(mapdata),
-        //   itemStyle: {
-        //     normal: {
-        //       color: "#66c2e0",
-        //       borderColor: "#01bb1c"
-        //       // label: {
-        //       //   show: true,
-        //       //   textStyle: {
-        //       //     color: "#66c2e0"
-        //       //   }
-        //       // }
-        //     },
-        //     emphasis: { color: "rgba(128, 128, 128, 0.5)" },
-        //     effect: {
-        //       show: true,
-        //       period: 6,
-        //       trailLength: 0
-        //     },
-        //     lineStyle: {
-        //       normal: {
-        //         color: "#389BB7",
-        //         width: 1,
-        //         opacity: 0.4,
-        //         curveness: 0.2
-        //       }
-        //     }
-        //   }
-        // }
-      ]
-    });
+    //       label: {
+    //         normal: {
+    //           show: true,
+    //           position: "right",
+    //           formatter: "{b}"
+    //         },
+    //         emphasis: {
+    //           show: true,
+    //           textStyle: {
+    //             color: "#fff"
+    //           }
+    //         }
+    //       },
+    //       itemStyle: {
+    //         normal: {
+    //           areaColor: "rgba(24,65,91,1)",
+    //           borderColor: "#9DDCEB",
+    //           borderWidth: 3,
+    //           shadowColor: "#9DDCEB",
+    //           shadowBlur: 20
+    //         },
+    //         emphasis: {
+    //           areaColor: "rgba(24,65,91,1)"
+    //         }
+    //       },
+    //       symbolSize: 8,
+    //       itemStyle: {
+    //         normal: {
+    //           color: "#389BB7"
+    //         }
+    //       },
+    //       data: this.convertData(mapdata)
+    //     }
+
+    //     // {
+    //     //   name: "销量", // series名称
+    //     //   type: "scatter", // series图表类型
+    //     //   coordinateSystem: "geo", // series坐标系类型
+    //     //   data: this.convertData(mapdata),
+    //     //   itemStyle: {
+    //     //     normal: {
+    //     //       color: "#66c2e0",
+    //     //       borderColor: "#01bb1c"
+    //     //       // label: {
+    //     //       //   show: true,
+    //     //       //   textStyle: {
+    //     //       //     color: "#66c2e0"
+    //     //       //   }
+    //     //       // }
+    //     //     },
+    //     //     emphasis: { color: "rgba(128, 128, 128, 0.5)" },
+    //     //     effect: {
+    //     //       show: true,
+    //     //       period: 6,
+    //     //       trailLength: 0
+    //     //     },
+    //     //     lineStyle: {
+    //     //       normal: {
+    //     //         color: "#389BB7",
+    //     //         width: 1,
+    //     //         opacity: 0.4,
+    //     //         curveness: 0.2
+    //     //       }
+    //     //     }
+    //     //   }
+    //     // }
+    //   ]
+    // });
 
     // this.myChart.setOption({
     //   xAxis: {
@@ -642,7 +688,7 @@ export default {
           nameTextStyle: {
             color: "#66c2e0"
           }
-        }
+        },
       ],
       series: [
         {
@@ -719,7 +765,8 @@ export default {
           nameTextStyle: {
             color: "#66c2e0"
           }
-        }
+        },
+        
       ],
       series: [
         {
@@ -767,7 +814,90 @@ export default {
     }
   },
   methods: {
+    draw(id, w, color) {
+      var cav1 = document.getElementById(id);
+      var cav1 = cav1.getContext("2d");
+      cav1.beginPath();
+      cav1.fillStyle = color;
+      cav1.moveTo(0, 0);
+      cav1.lineTo(w, 0);
+      cav1.lineTo(w, 15);
+      cav1.lineTo(0, 15);
+      cav1.fill();
+    },
+    /*   排序 */
+    compare(pro) {
+      return function(obj1, obj2) {
+        var val1 = obj1[pro];
+        var val2 = obj2[pro];
+        if (val1 < val2) {
+          //正序
+          return 1;
+        } else if (val1 > val2) {
+          return -1;
+        } else {
+          return 0;
+        }
+      };
+    },
     _init() {
+      httpStaFind().then(res => {
+        let data = res.data;
+        if (data.code == 200) {
+          this.showData = data.data;
+        } else {
+          this.$message({
+            message: data.msg,
+            type: "error"
+          });
+        }
+      });
+      httpStaFindMarkDo(1).then(res => {
+        let data = res.data;
+        if (data.code == 200) {
+          this.tableData = data.data;
+          this.yields = JSON.parse(JSON.stringify(data.data.earnStats.data));
+          this.realTimePower = JSON.parse(
+            JSON.stringify(data.data.realTimePower)
+          );
+          var scroe = [
+            { index: 1, score: this.realTimePower.shares_1m },
+            { index: 2, score: this.realTimePower.shares_5m },
+            { index: 3, score: this.realTimePower.shares_15m }
+          ];
+          scroe.sort(this.compare("score"));
+          console.log(scroe[0].index, scroe[1].index, scroe[2].index);
+          scroe[0].index == 1
+            ? this.draw("dashboard-progress-4", 400, "#04BA18")
+            : scroe[0].index == 2
+              ? this.draw("dashboard-progress-5", 400, "#FFFF00")
+              : scroe[0].index == 3
+                ? this.draw("dashboard-progress-6", 400, "#D2D2D2")
+                : "";
+          scroe[1].index == 1
+            ? this.draw("dashboard-progress-4", 370, "#04BA18")
+            : scroe[1].index == 2
+              ? this.draw("dashboard-progress-5", 370, "#FFFF00")
+              : scroe[1].index == 3
+                ? this.draw("dashboard-progress-6", 370, "#D2D2D2")
+                : "";
+          scroe[2].index == 1
+            ? this.draw("dashboard-progress-4", 340, "#04BA18")
+            : scroe[2].index == 2
+              ? this.draw("dashboard-progress-5", 340, "#FFFF00")
+              : scroe[2].index == 3
+                ? this.draw("dashboard-progress-6", 340, "#D2D2D2")
+                : "";
+        } else {
+          this.$message({
+            message: data.msg,
+            type: "error"
+          });
+        }
+      });
+      httpGETpoolstatsmerge().then(res => {
+        console.log(res.data);
+      });
       var cvs = document.getElementById("cvs");
       cvs.width = this.width;
       var ctx = cvs.getContext("2d");
@@ -841,6 +971,8 @@ export default {
       var cavE = document.getElementById("chinaEchart");
       var cave = cavE.getContext("2d");
       cave.beginPath();
+
+      cave.lineWidth = 2;
       cave.strokeStyle = "#52FFFC";
       cave.fillStyle = "rgba(102,194,224,0.1)";
       cave.moveTo(0, 10);
@@ -853,23 +985,11 @@ export default {
       cave.fill();
       cave.stroke();
 
-      function draw(id, w, color) {
-        var cav1 = document.getElementById(id);
-        var cav1 = cav1.getContext("2d");
-        cav1.beginPath();
-        cav1.fillStyle = color;
-        cav1.moveTo(0, 0);
-        cav1.lineTo(w, 0);
-        cav1.lineTo(w, 15);
-        cav1.lineTo(0, 15);
-        cav1.fill();
-      }
-      draw("dashboard-progress-1", 400, "#04BA18");
-      draw("dashboard-progress-2", 200, "#FFFF00");
-      draw("dashboard-progress-3", 200, "#D2D2D2");
-      draw("dashboard-progress-4", 400, "#04BA18");
-      draw("dashboard-progress-5", 200, "#FFFF00");
-      draw("dashboard-progress-6", 200, "#D2D2D2");
+      this.draw("dashboard-progress-1", 400, "#04BA18");
+      this.draw("dashboard-progress-2", 200, "#FFFF00");
+      this.draw("dashboard-progress-3", 200, "#D2D2D2");
+
+      this.dashboardShow = true;
     },
     convertData(data) {
       var res = [];
@@ -991,6 +1111,41 @@ li {
       margin: 0 auto;
       padding: 20px 0;
       background: #0b1016;
+      & > img {
+        position: absolute;
+      }
+      .img1 {
+        top: -20px;
+        left: 0;
+      }
+      .img2 {
+        top: 0;
+        left: -20px;
+      }
+      .img3 {
+        top: -20px;
+        right: 0;
+      }
+      .img4 {
+        top: 0;
+        right: -20px;
+      }
+      .img5 {
+        bottom: -20px;
+        right: 0;
+      }
+      .img6 {
+        bottom: 0;
+        right: -20px;
+      }
+      .img7 {
+        bottom: -20px;
+        left: 0;
+      }
+      .img8 {
+        bottom: 0;
+        left: -20px;
+      }
       .dashboard-middle-icon {
         color: #62bee0;
         font-weight: bold;
@@ -1101,7 +1256,6 @@ li {
         position: relative;
         width: 600px;
         color: #66c2e0;
-        font-weight: bold;
         & > div {
           height: 50px;
           padding-right: 50px;
@@ -1115,12 +1269,18 @@ li {
             display: flex;
             flex-direction: column;
             align-items: center;
+            img {
+              width: 70px;
+              height: 56px;
+            }
             p {
+              font-size: 16px;
               span {
                 color: #01bb1c;
               }
               b {
-                margin-left: 10px;
+                font-weight: normal;
+                margin-left: 5px;
               }
             }
           }
@@ -1150,8 +1310,9 @@ li {
         margin: 0 20px;
         padding: 0 20px;
         font-weight: bold;
-        border: 1px solid #1e2d51;
+        border: 1px solid #52fffc;
         color: #62bee0;
+        background: rgba(102, 194, 224, 0.1);
         .broken-left {
           font-size: 16px;
           background-image: -webkit-linear-gradient(

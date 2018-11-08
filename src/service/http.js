@@ -634,7 +634,7 @@ export function httpFtModifyfaulttype(id, faultType, deadline) {
 }
 
 //后台管理模块 / 错误类型 新增
-export function httpFtAddfaulttype( faultType, deadline) {
+export function httpFtAddfaulttype(faultType, deadline) {
   let data = {
     faultType,
     deadline
@@ -649,7 +649,95 @@ export function httpFtAddfaulttype( faultType, deadline) {
   })
 }
 
+//后台管理模块 /班次管理——查询值班员的所有班次
+export function httpScheduleWorktime(rid = 0) {
+  let data = {
+    rid
+  };
+  return axios({
+    url: '/schedule/worktime',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
 
+//后台管理模块 /更新值班员工作时间
+export function httpscheduleUpdate_time(wtId1, startTime1, endTime1, wtCategory, wtId2, startTime2, endTime2) {
+  let data = {
+    wtId1,
+    startTime1,
+    endTime1,
+    wtCategory,
+    wtId2,
+    startTime2,
+    endTime2
+  };
+  return axios({
+    url: '/schedule/update_time',
+    method: 'post',
+    // headers: {
+    //   'Content-type': 'application/json'
+    // },
+    // data: JSON.stringify(data)
+    data: qs.stringify(data)
+  })
+}
+
+
+//后台管理模块 /更新值班员工作时间
+export function httpscheduleAll_rota(cp, pageSize, mid) {
+  let data = {
+    cp,
+    pageSize,
+    mid
+  };
+  return axios({
+    url: '/schedule/all_rota',
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json  '
+    },
+    data: JSON.stringify(data)
+  })
+}
+
+
+//后台管理模块 / admin 贷后管理 逾期列表展示 下拉点击查看详细信息
+export function httpGETpoolstatsmerge() {
+  return axios({
+    url: "https://sz-pool.api.btc.com/public/v1/pool/stats/merge",
+    method: "get",
+    params: {
+      access_key: 'r_XcBYADIE1paph',
+      puid: '239823',
+      lang: 'zh-cn'
+    }
+  })
+}
+
+
+//大盘统计
+export function httpStaFindMarkDo(asId) {
+  let data = {
+    asId
+  };
+  return axios({
+    url: '/sta/findMarkDo',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 / 获取矿机总数据
+export function httpStaFind() {
+  return axios({
+    url: "/sta/findMinerCount",
+    method: "get",
+  })
+}
 /* 前台页面 */
 
 //前台管理模块 / 客户登录

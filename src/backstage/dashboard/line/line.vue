@@ -13,6 +13,12 @@
 import echarts from "echarts";
 import header from "@/backstage/common/Eheader";
 import filter from "@/backstage/common/filter";
+import { timeFormat } from "@/config/time";
+import {
+  httpGETpoolstatsmerge,
+  httpStaFindMarkDo,
+  httpStaFind
+} from "@/service/http";
 
 export default {
   data() {
@@ -20,7 +26,9 @@ export default {
       legendArr: [],
       color: this.$store.state.color,
       myChart: {},
-      name: "折线图"
+      name: "折线图",
+      day30: [],
+      day24: []
     };
   },
   methods: {
@@ -36,113 +44,248 @@ export default {
           this.myChart.resize();
         }.bind(this)
       );
-    }
+    },
+    go() {}
   },
   components: {
     "v-header": header,
     "v-filter": filter
   },
   mounted() {
-    // 基于准备好的dom，初始化echarts实例
-    this.myChart = echarts.init(document.querySelector(".line .main"));
-    this.myChart.setOption({
-      title: {
-        show: false
-      },
-      tooltip: {
-        trigger: "axis"
-      },
-      legend: {
-        show: false
-      },
-      toolbox: {
-        show: false
-      },
-      color: this.color,
-      calculable: true,
-      xAxis: [
-        {
-          name: "产品",
-          type: "category",
-          axisLine: {
-            show: false
-          },
-          axisTick: {
-            show: false
-          },
-          nameTextStyle: {
-            color: "rgba(255, 255, 255, 0.69)"
-          },
-          axisLabel: {
-            textStyle: {
-              color: "white"
-            }
-          },
-          data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
-        }
-      ],
-      yAxis: [
-        {
-          axisLine: {
-            show: false
-          },
-          nameLocation: "end",
-          nameGap: 20,
-          nameRotate: 0,
-          axisTick: {
-            show: false
-          },
-          splitLine: {
-            lineStyle: {
-              color: ["rgba(230, 230, 230, 0.2)"]
-            }
-          },
-          axisLabel: {
-            textStyle: {
-              color: "white",
-              fontSize: 14
-            }
-          },
-          name: "数量",
-          type: "value",
-          nameTextStyle: {
-            color: "rgba(255, 255, 255, 0.69)"
+    this.go();
+    httpStaFindMarkDo(1).then(res => {
+      let data = res.data;
+      this.day30 = JSON.parse(
+        JSON.stringify(data.data.shareHistoryDay.data.tickers)
+      );
+      this.day30.pop();
+      var time = [];
+      var x1 = [];
+      var x2 = [];
+      // this.day30.forEach(v => v.split(","));
+      var s = this.day30.map((v, i) => {
+        return v.split(",");
+        // time.push(v[0]);
+        // x1.push(v[1]);
+        // x2.push(v[2]);
+      });
+      console.log(s);
+      time = this.day30.map((v, i) => {
+        return v[0];
+        // time.push(v[0]);
+        // x1.push(v[1]);
+        // x2.push(v[2]);
+      });
+      console.log(time);
+      // 基于准备好的dom，初始化echarts实例
+      this.myChart = echarts.init(document.querySelector(".line .main"));
+      this.myChart.setOption({
+        // backgroundColor: "rgba(43, 62, 75, 0.5)", //背景颜色
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: "line" // 默认为直线，可选为：'line' | 'shadow'
           }
-        }
-      ],
-      series: [
-        {
-          name: "标签1",
-          type: "line",
-          stack: "总量",
-          data: [120, 132, 101, 134, 90, 230, 210]
         },
-        {
-          name: "标签2",
-          type: "line",
-          stack: "总量",
-          data: [220, 182, 191, 234, 290, 330, 310]
+        grid: {
+          //间距距离左右下
+          //top: '50',
+          bottom: "45",
+          left: "1%",
+          right: "1%",
+          containLabel: true
         },
-        {
-          name: "标签3",
-          type: "line",
-          stack: "总量",
-          data: [150, 232, 201, 154, 190, 330, 410]
+        legend: {
+          data: ["掌上营业厅相关内容点击量", "环比增幅"],
+          left: "right",
+          padding: [0, 60],
+          textStyle: {
+            //图例文字的样式
+            color: "red",
+            fontSize: 12
+          }
         },
-        {
-          name: "标签4",
-          type: "line",
-          stack: "总量",
-          data: [320, 332, 301, 334, 390, 330, 320]
-        },
-        {
-          name: "标签5",
-          type: "line",
-          stack: "总量",
-          data: [820, 932, 901, 934, 1290, 1330, 1320]
-        }
-      ]
+        calculable: true,
+        xAxis: [
+          {
+            type: "category",
+            boundaryGap: false,
+            data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+            boundaryGap: ["5%", "5%"],
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: "#66c2e0"
+              }
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: "value",
+            axisLabel: {
+              formatter: "{value} °C"
+            },
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: "#66c2e0"
+              }
+            },
+            name: "(BTC)",
+            nameTextStyle: {
+              color: "#66c2e0"
+            }
+          },
+          {
+            type: "value",
+            axisLabel: {
+              formatter: "{value} °C"
+            },
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: "#66c2e0"
+              }
+            },
+            name: "(BTC)",
+            nameTextStyle: {
+              color: "#66c2e0"
+            }
+          }
+        ],
+        series: [
+          {
+            name: "掌上营业厅相关内容点击量",
+            type: "line",
+            data: [11, 11, 15, 13, 12, 13, 10],
+            markPoint: {
+              data: [
+                { type: "max", name: "最大值" },
+                { type: "min", name: "最小值" }
+              ]
+            },
+            markLine: {
+              data: [{ type: "average", name: "平均值" }]
+            },
+            color: ["#66c2e0"]
+          },
+          {
+            name: "环比增幅",
+            type: "line",
+            yAxisIndex: 1,
+            data: [1, -2, 2, 5, 3, 2, 0],
+            markPoint: {
+              data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }]
+            },
+            markLine: {
+              data: [{ type: "average", name: "平均值" }]
+            },
+            color: ["#01bb1c"]
+          }
+        ]
+      });
     });
+
+    // this.myChart.setOption({
+    //   title: {
+    //     show: false
+    //   },
+    //   tooltip: {
+    //     trigger: "axis"
+    //   },
+    //   legend: {
+    //     show: false
+    //   },
+    //   toolbox: {
+    //     show: false
+    //   },
+    //   color: this.color,
+    //   calculable: true,
+    //   xAxis: [
+    //     {
+    //       name: "产品",
+    //       type: "category",
+    //       axisLine: {
+    //         show: false
+    //       },
+    //       axisTick: {
+    //         show: false
+    //       },
+    //       nameTextStyle: {
+    //         color: "rgba(255, 255, 255, 0.69)"
+    //       },
+    //       axisLabel: {
+    //         textStyle: {
+    //           color: "white"
+    //         }
+    //       },
+    //       data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+    //     }
+    //   ],
+    //   yAxis: [
+    //     {
+    //       axisLine: {
+    //         show: false
+    //       },
+    //       nameLocation: "end",
+    //       nameGap: 20,
+    //       nameRotate: 0,
+    //       axisTick: {
+    //         show: false
+    //       },
+    //       splitLine: {
+    //         lineStyle: {
+    //           color: ["rgba(230, 230, 230, 0.2)"]
+    //         }
+    //       },
+    //       axisLabel: {
+    //         textStyle: {
+    //           color: "white",
+    //           fontSize: 14
+    //         }
+    //       },
+    //       name: "数量",
+    //       type: "value",
+    //       nameTextStyle: {
+    //         color: "rgba(255, 255, 255, 0.69)"
+    //       }
+    //     }
+    //   ],
+    //   series: [
+    //     {
+    //       name: "标签1",
+    //       type: "line",
+    //       stack: "总量",
+    //       data: [120, 132, 101, 134, 90, 230, 210]
+    //     },
+    //     {
+    //       name: "标签2",
+    //       type: "line",
+    //       stack: "总量",
+    //       data: [220, 182, 191, 234, 290, 330, 310]
+    //     },
+    //     {
+    //       name: "标签3",
+    //       type: "line",
+    //       stack: "总量",
+    //       data: [150, 232, 201, 154, 190, 330, 410]
+    //     },
+    //     {
+    //       name: "标签4",
+    //       type: "line",
+    //       stack: "总量",
+    //       data: [320, 332, 301, 334, 390, 330, 320]
+    //     },
+    //     {
+    //       name: "标签5",
+    //       type: "line",
+    //       stack: "总量",
+    //       data: [820, 932, 901, 934, 1290, 1330, 1320]
+    //     }
+    //   ]
+    // });
     this._init();
   }
 };

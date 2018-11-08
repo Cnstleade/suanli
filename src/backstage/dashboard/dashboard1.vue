@@ -22,6 +22,9 @@ import column from "@/backstage/dashboard/column/column";
 import multipleColumn from "@/backstage/dashboard/multipleColumn/multipleColumn";
 import point from "@/backstage/dashboard/point/point";
 import line from "@/backstage/dashboard/line/line";
+import {
+  httpStaFindMarkDo,
+} from "@/service/http";
 export default {
   data() {
     return {

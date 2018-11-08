@@ -39,8 +39,8 @@
                     {{username}}<i class="el-icon-caret-bottom"></i>
                 </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="admin/basicInformation">基本资料</el-dropdown-item>
-          <el-dropdown-item command="editPassword">密码管理</el-dropdown-item>
+          <!-- <el-dropdown-item command="admin/basicInformation">基本资料</el-dropdown-item>
+          <el-dropdown-item command="editPassword">密码管理</el-dropdown-item> -->
           <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -57,7 +57,7 @@
 
 <script>
 import bus from "../../config/bus";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -99,20 +99,15 @@ export default {
     ])
   },
   methods: {
+    ...mapMutations(["SIGN_OUT"]),
     // 用户名下拉菜单选择事件
     handleCommand(command) {
-      //   if (command == "loginout") {
-      //     this.$store
-      //       .dispatch("Logout")
-      //       .then(() => {
-      //       })
-      //       .catch(err => {
-      //         this.$message.error(err);
-      //       });
-      //     sessionStorage.removeItem("fk_username");
-      //   } else {
-      //     this.$router.push("/" + command);
-      //   }
+      if (command == "loginout") {
+        this.SIGN_OUT();
+        this.$router.push("admin");
+      } else {
+        this.$router.push("/" + command);
+      }
     },
     // 侧边栏折叠
     collapseChage() {

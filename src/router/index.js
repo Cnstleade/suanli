@@ -174,6 +174,24 @@ export default new Router({
             role: 'errorTYpe'
           }
         },
+        {
+          path: 'worktime',
+          name: 'worktime',
+          component: resolve => require(['@/backstage/page/flightManagement/worktime.vue'], resolve),
+          meta: {
+            title: '班次管理',
+            role: 'worktime'
+          }
+        },
+        {
+          path: 'watchRecords',
+          name: 'watchRecords',
+          component: resolve => require(['@/backstage/page/flightManagement/watchRecords.vue'], resolve),
+          meta: {
+            title: '值班日志管理',
+            role: 'watchRecords'
+          }
+        },
       ]
     }
   ]
@@ -514,5 +532,24 @@ export const powerRouter = [{
         role: 'errorTYpe'
       }
     },
+    {
+      path: 'worktime',
+      name: 'worktime',
+      component: resolve => require(['@/backstage/page/flightManagement/worktime.vue'], resolve),
+      meta: {
+        title: '班次管理',
+        role: 'worktime'
+      }
+    },
+    {
+      path: 'watchRecords',
+      name: 'watchRecords',
+      component: resolve => require(['@/backstage/page/flightManagement/watchRecords.vue'], resolve),
+      meta: {
+        title: '值班日志管理',
+        role: 'watchRecords'
+      }
+    },
+
   ]
 }]

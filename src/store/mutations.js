@@ -72,10 +72,10 @@ export default {
     sessionStorage.setItem("zby_isLogin", true);
     sessionStorage.setItem("zby_loginId", data.loginId);
     // sessionStorage.setItem("zby_role", data.data);
-    sessionStorage.setItem("zby_role", ['myWorkOrder', 'errorType']);
+    sessionStorage.setItem("zby_role", ['myWorkOrder', 'errorType', 'worktime', 'watchRecords']);
     state.loginId = data.loginId, //同步的改变store中的状态  
       //  state.role = data.data, //同步的改变store中的状态  
-      state.role = ['myWorkOrder', 'errorType'], //同步的改变store中的状态  
+      state.role = ['myWorkOrder', 'errorType', 'worktime', 'watchRecords'], //同步的改变store中的状态  
       state.isLogin = true
   },
 
@@ -84,9 +84,11 @@ export default {
     sessionStorage.removeItem("zby_loginId"); //移除sessionStorage  
     sessionStorage.removeItem("zby_isLogin");
     sessionStorage.removeItem("zby_userInfo");
+    sessionStorage.removeItem("zby_role");
     state.userInfo = {};
     state.loginId = '' //同步的改变story中的状态  
-    state.isLogin = false
+    state.isLogin = false,
+      state.zby_role = []
   },
 
   /*   存储最新的路由 */

@@ -13,6 +13,7 @@ import router from './router'
 import FastClick from 'fastclick'
 import echarts from 'echarts'
 import * as custom from './config/dateFilter';
+import * as custom1 from './config/minute';
 import ElementLocale from 'element-ui/lib/locale'
 import 'babel-polyfill'
 import {
@@ -24,6 +25,9 @@ import {
 
 Object.keys(custom).forEach(key => {
   Vue.filter(key, custom[key])
+})
+Object.keys(custom1).forEach(key => {
+  Vue.filter(key, custom1[key])
 })
 Vue.prototype.$echarts = echarts
 // Vue.use(VueI18n);
@@ -44,7 +48,7 @@ Vue.config.productionTip = false;
 
 
 router.beforeEach((to, from, next) => {
-  if (/index/.test(to.fullPath.slice(1)) || /dashboard/.test(to.fullPath.slice(1))|| /dashboard1/.test(to.fullPath.slice(1))) {
+  if (/index/.test(to.fullPath.slice(1)) || /dashboard/.test(to.fullPath.slice(1)) || /dashboard1/.test(to.fullPath.slice(1))) {
     next();
   } else
   if (store.getters.role) { //判断role 是否存在
