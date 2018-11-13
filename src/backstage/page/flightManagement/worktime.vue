@@ -108,22 +108,7 @@
             </el-form-item>            
             <el-form-item label="班次类别" label-width="100px">
                 <el-select v-model="editForm.wtCategory" placeholder="请选择角色" @change="changeRid">
-                  <el-option
-                    label="早班"
-                    value="1">
-                  </el-option>
-                  <el-option
-                    label="中班"
-                    value="2">
-                  </el-option>
-                  <el-option
-                    label="晚班"
-                    value="3">
-                  </el-option> 
-                  <el-option
-                    label="替班"
-                    value="4">
-                  </el-option>                                                      
+                <el-option v-for="item in options" :key="item.value" :value="item.value" :label="item.label"></el-option>                                                     
                 </el-select>
             </el-form-item>
             <template v-if="editFormAdd">
@@ -161,7 +146,25 @@ export default {
       editForm: {},
       dialogFormEditVisible: false,
       rules: {},
-      editFormAdd: false
+      editFormAdd: false,
+      options: [
+        {
+          value: 1,
+          label: "早班"
+        },
+        {
+          value: 2,
+          label: "中班"
+        },
+        {
+          value: 3,
+          label: "晚班"
+        },
+        {
+          value: 4,
+          label: "替班"
+        }
+      ]
     };
   },
   mounted() {

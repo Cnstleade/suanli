@@ -167,24 +167,23 @@ export default {
     },
     _httpFtModifyfaulttype(id, faultType, deadline) {
       httpFtModifyfaulttype(id, faultType, deadline).then(res => {
-        res => {
-          let data = res.data;
-          if (data.code == 200) {
-            this.$message({
-              message: data.msg,
-              type: "success"
-            });
-            this.dialogFormEditVisible = false;
-            setTimeout(() => {
-              this._init();
-            }, 1000);
-          } else {
-            this.$message({
-              message: data.msg,
-              type: "error"
-            });
-          }
-        };
+        let data = res.data;
+        if (data.code == 200) {
+          this.$message({
+            message: data.msg,
+            type: "success"
+          });
+          console.log(data);
+          this.dialogFormEditVisible = false;
+          setTimeout(() => {
+            this._init();
+          }, 1000);
+        } else {
+          this.$message({
+            message: data.msg,
+            type: "error"
+          });
+        }
       });
     },
     /*   新增 */
@@ -217,4 +216,12 @@ export default {
 </script>
 <style lang="less" scoped>
 </style>
+<style>
+#darkCell .cell {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+</style>
+
 

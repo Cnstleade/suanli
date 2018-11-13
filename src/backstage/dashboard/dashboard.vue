@@ -9,17 +9,33 @@
             <div id="elForm">
               <el-form :inline="true" :model="formInline" class="demo-form-inline" size="mini" >
                 <el-form-item label="当前账号：">
-                  <el-select v-model="formInline.region" placeholder="活动区域" style="width:190px;">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                  <el-select v-model="formInline.region" placeholder="活动区域" style="width:190px;" @change="changeInt">
+                    <el-option
+                      v-for="item in adminSubaccountList"
+                      :key="item.id"
+                      :label="item.code"
+                      :value="item.id">
+                    </el-option>
+                  <!-- <el-option
+                    label="查询所有"
+                    value="0">
+                  </el-option>
+                  <el-option
+                    label="后台管理员"
+                    value="1">
+                  </el-option>
+                  <el-option
+                    label="维修人员."
+                    value="2">
+                  </el-option>                                     -->
                   </el-select>
                 </el-form-item>
                 <el-form-item prop="delivery">
-                  <el-switch v-model="formInline.regio"
+                  <!-- <el-switch v-model="formInline.regio"
                     active-color="#13ce66"
                     inactive-color="#62bee0"
                     active-text="轮播"
-                  ></el-switch>
+                  ></el-switch> -->
                 </el-form-item>              
               </el-form>
             </div>
@@ -27,7 +43,7 @@
           <div  class="dashboard-title">助币云矿机监控平台</div> 
           <div id="elButton">
             <span>{{date|dateServer}}</span>
-             <el-button type="primary" icon="el-icon-back" size="mini" class="elButton">返回</el-button>
+             <el-button type="primary" icon="el-icon-back" size="mini" class="elButton" @click="back">返回</el-button>
           </div>
         </div>
         <div class="dashboard-middle">
@@ -104,38 +120,43 @@
         <div class="dashboard-bottom">
           <div class="broken">
             <p>
-              <span class="broken-left">1小时算力曲线</span>
-              <span class="broken-right">总收益<b class="broken-right-top">37.6</b>%</span>
+              <span class="broken-left">1个月算力曲线</span>
+              <!-- <span class="broken-right">总收益<b class="broken-right-top">37.6</b>%</span> -->
             </p>
             <div class="echart echart1">
 
             </div>
             <p>
-              <span class="broken-left">数据信息</span>
-              <span class="broken-right">总装机容量<b class="broken-right-bottom">1054</b>MW</span>
+              <span class="broken-left">网络状态</span>
+              <!-- <span class="broken-right">总装机容量<b class="broken-right-bottom">1054</b>MW</span> -->
             </p>
             <div class="dashboard-progress">
               <div >
-                <p style="color:#04BA18">井网容量<span>(798MV)</span></p>
+                <p style="color:#04BA18">全网算力<span>({{btc.hashrate?(btc.hashrate/(1000000000000000000)).toFixed(2):''}} EH/s)</span></p>
                 <canvas id="dashboard-progress-1" width="400" height="30" >
                 </canvas>             
               </div>
               <div>
-                <p style="color:#FFFF00">在建容量<span>(398MV)</span></p>
+                <p style="color:#FFFF00">矿场算力<span>({{btc.shares_15m?btc.shares_15m:''}} EH/s)</span></p>
                 <canvas id="dashboard-progress-2" width="400" height="30" >
                 </canvas>                
               </div>
               <div>
-                <p style="color:#D2D2D2">未建容量<span>(398MV)</span></p>
+                <p style="color:#D2D2D2">BTC 每T24H收益<span>({{btc.income_coin?btc.income_coin.toFixed(8):''}}  BTC)</span></p>
                 <canvas id="dashboard-progress-3" width="400" height="30" >
                 </canvas>                  
               </div>
+              <div>
+                <p style="color:#04BA18">距离调整还剩<span>({{btc.day?btc.day:''}}天)</span></p>
+                <canvas id="dashboard-progress-7" width="400" height="30" >
+                </canvas>                  
+              </div>              
             </div>
           </div>
           <div class="broken">
             <p>
               <span class="broken-left">24小时算力曲线</span>
-              <span class="broken-right">总收益<b class="broken-right-top">37.6</b>%</span>
+              <!-- <span class="broken-right">总收益<b class="broken-right-top">37.6</b>%</span> -->
             </p>
             <div class="echart echart2">
 
@@ -195,13 +216,17 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { timeFormat, timeFormatH } from "@/config/time";
 import echarts from "echarts";
 import china from "echarts/map/js/china";
 import line from "@/backstage/dashboard/line/line";
 import {
   httpGETpoolstatsmerge,
+  httpGETSZpool,
   httpStaFindMarkDo,
-  httpStaFind
+  httpStaFind,
+  httpSysLogin
 } from "@/service/http";
 export default {
   data() {
@@ -217,14 +242,25 @@ export default {
       dashboardShow: false,
       scroe1: [],
       scroe2: [],
-      showData: []
+      showData: [],
+      btc: {},
+      day30: [],
+      day24: [],
+      timer1: null,
+      timer2: null,
+      userList: []
     };
   },
   mounted() {
     setInterval(() => {
       this.date = new Date();
     }, 1000);
-    this._init();
+    this.formInline = {
+      region: this.adminSubaccountList[0]["id"]
+    };
+    this._init(this.adminSubaccountList[0]["id"]);
+    this.getOut();
+    this.drwaLine();
     window.onresize = () => {
       return (() => {
         this._init();
@@ -240,564 +276,7 @@ export default {
     var data = [Math.random() * 150];
     var now = new Date(base);
 
-    // function addData(shift) {
-    //   now = [now.getFullYear(), now.getMonth() + 1, now.getDate()].join("/");
-    //   date.push(now);
-    //   data.push((Math.random() - 0.4) * 10 + data[data.length - 1]);
-
-    //   if (shift) {
-    //     date.shift();
-    //     data.shift();
-    //   }
-
-    //   now = new Date(+new Date(now) + oneDay);
-    // }
-
-    // for (var i = 1; i < 100; i++) {
-    //   addData();
-    // }
-    this.geoCoordMap = {
-      海门: [121.15, 31.89],
-      鄂尔多斯: [109.781327, 39.608266],
-      招远: [120.38, 37.35],
-      舟山: [122.207216, 29.985295],
-      齐齐哈尔: [123.97, 47.33],
-      盐城: [120.13, 33.38],
-      赤峰: [118.87, 42.28],
-      青岛: [120.33, 36.07],
-      乳山: [121.52, 36.89],
-      金昌: [102.188043, 38.520089],
-      泉州: [118.58, 24.93],
-      莱西: [120.53, 36.86],
-      日照: [119.46, 35.42],
-      胶南: [119.97, 35.88],
-      南通: [121.05, 32.08],
-      拉萨: [91.11, 29.97],
-      云浮: [112.02, 22.93],
-      梅州: [116.1, 24.55],
-      文登: [122.05, 37.2],
-      上海: [121.48, 31.22],
-      攀枝花: [101.718637, 26.582347],
-      威海: [122.1, 37.5],
-      承德: [117.93, 40.97],
-      厦门: [118.1, 24.46],
-      汕尾: [115.375279, 22.786211],
-      潮州: [116.63, 23.68],
-      丹东: [124.37, 40.13],
-      太仓: [121.1, 31.45],
-      曲靖: [103.79, 25.51],
-      烟台: [121.39, 37.52],
-      福州: [119.3, 26.08],
-      瓦房店: [121.979603, 39.627114],
-      即墨: [120.45, 36.38],
-      抚顺: [123.97, 41.97],
-      玉溪: [102.52, 24.35],
-      张家口: [114.87, 40.82],
-      阳泉: [113.57, 37.85],
-      莱州: [119.942327, 37.177017],
-      湖州: [120.1, 30.86],
-      汕头: [116.69, 23.39],
-      昆山: [120.95, 31.39],
-      宁波: [121.56, 29.86],
-      湛江: [110.359377, 21.270708],
-      揭阳: [116.35, 23.55],
-      荣成: [122.41, 37.16],
-      连云港: [119.16, 34.59],
-      葫芦岛: [120.836932, 40.711052],
-      常熟: [120.74, 31.64],
-      东莞: [113.75, 23.04],
-      河源: [114.68, 23.73],
-      淮安: [119.15, 33.5],
-      泰州: [119.9, 32.49],
-      南宁: [108.33, 22.84],
-      营口: [122.18, 40.65],
-      惠州: [114.4, 23.09],
-      江阴: [120.26, 31.91],
-      蓬莱: [120.75, 37.8],
-      韶关: [113.62, 24.84],
-      嘉峪关: [98.289152, 39.77313],
-      广州: [113.23, 23.16],
-      延安: [109.47, 36.6],
-      太原: [112.53, 37.87],
-      清远: [113.01, 23.7],
-      中山: [113.38, 22.52],
-      昆明: [102.73, 25.04],
-      寿光: [118.73, 36.86],
-      盘锦: [122.070714, 41.119997],
-      长治: [113.08, 36.18],
-      深圳: [114.07, 22.62],
-      珠海: [113.52, 22.3],
-      宿迁: [118.3, 33.96],
-      咸阳: [108.72, 34.36],
-      铜川: [109.11, 35.09],
-      平度: [119.97, 36.77],
-      佛山: [113.11, 23.05],
-      海口: [110.35, 20.02],
-      江门: [113.06, 22.61],
-      章丘: [117.53, 36.72],
-      肇庆: [112.44, 23.05],
-      大连: [121.62, 38.92],
-      临汾: [111.5, 36.08],
-      吴江: [120.63, 31.16],
-      石嘴山: [106.39, 39.04],
-      沈阳: [123.38, 41.8],
-      苏州: [120.62, 31.32],
-      茂名: [110.88, 21.68],
-      嘉兴: [120.76, 30.77],
-      长春: [125.35, 43.88],
-      胶州: [120.03336, 36.264622],
-      银川: [106.27, 38.47],
-      张家港: [120.555821, 31.875428],
-      三门峡: [111.19, 34.76],
-      锦州: [121.15, 41.13],
-      南昌: [115.89, 28.68],
-      柳州: [109.4, 24.33],
-      三亚: [109.511909, 18.252847],
-      自贡: [104.778442, 29.33903],
-      吉林: [126.57, 43.87],
-      阳江: [111.95, 21.85],
-      泸州: [105.39, 28.91],
-      西宁: [101.74, 36.56],
-      宜宾: [104.56, 29.77],
-      呼和浩特: [111.65, 40.82],
-      成都: [104.06, 30.67],
-      大同: [113.3, 40.12],
-      镇江: [119.44, 32.2],
-      桂林: [110.28, 25.29],
-      张家界: [110.479191, 29.117096],
-      宜兴: [119.82, 31.36],
-      北海: [109.12, 21.49],
-      西安: [108.95, 34.27],
-      金坛: [119.56, 31.74],
-      东营: [118.49, 37.46],
-      牡丹江: [129.58, 44.6],
-      遵义: [106.9, 27.7],
-      绍兴: [120.58, 30.01],
-      扬州: [119.42, 32.39],
-      常州: [119.95, 31.79],
-      潍坊: [119.1, 36.62],
-      重庆: [106.54, 29.59],
-      台州: [121.420757, 28.656386],
-      南京: [118.78, 32.04],
-      滨州: [118.03, 37.36],
-      贵阳: [106.71, 26.57],
-      无锡: [120.29, 31.59],
-      本溪: [123.73, 41.3],
-      克拉玛依: [84.77, 45.59],
-      渭南: [109.5, 34.52],
-      马鞍山: [118.48, 31.56],
-      宝鸡: [107.15, 34.38],
-      焦作: [113.21, 35.24],
-      句容: [119.16, 31.95],
-      北京: [116.46, 39.92],
-      徐州: [117.2, 34.26],
-      衡水: [115.72, 37.72],
-      包头: [110, 40.58],
-      绵阳: [104.73, 31.48],
-      乌鲁木齐: [87.68, 43.77],
-      枣庄: [117.57, 34.86],
-      杭州: [120.19, 30.26],
-      淄博: [118.05, 36.78],
-      鞍山: [122.85, 41.12],
-      溧阳: [119.48, 31.43],
-      库尔勒: [86.06, 41.68],
-      安阳: [114.35, 36.1],
-      开封: [114.35, 34.79],
-      济南: [117, 36.65],
-      德阳: [104.37, 31.13],
-      温州: [120.65, 28.01],
-      九江: [115.97, 29.71],
-      邯郸: [114.47, 36.6],
-      临安: [119.72, 30.23],
-      兰州: [103.73, 36.03],
-      沧州: [116.83, 38.33],
-      临沂: [118.35, 35.05],
-      南充: [106.110698, 30.837793],
-      天津: [117.2, 39.13],
-      富阳: [119.95, 30.07],
-      泰安: [117.13, 36.18],
-      诸暨: [120.23, 29.71],
-      郑州: [113.65, 34.76],
-      哈尔滨: [126.63, 45.75],
-      聊城: [115.97, 36.45],
-      芜湖: [118.38, 31.33],
-      唐山: [118.02, 39.63],
-      平顶山: [113.29, 33.75],
-      邢台: [114.48, 37.05],
-      德州: [116.29, 37.45],
-      济宁: [116.59, 35.38],
-      荆州: [112.239741, 30.335165],
-      宜昌: [111.3, 30.7],
-      义乌: [120.06, 29.32],
-      丽水: [119.92, 28.45],
-      洛阳: [112.44, 34.7],
-      秦皇岛: [119.57, 39.95],
-      株洲: [113.16, 27.83],
-      石家庄: [114.48, 38.03],
-      莱芜: [117.67, 36.19],
-      常德: [111.69, 29.05],
-      保定: [115.48, 38.85],
-      湘潭: [112.91, 27.87],
-      金华: [119.64, 29.12],
-      岳阳: [113.09, 29.37],
-      长沙: [113, 28.21],
-      衢州: [118.88, 28.97],
-      廊坊: [116.7, 39.53],
-      菏泽: [115.480656, 35.23375],
-      合肥: [117.27, 31.86],
-      武汉: [114.31, 30.52],
-      大庆: [125.03, 46.58],
-      林芝地: [94.25, 29.59],
-      果洛藏族自治: [97.42, 34.81],
-      闵行: [121.23, 31.07],
-      那曲地: [92.1, 31.47]
-    };
-    let mapdata = [
-      { name: "海门", value: 90 },
-      { name: "鄂尔多斯", value: 120 },
-      { name: "招远", value: 142 },
-      { name: "舟山", value: 123 }
-    ];
-
     // 基于准备好的dom，初始化echarts实例
-    this.myChart1 = echarts.init(document.querySelector(".echart1"));
-    this.myChart2 = echarts.init(document.querySelector(".echart2"));
-    // this.myChina = echarts.init(document.querySelector(".chinaEchart"));
-    // this.myChina.setOption({
-    //   // backgroundColor: '#404a59',
-    //   // title: {
-    //   //   show: false
-    //   // },
-    //   // tooltip: {
-    //   //   trigger: "item",
-    //   //   formatter: function(params) {
-    //   //     return params.name + " : " + params.value[2];
-    //   //   }
-    //   // },
-    //   // legend: {
-    //   //   show: false
-    //   // },
-    //   // visualMap: {
-    //   //   min: 0,
-    //   //   max: 200,
-    //   //   bottom: 50,
-    //   //   splitNumber: 5,
-    //   //   inRange: {
-    //   //     color: ["#255B78", "#2A7484", "#2F9696", "#3BBCB0", "#51D4EB"]
-    //   //   },
-    //   //   textStyle: {
-    //   //     color: "#fff"
-    //   //   }
-    //   // },
-    //   geo: {
-    //     map: "china",
-    //     zoom: 1,
-    //     top: 50,
-    //     itemStyle: {
-    //       normal: {
-    //         // 普通状态下的样式
-    //         color: "#3c4247",
-    //         opacity: 0.6,
-    //         borderColor: "rgba(255, 255, 255, 0.35)"
-    //       },
-    //       emphasis: {
-    //         // 高亮状态下的样式
-    //         color: "#2a333d"
-    //       }
-    //     }
-    //   },
-    //   series: [
-    //     // {
-    //     //   name: "rode",
-    //     //   type: "lines",
-    //     //   coordinateSystem: "geo",
-    //     //   data: this.convertData(mapdata),
-    //     //   effect: {
-    //     //     show: true,
-    //     //     period: 6,
-    //     //     trailLength: 0
-    //     //   },
-    //     //   lineStyle: {
-    //     //     normal: {
-    //     //       color: "#389BB7",
-    //     //       width: 1,
-    //     //       opacity: 0.4,
-    //     //       curveness: 0.2
-    //     //     }
-    //     //   }
-    //     // },
-    //     {
-    //       name: "city",
-    //       type: "effectScatter",
-    //       layoutCenter: ["50%", "50%"],
-    //       layoutSize: "100%",
-    //       coordinateSystem: "geo",
-    //       rippleEffect: {
-    //         brushType: "stroke"
-    //       },
-
-    //       label: {
-    //         normal: {
-    //           show: true,
-    //           position: "right",
-    //           formatter: "{b}"
-    //         },
-    //         emphasis: {
-    //           show: true,
-    //           textStyle: {
-    //             color: "#fff"
-    //           }
-    //         }
-    //       },
-    //       itemStyle: {
-    //         normal: {
-    //           areaColor: "rgba(24,65,91,1)",
-    //           borderColor: "#9DDCEB",
-    //           borderWidth: 3,
-    //           shadowColor: "#9DDCEB",
-    //           shadowBlur: 20
-    //         },
-    //         emphasis: {
-    //           areaColor: "rgba(24,65,91,1)"
-    //         }
-    //       },
-    //       symbolSize: 8,
-    //       itemStyle: {
-    //         normal: {
-    //           color: "#389BB7"
-    //         }
-    //       },
-    //       data: this.convertData(mapdata)
-    //     }
-
-    //     // {
-    //     //   name: "销量", // series名称
-    //     //   type: "scatter", // series图表类型
-    //     //   coordinateSystem: "geo", // series坐标系类型
-    //     //   data: this.convertData(mapdata),
-    //     //   itemStyle: {
-    //     //     normal: {
-    //     //       color: "#66c2e0",
-    //     //       borderColor: "#01bb1c"
-    //     //       // label: {
-    //     //       //   show: true,
-    //     //       //   textStyle: {
-    //     //       //     color: "#66c2e0"
-    //     //       //   }
-    //     //       // }
-    //     //     },
-    //     //     emphasis: { color: "rgba(128, 128, 128, 0.5)" },
-    //     //     effect: {
-    //     //       show: true,
-    //     //       period: 6,
-    //     //       trailLength: 0
-    //     //     },
-    //     //     lineStyle: {
-    //     //       normal: {
-    //     //         color: "#389BB7",
-    //     //         width: 1,
-    //     //         opacity: 0.4,
-    //     //         curveness: 0.2
-    //     //       }
-    //     //     }
-    //     //   }
-    //     // }
-    //   ]
-    // });
-
-    // this.myChart.setOption({
-    //   xAxis: {
-    //     type: "category",
-    //     boundaryGap: false,
-    //     data: date
-    //   },
-    //   yAxis: {
-    //     boundaryGap: [0, "50%"],
-    //     type: "value"
-    //   },
-    //   series: [
-    //     {
-    //       name: "成交",
-    //       type: "line",
-    //       smooth: true,
-    //       symbol: "none",
-    //       stack: "a",
-    //       areaStyle: {
-    //         normal: {}
-    //       },
-    //       data: data
-    //     }
-    //   ]
-    // });
-    // setInterval(() => {
-    //   addData(true);
-    //   this.myChart.setOption({
-    //     xAxis: {
-    //       data: date
-    //     },
-    //     series: [
-    //       {
-    //         name: "成交",
-    //         data: data
-    //       }
-    //     ]
-    //   });
-    // }, 500);
-    this.myChart1.setOption({
-      tooltip: {
-        trigger: "axis"
-      },
-      legend: {
-        data: ["拒绝率", "算力"],
-        left: "right",
-        padding: [0, 60],
-        textStyle: {
-          //图例文字的样式
-          color: "#ccc",
-          fontSize: 12
-        }
-      },
-      calculable: true,
-      xAxis: [
-        {
-          type: "category",
-          boundaryGap: false,
-          data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-          boundaryGap: ["5%", "5%"],
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: "#66c2e0"
-            }
-          }
-        }
-      ],
-      yAxis: [
-        {
-          type: "value",
-          axisLabel: {
-            formatter: "{value} °C"
-          },
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: "#66c2e0"
-            }
-          },
-          name: "(BTC)",
-          nameTextStyle: {
-            color: "#66c2e0"
-          }
-        },
-      ],
-      series: [
-        {
-          name: "拒绝率",
-          type: "line",
-          data: [11, 11, 15, 13, 12, 13, 10],
-          markPoint: {
-            data: [
-              { type: "max", name: "最大值" },
-              { type: "min", name: "最小值" }
-            ]
-          },
-          markLine: {
-            data: [{ type: "average", name: "平均值" }]
-          },
-          color: ["#66c2e0"]
-        },
-        {
-          name: "算力",
-          type: "line",
-          data: [1, -2, 2, 5, 3, 2, 0],
-          markPoint: {
-            data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }]
-          },
-          markLine: {
-            data: [{ type: "average", name: "平均值" }]
-          },
-          color: ["#01bb1c"]
-        }
-      ]
-    });
-    this.myChart2.setOption({
-      tooltip: {
-        trigger: "axis"
-      },
-      legend: {
-        data: ["拒绝率", "算力"],
-        left: "right",
-        padding: [0, 60],
-        textStyle: {
-          //图例文字的样式
-          color: "#ccc",
-          fontSize: 12
-        }
-      },
-      calculable: true,
-      xAxis: [
-        {
-          type: "category",
-          boundaryGap: false,
-          data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-          boundaryGap: ["5%", "5%"],
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: "#66c2e0"
-            }
-          }
-        }
-      ],
-      yAxis: [
-        {
-          type: "value",
-          axisLabel: {
-            formatter: "{value} °C"
-          },
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: "#66c2e0"
-            }
-          },
-          name: "(BTC)",
-          nameTextStyle: {
-            color: "#66c2e0"
-          }
-        },
-        
-      ],
-      series: [
-        {
-          name: "拒绝率",
-          type: "line",
-          data: [11, 11, 15, 13, 12, 13, 10],
-          markPoint: {
-            data: [
-              { type: "max", name: "最大值" },
-              { type: "min", name: "最小值" }
-            ]
-          },
-          markLine: {
-            data: [{ type: "average", name: "平均值" }]
-          },
-          color: ["#66c2e0"]
-        },
-        {
-          name: "算力",
-          type: "line",
-          data: [1, -2, 2, 5, 3, 2, 0],
-          markPoint: {
-            data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }]
-          },
-          markLine: {
-            data: [{ type: "average", name: "平均值" }]
-          },
-          color: ["#01bb1c"]
-        }
-      ]
-    });
   },
   watch: {
     screenWidth(val) {
@@ -813,7 +292,42 @@ export default {
       }
     }
   },
+  computed: {
+    // 使用对象展开运算符将 getter 混入 computed 对象中
+    ...mapGetters([
+      "adminSubaccountList"
+      // ...
+    ])
+  },
   methods: {
+    //
+    changeInt(v) {
+      console.log("+++++++++++" + v);
+      if (this.timer1) {
+        //如果定时器还在运行 或者直接关闭，不用判断
+        clearInterval(this.timer1); //关闭
+      }
+      if (this.timer2) {
+        //如果定时器还在运行 或者直接关闭，不用判断
+        clearInterval(this.timer2); //关闭
+      }
+      this._init(v);
+    },
+    //返回
+    back() {
+      this.$router.push("admin");
+    },
+    getDaysByDateString(dateString1, dateString2) {
+      var startDate = Date.parse(timeFormat(dateString1).replace("/-/g", "/"));
+      var endDate = Date.parse(
+        timeFormat(dateString2 * 1000).replace("/-/g", "/")
+      );
+      // var diffDate = endDate - startDate + 1 * 24 * 60 * 60 * 1000;
+      var diffDate = endDate - startDate;
+      var days = diffDate / (1 * 24 * 60 * 60 * 1000);
+      //alert(diffDate/(1*24*60*60*1000));
+      return days;
+    },
     draw(id, w, color) {
       var cav1 = document.getElementById(id);
       var cav1 = cav1.getContext("2d");
@@ -840,7 +354,8 @@ export default {
         }
       };
     },
-    _init() {
+    /*   取得外部接口 */
+    getOut() {
       httpStaFind().then(res => {
         let data = res.data;
         if (data.code == 200) {
@@ -852,51 +367,23 @@ export default {
           });
         }
       });
-      httpStaFindMarkDo(1).then(res => {
-        let data = res.data;
-        if (data.code == 200) {
-          this.tableData = data.data;
-          this.yields = JSON.parse(JSON.stringify(data.data.earnStats.data));
-          this.realTimePower = JSON.parse(
-            JSON.stringify(data.data.realTimePower)
-          );
-          var scroe = [
-            { index: 1, score: this.realTimePower.shares_1m },
-            { index: 2, score: this.realTimePower.shares_5m },
-            { index: 3, score: this.realTimePower.shares_15m }
-          ];
-          scroe.sort(this.compare("score"));
-          console.log(scroe[0].index, scroe[1].index, scroe[2].index);
-          scroe[0].index == 1
-            ? this.draw("dashboard-progress-4", 400, "#04BA18")
-            : scroe[0].index == 2
-              ? this.draw("dashboard-progress-5", 400, "#FFFF00")
-              : scroe[0].index == 3
-                ? this.draw("dashboard-progress-6", 400, "#D2D2D2")
-                : "";
-          scroe[1].index == 1
-            ? this.draw("dashboard-progress-4", 370, "#04BA18")
-            : scroe[1].index == 2
-              ? this.draw("dashboard-progress-5", 370, "#FFFF00")
-              : scroe[1].index == 3
-                ? this.draw("dashboard-progress-6", 370, "#D2D2D2")
-                : "";
-          scroe[2].index == 1
-            ? this.draw("dashboard-progress-4", 340, "#04BA18")
-            : scroe[2].index == 2
-              ? this.draw("dashboard-progress-5", 340, "#FFFF00")
-              : scroe[2].index == 3
-                ? this.draw("dashboard-progress-6", 340, "#D2D2D2")
-                : "";
-        } else {
-          this.$message({
-            message: data.msg,
-            type: "error"
-          });
-        }
-      });
+    },
+    /*  开始划线 */
+    drwaLine() {
       httpGETpoolstatsmerge().then(res => {
-        console.log(res.data);
+        let data = res.data;
+        this.btc = JSON.parse(JSON.stringify(data.data.btc));
+
+        this.btc["day"] = parseInt(
+          this.getDaysByDateString(
+            new Date(),
+            new Date(this.btc.diff_adjust_time)
+          )
+        );
+        httpGETSZpool().then(res => {
+          let data = res.data;
+          this.btc["shares_15m"] = data.data.shares.shares_15m;
+        });
       });
       var cvs = document.getElementById("cvs");
       cvs.width = this.width;
@@ -986,8 +473,397 @@ export default {
       cave.stroke();
 
       this.draw("dashboard-progress-1", 400, "#04BA18");
-      this.draw("dashboard-progress-2", 200, "#FFFF00");
-      this.draw("dashboard-progress-3", 200, "#D2D2D2");
+      this.draw("dashboard-progress-2", 380, "#FFFF00");
+      this.draw("dashboard-progress-3", 360, "#D2D2D2");
+      this.draw("dashboard-progress-7", 340, "#04BA18");
+    },
+    _init(id) {
+      httpStaFindMarkDo(id).then(res => {
+        let data = res.data;
+        if (data.code == 200) {
+          this.tableData = data.data;
+          this.yields = JSON.parse(JSON.stringify(data.data.earnStats.data));
+          this.realTimePower = JSON.parse(
+            JSON.stringify(data.data.realTimePower)
+          );
+          var scroe = [
+            { index: 1, score: this.realTimePower.shares_1m },
+            { index: 2, score: this.realTimePower.shares_5m },
+            { index: 3, score: this.realTimePower.shares_15m }
+          ];
+          scroe.sort(this.compare("score"));
+          scroe[0].index == 1
+            ? this.draw("dashboard-progress-4", 400, "#04BA18")
+            : scroe[0].index == 2
+              ? this.draw("dashboard-progress-5", 400, "#FFFF00")
+              : scroe[0].index == 3
+                ? this.draw("dashboard-progress-6", 400, "#D2D2D2")
+                : "";
+          scroe[1].index == 1
+            ? this.draw("dashboard-progress-4", 370, "#04BA18")
+            : scroe[1].index == 2
+              ? this.draw("dashboard-progress-5", 370, "#FFFF00")
+              : scroe[1].index == 3
+                ? this.draw("dashboard-progress-6", 370, "#D2D2D2")
+                : "";
+          scroe[2].index == 1
+            ? this.draw("dashboard-progress-4", 340, "#04BA18")
+            : scroe[2].index == 2
+              ? this.draw("dashboard-progress-5", 340, "#FFFF00")
+              : scroe[2].index == 3
+                ? this.draw("dashboard-progress-6", 340, "#D2D2D2")
+                : "";
+          this.day30 = JSON.parse(
+            JSON.stringify(data.data.shareHistoryDay.data.tickers)
+          );
+          this.day30.pop();
+          let that = this;
+          function addTimes(times, data) {
+            var time = [];
+            var x1 = [];
+            var x2 = [];
+            if (times < data.length - 10) {
+              time = data.slice(times, times + 10).map((v, i) => {
+                return timeFormat(v[0] * 1000, 0, false);
+              });
+              x1 = data.slice(times, times + 10).map((v, i) => {
+                return v[1];
+              });
+              x2 = data.slice(times, times + 10).map((v, i) => {
+                return v[2];
+              });
+            } else {
+              time = data
+                .slice(times, data.length)
+                .concat(data.slice(0, 10 - data.length + times))
+                .map((v, i) => {
+                  return timeFormat(v[0] * 1000, 0, false);
+                });
+              x1 = data
+                .slice(times, data.length)
+                .concat(data.slice(0, 10 - data.length + times))
+                .map((v, i) => {
+                  return v[1];
+                });
+              x2 = data
+                .slice(times, data.length)
+                .concat(data.slice(0, 10 - data.length + times))
+                .map((v, i) => {
+                  return v[2];
+                });
+            }
+
+            // 基于准备好的dom，初始化echarts实例
+            that.myChart = echarts.init(document.querySelector(".echart1"));
+            that.myChart.setOption({
+              // backgroundColor: "rgba(43, 62, 75, 0.5)", //背景颜色
+              tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                  // 坐标轴指示器，坐标轴触发有效
+                  type: "line" // 默认为直线，可选为：'line' | 'shadow'
+                }
+              },
+              grid: {
+                //间距距离左右下
+                //top: '50',
+                bottom: "45",
+                left: "1%",
+                right: "1%",
+                containLabel: true
+              },
+              legend: {
+                data: ["算力", "拒绝率"],
+                left: "right",
+                padding: [0, 60],
+                textStyle: {
+                  //图例文字的样式
+                  color: "#ccc",
+                  fontSize: 12
+                }
+              },
+              calculable: true,
+              xAxis: [
+                {
+                  type: "category",
+                  boundaryGap: false,
+                  data: time,
+                  boundaryGap: ["5%", "5%"],
+                  axisLabel: {
+                    show: true,
+                    textStyle: {
+                      color: "#66c2e0"
+                    }
+                  }
+                }
+              ],
+              yAxis: [
+                {
+                  type: "value",
+                  axisLabel: {
+                    formatter: "{value} °C"
+                  },
+                  axisLabel: {
+                    show: true,
+                    textStyle: {
+                      color: "#66c2e0"
+                    }
+                  },
+                  name: "(BTC)",
+                  nameTextStyle: {
+                    color: "#66c2e0"
+                  },
+                  splitLine: {
+                    show: false
+                  }
+                },
+                {
+                  type: "value",
+                  min: 0,
+                  max: 0.1,
+                  axisLabel: {
+                    formatter: "{value} °C"
+                  },
+                  axisLabel: {
+                    show: true,
+                    textStyle: {
+                      color: "#e4393c"
+                    }
+                  },
+                  name: "(%)",
+                  nameTextStyle: {
+                    color: "#e4393c"
+                  },
+                  splitLine: {
+                    show: false
+                  }
+                }
+              ],
+              series: [
+                {
+                  name: "算力",
+                  type: "line",
+                  data: x1,
+                  yAxisIndex: 0,
+                  markPoint: {
+                    data: [
+                      { type: "max", name: "最大值" }
+                      //{ type: "min", name: "最小值" }
+                    ]
+                  },
+                  markLine: {
+                    data: [{ type: "average", name: "平均值" }]
+                  },
+                  color: ["#66c2e0"]
+                },
+                {
+                  name: "拒绝率",
+
+                  type: "line",
+                  yAxisIndex: 1,
+                  // scale: true,
+
+                  data: x2,
+                  markPoint: {
+                    data: [
+                      { type: "max", name: "最大值" }
+                      //{ type: "min", name: "最小值" }
+                    ]
+                    // data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }]
+                  },
+                  markLine: {
+                    data: [{ type: "average", name: "平均值" }]
+                  },
+                  color: ["#e4393c"]
+                }
+              ]
+            });
+          }
+          var times = 0;
+          this.timer1 = setInterval(() => {
+            times += 1;
+            if (times == this.day30.length) {
+              times = 0;
+            }
+            addTimes(times, this.day30);
+          }, 1500);
+          this.day24 = JSON.parse(
+            JSON.stringify(data.data.shareHistoryHoure.data.tickers)
+          );
+          this.day24.pop();
+          function addTimes2(times, data) {
+            var time = [];
+            var x1 = [];
+            var x2 = [];
+            if (times < data.length - 12) {
+              time = data.slice(times, times + 12).map((v, i) => {
+                return timeFormatH(v[0] * 1000, 0, false);
+              });
+              x1 = data.slice(times, times + 12).map((v, i) => {
+                return v[1];
+              });
+              x2 = data.slice(times, times + 12).map((v, i) => {
+                return v[2];
+              });
+            } else {
+              time = data
+                .slice(times, data.length)
+                .concat(data.slice(0, 12 - data.length + times))
+                .map((v, i) => {
+                  return timeFormatH(v[0] * 1000, 0, false);
+                });
+              x1 = data
+                .slice(times, data.length)
+                .concat(data.slice(0, 12 - data.length + times))
+                .map((v, i) => {
+                  return v[1];
+                });
+              x2 = data
+                .slice(times, data.length)
+                .concat(data.slice(0, 12 - data.length + times))
+                .map((v, i) => {
+                  return v[2];
+                });
+            }
+            // 基于准备好的dom，初始化echarts实例
+            that.myChart2 = echarts.init(document.querySelector(".echart2"));
+            that.myChart2.setOption({
+              // backgroundColor: "rgba(43, 62, 75, 0.5)", //背景颜色
+              tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                  // 坐标轴指示器，坐标轴触发有效
+                  type: "line" // 默认为直线，可选为：'line' | 'shadow'
+                }
+              },
+              grid: {
+                //间距距离左右下
+                //top: '50',
+                bottom: "45",
+                left: "1%",
+                right: "1%",
+                containLabel: true
+              },
+              legend: {
+                data: ["算力", "拒绝率"],
+                left: "right",
+                padding: [0, 60],
+                textStyle: {
+                  //图例文字的样式
+                  color: "#ccc",
+                  fontSize: 12
+                }
+              },
+              calculable: true,
+              xAxis: [
+                {
+                  type: "category",
+                  boundaryGap: false,
+                  data: time,
+                  boundaryGap: ["5%", "5%"],
+                  axisLabel: {
+                    show: true,
+                    textStyle: {
+                      color: "#66c2e0"
+                    }
+                  }
+                }
+              ],
+              yAxis: [
+                {
+                  type: "value",
+                  axisLabel: {
+                    formatter: "{value} °C"
+                  },
+                  axisLabel: {
+                    show: true,
+                    textStyle: {
+                      color: "#66c2e0"
+                    }
+                  },
+                  name: "(BTC)",
+                  nameTextStyle: {
+                    color: "#66c2e0"
+                  },
+                  splitLine: {
+                    show: false
+                  }
+                },
+                {
+                  type: "value",
+                  min: 0,
+                  max: 0.1,
+                  axisLabel: {
+                    formatter: "{value} °C"
+                  },
+                  axisLabel: {
+                    show: true,
+                    textStyle: {
+                      color: "#66c2e0"
+                    }
+                  },
+                  name: "(%)",
+                  nameTextStyle: {
+                    color: "#66c2e0"
+                  },
+                  splitLine: {
+                    show: false
+                  }
+                }
+              ],
+              series: [
+                {
+                  name: "算力",
+                  type: "line",
+                  data: x1,
+                  markPoint: {
+                    data: [
+                      { type: "max", name: "最大值" }
+                      //{ type: "min", name: "最小值" }
+                    ]
+                  },
+                  markLine: {
+                    data: [{ type: "average", name: "平均值" }]
+                  },
+                  color: ["#66c2e0"]
+                },
+                {
+                  name: "拒绝率",
+                  type: "line",
+                  yAxisIndex: 1,
+                  data: x2,
+                  scale: true,
+
+                  markPoint: {
+                    data: [
+                      { type: "max", name: "最大值" }
+                      //{ type: "min", name: "最小值" }
+                    ]
+                    // data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }]
+                  },
+                  markLine: {
+                    data: [{ type: "average", name: "平均值" }]
+                  },
+                  color: ["#e4393c"]
+                }
+              ]
+            });
+          }
+          var times1 = 0;
+          this.timer2 = setInterval(() => {
+            times1 += 1;
+            if (times1 == this.day24.length) {
+              times1 = 0;
+            }
+            addTimes2(times1, this.day24);
+          }, 1500);
+        } else {
+          this.$message({
+            message: data.msg,
+            type: "error"
+          });
+        }
+      });
 
       this.dashboardShow = true;
     },
@@ -1002,12 +878,43 @@ export default {
           });
         }
       }
-      console.log(res);
       return res;
     }
   },
   components: {
     "v-line": line
+  },
+  beforeDestroy() {
+    if (this.timer1) {
+      //如果定时器还在运行 或者直接关闭，不用判断
+      clearInterval(this.timer1); //关闭
+    }
+    if (this.timer2) {
+      //如果定时器还在运行 或者直接关闭，不用判断
+      clearInterval(this.timer2); //关闭
+    }
+  },
+  // updated() {
+  //   if (this.timer1) {
+  //     //如果定时器还在运行 或者直接关闭，不用判断
+  //     console.log(this.timer1);
+  //     clearInterval(this.timer1); //关闭
+  //   }
+  //   if (this.timer2) {
+  //     //如果定时器还在运行 或者直接关闭，不用判断
+  //     console.log(this.timer2);
+  //     clearInterval(this.timer2); //关闭
+  //   }
+  // },
+  destroyed() {
+    if (this.timer1) {
+      //如果定时器还在运行 或者直接关闭，不用判断
+      clearInterval(this.timer1); //关闭
+    }
+    if (this.timer2) {
+      //如果定时器还在运行 或者直接关闭，不用判断
+      clearInterval(this.timer2); //关闭
+    }
   }
 };
 </script>
@@ -1064,9 +971,9 @@ li {
       letter-spacing: 5px;
       background-image: -webkit-linear-gradient(
         bottom,
-        #3e76eb,
+        #14aed8,
         #24abd6,
-        #62bee0
+        #4078ed
       );
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -1077,9 +984,11 @@ li {
       line-height: 50px;
       background-image: -webkit-linear-gradient(
         bottom,
-        #3e76eb,
+        #14aed8,
         #24abd6,
-        #62bee0
+        #4078ed /*        / / #3e76eb,
+        / / #24abd6,
+        / / #62bee0 */
       );
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -1317,9 +1226,9 @@ li {
           font-size: 16px;
           background-image: -webkit-linear-gradient(
             bottom,
-            #3e76eb,
+            #14aed8,
             #24abd6,
-            #62bee0
+            #4078ed
           );
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -1370,9 +1279,9 @@ li {
         font-size: 16px;
         background-image: -webkit-linear-gradient(
           bottom,
-          #3e76eb,
+          #14aed8,
           #24abd6,
-          #62bee0
+          #4078ed
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -1394,7 +1303,7 @@ li {
         border-top: none;
         li {
           width: 195px;
-          background: #000;
+          background: #020c18;
           text-align: center;
           font-weight: bold;
           padding-top: 15px;

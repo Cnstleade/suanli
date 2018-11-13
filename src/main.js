@@ -14,6 +14,7 @@ import FastClick from 'fastclick'
 import echarts from 'echarts'
 import * as custom from './config/dateFilter';
 import * as custom1 from './config/minute';
+import * as custom2 from './config/year';
 import ElementLocale from 'element-ui/lib/locale'
 import 'babel-polyfill'
 import {
@@ -28,6 +29,9 @@ Object.keys(custom).forEach(key => {
 })
 Object.keys(custom1).forEach(key => {
   Vue.filter(key, custom1[key])
+})
+Object.keys(custom2).forEach(key => {
+  Vue.filter(key, custom2[key])
 })
 Vue.prototype.$echarts = echarts
 // Vue.use(VueI18n);

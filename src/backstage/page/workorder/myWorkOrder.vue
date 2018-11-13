@@ -80,8 +80,8 @@
             <el-table-column prop="status" label="工单当前状态" align="center" min-width="140">
               <template slot-scope="scope">
                 <el-tag
-                  :type="scope.row.status==1?'success':'danger'">
-                  {{scope.row.status==1?'初始':scope.row.type==2?'已接单':scope.row.type==3?'已反馈':scope.row.type==4?'已结单':scope.row.type==5?'返厂维修':''}}
+                  :type="scope.row.status==1?'success':scope.row.status==2?'info':scope.row.status==3?'warning':scope.row.status==4?'danger':scope.row.status==5?'':''">
+                  {{scope.row.status==1?'初始':scope.row.status==2?'已接单':scope.row.status==3?'已反馈':scope.row.status==4?'已结单':scope.row.status==5?'返厂维修':''}}
                 </el-tag>                    
               </template>
             </el-table-column>
@@ -157,14 +157,17 @@
                 <el-button
                   size="mini"
                   type="primary"
+                  v-if="scope.row.status==1"
                   @click="handleTake(scope.$index, scope.row)">接单</el-button>
                 <el-button
                   size="mini"
                   type="success"
+                     v-if="scope.row.status!==2"
                   @click="handleFeedback(scope.$index, scope.row)">反馈</el-button>
                 <el-button
                   size="mini"
                   type="danger"
+                  v-if="scope.row.status!==4"
                   @click="handleDelete(scope.$index, scope.row)">结单</el-button>                  
               </template>
             </el-table-column>            
@@ -215,6 +218,7 @@
             :visible.sync="dialogFormDeleteVisible" 
             center
             width="30%"
+            id="dialogFormDeleteVisible"
             >
           <el-form :model="deleteForm" ref="deleteForm" :rules="rules" >
             <el-form-item label="工单ID" label-width="100px">
@@ -222,7 +226,16 @@
             </el-form-item>
             <el-form-item label="错误ID" label-width="100px" prop="faultType">
               <el-input v-model="deleteForm.faultType" autocomplete="off"></el-input>
-            </el-form-item>            
+            </el-form-item> 
+            <el-form-item label="矿机列表" label-width="100px">
+              <template>
+                <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+                <div style="margin: 15px 0;"></div>
+                <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+                  <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+                </el-checkbox-group>
+              </template>              
+            </el-form-item>           
             <el-form-item label="工单描述" label-width="100px">
               <el-input
                 type="textarea"
@@ -264,7 +277,11 @@ export default {
         faultType: [
           { required: true, message: "请选择错误ID", trigger: "change" }
         ]
-      }
+      },
+      checkAll: false,
+      checkedCities: [],
+      cities: [],
+      isIndeterminate: true
     };
   },
   mounted() {
@@ -278,6 +295,16 @@ export default {
     ])
   },
   methods: {
+    handleCheckAllChange(val) {
+      this.checkedCities = val ? this.cities : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedCitiesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.cities.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.cities.length;
+    },
     _init(
       npage,
       pagesize,
@@ -379,17 +406,12 @@ export default {
             );
           }
           if (formName == "deleteForm") {
-            console.log(
-              this.feedbackForm.id,
-              this.loginId,
-              this.feedbackForm.faultType,
-              this.feedbackForm.remake
-            );
             this._httpHoOverhandleorder(
               this.deleteForm.id,
               this.loginId,
               this.deleteForm.faultType,
-              this.deleteForm.remake
+              this.deleteForm.remake,
+              this.checkedCities.join(",")
             );
           }
         } else {
@@ -461,10 +483,17 @@ export default {
     /*  结单 */
     handleDelete(index, row) {
       this.deleteForm = JSON.parse(JSON.stringify(row));
+      this.cities = row.mpfId.split(",");
       this.dialogFormDeleteVisible = true;
     },
-    _httpHoOverhandleorder(id, repairmanId, faultType, remake) {
-      httpHoOverhandleorder(id, repairmanId, faultType, remake).then(res => {
+    _httpHoOverhandleorder(id, repairmanId, faultType, remake, fixedMinerIds) {
+      httpHoOverhandleorder(
+        id,
+        repairmanId,
+        faultType,
+        remake,
+        fixedMinerIds
+      ).then(res => {
         let data = res.data;
         if (data.code == 200) {
           this.$message({
@@ -494,5 +523,9 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+#dialogFormDeleteVisible .el-checkbox {
+  width: 50px;
+  margin-left: 30px;
 }
 </style>

@@ -588,12 +588,13 @@ export function httpHoResponsehandleorder(id, repairmanId, faultType, remake) {
 }
 
 //后台管理模块 / 工单管理 结单
-export function httpHoOverhandleorder(id, repairmanId, faultType, remake) {
+export function httpHoOverhandleorder(id, repairmanId, faultType, remake, fixedMinerIds) {
   let data = {
     id,
     repairmanId,
     faultType,
-    remake
+    remake,
+    fixedMinerIds
   };
   return axios({
     url: '/ho/overhandleorder',
@@ -657,10 +658,11 @@ export function httpScheduleWorktime(rid = 0) {
   return axios({
     url: '/schedule/worktime',
     method: 'post',
-    headers: {
-      'Content-type': 'application/json  '
-    },
-    data: JSON.stringify(data)
+    // headers: {
+    //   'Content-type': 'application/json  '
+    // },
+    // data: JSON.stringify(data)
+    data: qs.stringify(data)
   })
 }
 
@@ -687,7 +689,7 @@ export function httpscheduleUpdate_time(wtId1, startTime1, endTime1, wtCategory,
 }
 
 
-//后台管理模块 /更新值班员工作时间
+//后台管理模块 /根据矿场编号对值班人员记录进行分页查询
 export function httpscheduleAll_rota(cp, pageSize, mid) {
   let data = {
     cp,
@@ -697,24 +699,182 @@ export function httpscheduleAll_rota(cp, pageSize, mid) {
   return axios({
     url: '/schedule/all_rota',
     method: 'post',
-    headers: {
-      'Content-type': 'application/json  '
-    },
-    data: JSON.stringify(data)
+    // headers: {
+    //   'Content-type': 'application/json  '
+    // },
+    data: qs.stringify(data)
+    // data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 /值班员管理——添加值班员记录
+export function httpscheduleSave_rota(rotaNum, rid, rotaName, rotaAge, rotaSex, rotaPhone, rotaJoinWorkDate, rotaWorkingLife, rotaDepartment, mid) {
+  let data = {
+    rotaNum,
+    rid,
+    rotaName,
+    rotaAge,
+    rotaSex,
+    rotaPhone,
+    rotaJoinWorkDate,
+    rotaWorkingLife,
+    rotaDepartment,
+    mid
+  };
+  return axios({
+    url: '/schedule/save_rota',
+    method: 'post',
+    data: qs.stringify(data)
+    // headers: {
+    //   'Content-type': 'application/json  '
+    // },
+
+    // data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 /值班员管理——更新值班员记录
+export function httpscheduleUpdate_rota(rotaId, rotaNum, rid, rotaName, rotaAge, rotaSex, rotaPhone, rotaJoinWorkDate, rotaWorkingLife, rotaDepartment, mid) {
+  let data = {
+    rotaId,
+    rotaNum,
+    rid,
+    rotaName,
+    rotaAge,
+    rotaSex,
+    rotaPhone,
+    rotaJoinWorkDate,
+    rotaWorkingLife,
+    rotaDepartment,
+    mid
+  };
+  return axios({
+    url: '/schedule/update_rota',
+    method: 'post',
+    data: qs.stringify(data)
+    // headers: {
+    //   'Content-type': 'application/json  '
+    // },
+    // data: JSON.stringify(data)
+  })
+}
+
+//后台管理模块 /值班员管理——删除值班员记录
+export function httpscheduleDelete_rota(rotaId) {
+  let data = {
+    rotaId,
+  };
+  return axios({
+    url: '/schedule/delete_rota',
+    method: 'post',
+    // headers: {
+    //   'Content-type': 'application/json  '
+    // },
+    // data: JSON.stringify(data)
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 /排班管理——根据排班表编号、值班员编号、工作班次类别或工作日期对排班记录进行分页查询
+export function httpscheduleFind_scheduling(cp, pageSize, sid, rotaId, wtCategory, sdate) {
+  let data = {
+    cp,
+    pageSize,
+    sid,
+    rotaId,
+    wtCategory,
+    sdate
+  };
+  return axios({
+    url: '/schedule/find_scheduling',
+    method: 'post',
+    // headers: {
+    //   'Content-type': 'application/json  '
+    // },
+    // data: JSON.stringify(data)
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 /排班管理——新增排班记录
+export function httpscheduleSave_scheduling(rotaId, wtCategory, sdate, state) {
+  let data = {
+    rotaId,
+    wtCategory,
+    sdate,
+    state
+  };
+  return axios({
+    url: '/schedule/save_scheduling',
+    method: 'post',
+    // headers: {
+    //   'Content-type': 'application/json  '
+    // },
+    // data: JSON.stringify(data)
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 /排班管理——根据排班表编号删除对应记录
+export function httpscheduleDelete_scheduling(sid) {
+  let data = {
+    sid
+  };
+  return axios({
+    url: '/schedule/delete_scheduling',
+    method: 'post',
+    // headers: {
+    //   'Content-type': 'application/json  '
+    // },
+    // data: JSON.stringify(data)
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 /排班管理——根据排班表编号更新对应记录
+export function httpscheduleUpdate_scheduling(sid, rotaId, wtCategory, sdate, state) {
+  let data = {
+    sid,
+    rotaId,
+    wtCategory,
+    sdate,
+    state
+  };
+  return axios({
+    url: '/schedule/update_scheduling',
+    method: 'post',
+    // headers: {
+    //   'Content-type': 'application/json  '
+    // },
+    // data: JSON.stringify(data)
+    data: qs.stringify(data)
   })
 }
 
 
-//后台管理模块 / admin 贷后管理 逾期列表展示 下拉点击查看详细信息
+//后台管理模块 /全网算力
 export function httpGETpoolstatsmerge() {
   return axios({
-    url: "https://sz-pool.api.btc.com/public/v1/pool/stats/merge",
+    url: "https://sz-pool.api.btc.com/v1/coins-income",
     method: "get",
     params: {
       access_key: 'r_XcBYADIE1paph',
       puid: '239823',
       lang: 'zh-cn'
     }
+  })
+}
+
+//后台管理模块 /矿场算力
+export function httpGETSZpool() {
+  return axios({
+    url: "https://sz-pool.api.btc.com/public/v1/pool/stats/merge?access_key=r_XcBYADIE1paph&puid=239823&lang=zh-cn",
+    method: "get",
+    // params: {
+    //   access_key: 'r_XcBYADIE1paph',
+    //   puid: '239823',
+    //   lang: 'zh-cn'
+    // }
   })
 }
 
@@ -738,6 +898,44 @@ export function httpStaFind() {
     method: "get",
   })
 }
+
+
+//后台管理模块 /故障类型
+export function httpStaVariousFaultCount() {
+  return axios({
+    url: "/sta/variousFaultCount",
+    method: "get",
+  })
+}
+
+
+//后台管理模块 /统计管理——矿机类型故障率
+export function httpfindMalfunctionTypeRate(startTime, endTime) {
+  let data = {
+    startTime,
+    endTime
+  };
+  return axios({
+    url: '/sta/findMalfunctionTypeRate',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+//后台管理模块 /统计管理——值班人员回单及时率
+export function httpfindRepairmanRate(startTime, endTime) {
+  let data = {
+    startTime,
+    endTime
+  };
+  return axios({
+    url: '/sta/findRepairmanRate',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+
 /* 前台页面 */
 
 //前台管理模块 / 客户登录

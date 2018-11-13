@@ -28,7 +28,8 @@ export default {
       myChart: {},
       name: "折线图",
       day30: [],
-      day24: []
+      day24: [],
+      timer1: null
     };
   },
   methods: {
@@ -59,133 +60,165 @@ export default {
         JSON.stringify(data.data.shareHistoryDay.data.tickers)
       );
       this.day30.pop();
-      var time = [];
-      var x1 = [];
-      var x2 = [];
-      // this.day30.forEach(v => v.split(","));
-      var s = this.day30.map((v, i) => {
-        return v.split(",");
-        // time.push(v[0]);
-        // x1.push(v[1]);
-        // x2.push(v[2]);
-      });
-      console.log(s);
-      time = this.day30.map((v, i) => {
-        return v[0];
-        // time.push(v[0]);
-        // x1.push(v[1]);
-        // x2.push(v[2]);
-      });
-      console.log(time);
-      // 基于准备好的dom，初始化echarts实例
-      this.myChart = echarts.init(document.querySelector(".line .main"));
-      this.myChart.setOption({
-        // backgroundColor: "rgba(43, 62, 75, 0.5)", //背景颜色
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: "line" // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        grid: {
-          //间距距离左右下
-          //top: '50',
-          bottom: "45",
-          left: "1%",
-          right: "1%",
-          containLabel: true
-        },
-        legend: {
-          data: ["掌上营业厅相关内容点击量", "环比增幅"],
-          left: "right",
-          padding: [0, 60],
-          textStyle: {
-            //图例文字的样式
-            color: "red",
-            fontSize: 12
-          }
-        },
-        calculable: true,
-        xAxis: [
-          {
-            type: "category",
-            boundaryGap: false,
-            data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-            boundaryGap: ["5%", "5%"],
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: "#66c2e0"
-              }
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: "value",
-            axisLabel: {
-              formatter: "{value} °C"
-            },
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: "#66c2e0"
-              }
-            },
-            name: "(BTC)",
-            nameTextStyle: {
-              color: "#66c2e0"
+      let that = this;
+      function addTimes(times, data) {
+        var time = [];
+        var x1 = [];
+        var x2 = [];
+        if (times < data.length - 10) {
+          time = data.slice(times, times + 10).map((v, i) => {
+            return timeFormat(v[0] * 1000, 0, false);
+          });
+          x1 = data.slice(times, times + 10).map((v, i) => {
+            return v[1];
+          });
+          x2 = data.slice(times, times + 10).map((v, i) => {
+            return v[2];
+          });
+        } else {
+          time = data
+            .slice(times, data.length)
+            .concat(data.slice(0, 10 - data.length + times))
+            .map((v, i) => {
+              return timeFormat(v[0] * 1000, 0, false);
+            });
+          x1 = data
+            .slice(times, data.length)
+            .concat(data.slice(0, 10 - data.length + times))
+            .map((v, i) => {
+              return v[1];
+            });
+          x2 = data
+            .slice(times, data.length)
+            .concat(data.slice(0, 10 - data.length + times))
+            .map((v, i) => {
+              return v[2];
+            });
+        }
+
+        // 基于准备好的dom，初始化echarts实例
+        that.myChart = echarts.init(document.querySelector(".line .main"));
+        that.myChart.setOption({
+          // backgroundColor: "rgba(43, 62, 75, 0.5)", //背景颜色
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              // 坐标轴指示器，坐标轴触发有效
+              type: "line" // 默认为直线，可选为：'line' | 'shadow'
             }
           },
-          {
-            type: "value",
-            axisLabel: {
-              formatter: "{value} °C"
-            },
-            axisLabel: {
-              show: true,
-              textStyle: {
+          grid: {
+            //间距距离左右下
+            //top: '50',
+            bottom: "45",
+            left: "1%",
+            right: "1%",
+            containLabel: true
+          },
+          legend: {
+            data: ["算力", "拒绝率"],
+            left: "right",
+            padding: [0, 60],
+            textStyle: {
+              //图例文字的样式
+              color: "red",
+              fontSize: 12
+            }
+          },
+          calculable: true,
+          xAxis: [
+            {
+              type: "category",
+              boundaryGap: false,
+              data: time,
+              boundaryGap: ["5%", "5%"],
+              axisLabel: {
+                show: true,
+                textStyle: {
+                  color: "#66c2e0"
+                }
+              }
+            }
+          ],
+          yAxis: [
+            {
+              type: "value",
+              axisLabel: {
+                formatter: "{value} °C"
+              },
+              axisLabel: {
+                show: true,
+                textStyle: {
+                  color: "#66c2e0"
+                }
+              },
+              name: "(BTC)",
+              nameTextStyle: {
                 color: "#66c2e0"
               }
             },
-            name: "(BTC)",
-            nameTextStyle: {
-              color: "#66c2e0"
+            {
+              type: "value",
+              axisLabel: {
+                formatter: "{value} °C"
+              },
+              axisLabel: {
+                show: true,
+                textStyle: {
+                  color: "#66c2e0"
+                }
+              },
+              name: "(BTC)",
+              nameTextStyle: {
+                color: "#66c2e0"
+              }
             }
-          }
-        ],
-        series: [
-          {
-            name: "掌上营业厅相关内容点击量",
-            type: "line",
-            data: [11, 11, 15, 13, 12, 13, 10],
-            markPoint: {
-              data: [
-                { type: "max", name: "最大值" },
-                { type: "min", name: "最小值" }
-              ]
+          ],
+          series: [
+            {
+              name: "算力",
+              type: "line",
+              data: x1,
+              markPoint: {
+                data: [
+                  { type: "max", name: "最大值" },
+                  { type: "min", name: "最小值" }
+                ]
+              },
+              markLine: {
+                data: [{ type: "average", name: "平均值" }]
+              },
+              color: ["#66c2e0"]
             },
-            markLine: {
-              data: [{ type: "average", name: "平均值" }]
-            },
-            color: ["#66c2e0"]
-          },
-          {
-            name: "环比增幅",
-            type: "line",
-            yAxisIndex: 1,
-            data: [1, -2, 2, 5, 3, 2, 0],
-            markPoint: {
-              data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }]
-            },
-            markLine: {
-              data: [{ type: "average", name: "平均值" }]
-            },
-            color: ["#01bb1c"]
-          }
-        ]
-      });
+            {
+              name: "拒绝率",
+              type: "line",
+              yAxisIndex: 1,
+              data: x2,
+              markPoint: {
+                data: [
+                  { type: "max", name: "最大值" },
+                  { type: "min", name: "最小值" }
+                ]
+                // data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }]
+              },
+              markLine: {
+                data: [{ type: "average", name: "平均值" }]
+              },
+              color: ["#01bb1c"]
+            }
+          ]
+        });
+      }
+      var times = 0;
+      clearInterval(this.timer1);
+      this.timer1 = setInterval(() => {
+        times += 1;
+        if (times == this.day30.length) {
+          times = 0;
+        }
+        addTimes(times, this.day30);
+      }, 500);
     });
 
     // this.myChart.setOption({
@@ -287,6 +320,9 @@ export default {
     //   ]
     // });
     this._init();
+  },
+  destroyed() {
+    clearInterval(this.timer1);
   }
 };
 </script>

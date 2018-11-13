@@ -156,42 +156,6 @@ export default new Router({
             role: 'siteConfiguration'
           }
         },
-        {
-          path: 'myWorkOrder',
-          name: 'myWorkOrder',
-          component: resolve => require(['@/backstage/page/workorder/myWorkOrder.vue'], resolve),
-          meta: {
-            title: '我的工单',
-            role: 'myWorkOrder'
-          }
-        },
-        {
-          path: 'errorTYpe',
-          name: 'errorTYpe',
-          component: resolve => require(['@/backstage/page/workorder/errorTYpe.vue'], resolve),
-          meta: {
-            title: '错误类型',
-            role: 'errorTYpe'
-          }
-        },
-        {
-          path: 'worktime',
-          name: 'worktime',
-          component: resolve => require(['@/backstage/page/flightManagement/worktime.vue'], resolve),
-          meta: {
-            title: '班次管理',
-            role: 'worktime'
-          }
-        },
-        {
-          path: 'watchRecords',
-          name: 'watchRecords',
-          component: resolve => require(['@/backstage/page/flightManagement/watchRecords.vue'], resolve),
-          meta: {
-            title: '值班日志管理',
-            role: 'watchRecords'
-          }
-        },
       ]
     }
   ]
@@ -546,10 +510,47 @@ export const powerRouter = [{
       name: 'watchRecords',
       component: resolve => require(['@/backstage/page/flightManagement/watchRecords.vue'], resolve),
       meta: {
-        title: '值班日志管理',
+        title: '值班员管理',
         role: 'watchRecords'
       }
     },
-
+    {
+      path: 'faultType',
+      name: 'faultType',
+      component: resolve => require(['@/backstage/page/workorder/faultType.vue'], resolve),
+      meta: {
+        title: '故障类型',
+        role: 'faultType'
+      }
+    },
+    ,
+    {
+      path: 'malfunctionTypeRate',
+      name: 'malfunctionTypeRate',
+      component: resolve => require(['@/backstage/page/workorder/malfunctionTypeRate.vue'], resolve),
+      meta: {
+        title: '故障类型',
+        role: 'malfunctionTypeRate'
+      }
+    },
+    ,
+    {
+      path: 'repairmanRate',
+      name: 'repairmanRate',
+      component: resolve => require(['@/backstage/page/workorder/repairmanRate.vue'], resolve),
+      meta: {
+        title: '回单及时率',
+        role: 'repairmanRate'
+      }
+    }, 
+    {
+      path: 'scheduling',
+      name: 'scheduling',
+      component: resolve => require(['@/backstage/page/workorder/scheduling.vue'], resolve),
+      meta: {
+        title: '排班记录',
+        role: 'scheduling'
+      }
+    },            
   ]
 }]

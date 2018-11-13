@@ -17,7 +17,8 @@ const state = {
   login: true, //是否登录
   cartPrice: null, //会员卡价格 价格很好了
   count: 0,
-  color: ['#325B69', '#698570', '#AE5548', '#6D9EA8', '#9CC2B0', '#C98769']
+  color: ['#325B69', '#698570', '#AE5548', '#6D9EA8', '#9CC2B0', '#C98769'],
+  adminSubaccountList: []
 }
 
 

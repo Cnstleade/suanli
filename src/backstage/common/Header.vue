@@ -8,8 +8,8 @@
     <div class="header-logo">
       
     </div>
-    <!-- <div class="menu">
-      <el-tag>
+    <div class="menu">
+      <!-- <el-tag>
         <a href="" style="color: #409eff;">系统设置</a>
       </el-tag>
       <el-tag type="success">
@@ -17,11 +17,11 @@
       </el-tag>
       <el-tag type="info">
         <a href="" style="color:#909399">理财管理</a>
-      </el-tag>
+      </el-tag> -->
       <el-tag type="warning">
-        <a href="" style="color:#e6a23c;">资金管理</a>
+        <router-link to="/dashboard" style="color:#fff">数据大盘</router-link>
       </el-tag>
-    </div> -->
+    </div>
     <div class="header-right">
       <!-- 全屏显示 -->
       <div class="header-fullscreen" @click="handleFullScreen">
