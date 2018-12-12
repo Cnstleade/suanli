@@ -70,7 +70,9 @@ export default {
       this._httpLogin(this.username, this.password);
     }
   },
-  mounted() {}
+  mounted() {
+    console.log();
+  }
 };
 </script>
 

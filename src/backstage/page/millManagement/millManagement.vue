@@ -72,7 +72,13 @@
                   </el-tooltip>
               </template>                 
             </el-table-column>
-            <el-table-column prop="minerAccount" label="矿工子账号" align="center" width="100"></el-table-column>
+            <el-table-column prop="minerAccount" label="矿工子账号" align="center" width="100">
+              <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.minerAccount" placement="top">
+                      <span>{{scope.row.minerAccount}}</span>
+                  </el-tooltip>
+              </template>
+            </el-table-column>
             <el-table-column prop="production_time" label="矿机生产日期" align="center" width="100"></el-table-column>            
             <el-table-column prop="minerUid" label="矿场id" align="center" width="80"></el-table-column>            
             <el-table-column prop="modelUid" label="型号id" align="center" width="80"></el-table-column>            

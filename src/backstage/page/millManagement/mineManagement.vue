@@ -41,7 +41,7 @@
             class="mt-3"
             v-loading="loading">
             <el-table-column prop="id" label="ID" align="center" width="50"></el-table-column>
-            <el-table-column prop="name" label="品牌名称" align="center" min-width="100"></el-table-column>
+            <el-table-column prop="name" label="矿场名称" align="center" min-width="100"></el-table-column>
             <el-table-column prop="electricityFees" label="电费" align="center" min-width="100"></el-table-column>
             <el-table-column prop="adress" label="地址" align="center" min-width="100"></el-table-column>
             <el-table-column prop="positionFrees" label="机位费" align="center" min-width="100"></el-table-column>            

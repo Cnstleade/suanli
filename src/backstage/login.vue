@@ -27,7 +27,7 @@
 
 <script>
 import { mapMutations } from "vuex";
-import { httpSysLogin } from "@/service/http";
+import { httpSysLogin ,httpGakkiTest} from "@/service/http";
 export default {
   data() {
     return {
@@ -89,6 +89,7 @@ export default {
     sessionStorage.removeItem("ROLE");
     sessionStorage.removeItem("LOGINID");
     sessionStorage.removeItem("fk_username");
+    httpGakkiTest('admin')
   }
 };
 </script>

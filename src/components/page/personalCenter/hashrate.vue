@@ -37,8 +37,11 @@
         </div>
         <div class="row hashrate-bottom">
             <div class="col-12 hashrate-bottom-show">
+             
                 <el-tabs v-model="activeName" @tab-click="handleClick">
+                     
                   <el-tab-pane label="收益记录" name="first">
+                    
                     <el-table
                       :data="tableData"
                       style="width: 100%">

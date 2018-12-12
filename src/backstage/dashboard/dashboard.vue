@@ -205,7 +205,7 @@
                 <span>矿机总数</span>              
               </li>
               <li style="margin-top:5px">
-                <p>{{showData.minerCount?showData.minerCount:''}}</p>
+                <p>{{showData.handleOrdersCount?showData.handleOrdersCount:''}}</p>
                 <span>工单总数</span>              
               </li>
             </ul>
@@ -261,14 +261,14 @@ export default {
     this._init(this.adminSubaccountList[0]["id"]);
     this.getOut();
     this.drwaLine();
-    window.onresize = () => {
-      return (() => {
-        this._init();
-        window.screenWidth = document.body.clientWidth;
-        this.screenWidth = window.screenWidth;
-        this.width = this.screenWidth;
-      })();
-    };
+    // window.onresize = () => {
+    //   return (() => {
+    //     this._init(this.adminSubaccountList[0]["id"]);
+    //     window.screenWidth = document.body.clientWidth;
+    //     this.screenWidth = window.screenWidth;
+    //     this.width = this.screenWidth;
+    //   })();
+    // };
     var base = +new Date(2014, 9, 3);
     var oneDay = 24 * 3600 * 1000;
     var date = [];
@@ -938,7 +938,7 @@ li {
   box-sizing: border-box;
   margin: 0px;
   padding: 0px;
-  background: url("../../assets/bg2.jpg");
+  background: url("../../assets/bg22.jpg");
   background-size: 100% 100%;
   #cvs {
   }

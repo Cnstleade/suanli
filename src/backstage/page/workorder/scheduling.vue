@@ -61,7 +61,7 @@
               <template slot-scope="scope">
                 <el-tag
                   :type="scope.row.wtCategory==1?'success':scope.row.wtCategory==2?'info':scope.row.wtCategory==3?'warning':scope.row.wtCategory==4?'danger':''">
-                  {{scope.row.wtCategory==1?'早班':scope.row.wtCategory==2?'中班':scope.row.wtCategory==3?'晚班':scope.row.wtCategory==4?'替班':''}}
+                  {{scope.row.wtCategory==1?'早班':scope.row.wtCategory==2?'中班':scope.row.wtCategory==3?'晚班':scope.row.wtCategory==4?'替班':scope.row.wtCategory==5?'常班':''}}
                 </el-tag>
               </template>
             </el-table-column> 
@@ -240,7 +240,11 @@ export default {
         {
           value: 4,
           label: "替班"
-        }
+        },
+        {
+          value: 5,
+          label: "常班"
+        }      
       ],
       states: [
         {

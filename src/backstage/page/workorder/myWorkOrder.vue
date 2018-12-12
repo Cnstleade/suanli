@@ -162,12 +162,12 @@
                 <el-button
                   size="mini"
                   type="success"
-                     v-if="scope.row.status!==2"
+                     v-if="scope.row.status==2"
                   @click="handleFeedback(scope.$index, scope.row)">反馈</el-button>
                 <el-button
                   size="mini"
                   type="danger"
-                  v-if="scope.row.status!==4"
+                  v-if="scope.row.status!==4 && scope.row.status!==1 "
                   @click="handleDelete(scope.$index, scope.row)">结单</el-button>                  
               </template>
             </el-table-column>            

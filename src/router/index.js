@@ -8,6 +8,8 @@ import calculator from '@/components/page/calculator'
 Vue.use(Router)
 
 export default new Router({
+  base: '/kefu/',
+  // mode: 'history',
   routes: [{
       path: '/',
       redirect: '/index'
@@ -522,8 +524,7 @@ export const powerRouter = [{
         title: '故障类型',
         role: 'faultType'
       }
-    },
-    ,
+    }, ,
     {
       path: 'malfunctionTypeRate',
       name: 'malfunctionTypeRate',
@@ -532,8 +533,7 @@ export const powerRouter = [{
         title: '故障类型',
         role: 'malfunctionTypeRate'
       }
-    },
-    ,
+    }, ,
     {
       path: 'repairmanRate',
       name: 'repairmanRate',
@@ -542,7 +542,7 @@ export const powerRouter = [{
         title: '回单及时率',
         role: 'repairmanRate'
       }
-    }, 
+    },
     {
       path: 'scheduling',
       name: 'scheduling',
@@ -551,6 +551,15 @@ export const powerRouter = [{
         title: '排班记录',
         role: 'scheduling'
       }
-    },            
+    },
+    {
+      path: 'role',
+      name: 'role',
+      component: resolve => require(['@/backstage/page/workorder/role.vue'], resolve),
+      meta: {
+        title: '角色管理',
+        role: 'role'
+      }
+    },
   ]
 }]

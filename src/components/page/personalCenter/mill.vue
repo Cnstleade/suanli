@@ -47,6 +47,9 @@
                         label="时间"
                         align="center"
                         width="180">
+                          <template slot-scope="scope">
+                            {{scope.row.ptime|dateServer}}
+                          </template>                         
                       </el-table-column>
                       <el-table-column
                         prop="profit"
